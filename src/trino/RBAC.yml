@@ -1,0 +1,18 @@
+# **** Automatic registration of users
+    # Map Authlib roles to superset roles
+    # Will allow user self-registration, allowing to create Flask users from Authorized User
+    AUTH_USER_REGISTRATION = True
+    # The default user self-registration role
+    AUTH_USER_REGISTRATION_ROLE = "NoAccess"
+    AUTH_ROLES_SYNC_AT_LOGIN = True
+    # The role names here are the roles that are auto created by Superset.
+    # You may have different requirements.
+    AUTH_ROLES_MAPPING = {
+      "Alpha": ["Admin"],
+      "Public": ["Public"],
+      "Alpha": ["Alpha"],
+      "Gamma": ["Gamma"],
+      "granter": ["granter"],
+      "sqllab": ["sql_lab"],
+    }
+    # **** End automatic registration of users
