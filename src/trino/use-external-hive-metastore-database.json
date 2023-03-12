@@ -1,0 +1,62 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "resources": [
+        {
+            "type": "microsoft.hdinsight/clusterpools/clusters",
+            "apiVersion": "2021-09-15-preview",
+            "name": "<cluster-pool-name>/<cluster-name>",
+            "location": "<region, e.g. westeurope>",
+            "tags": {},
+            "properties": {
+                "clusterType": "Trino",
+<cut>
+                "clusterProfile": {
+<cut>
+                    "secretsProfile": {
+                        "keyVaultResourceId": "/subscriptions/976b964f-8452-4654-ad20-000000000000/resourceGroups/trino-rg/providers/Microsoft.KeyVault/vaults/trinoakv",
+                        "secrets": [
+                            {
+                                "referenceName": "hms-db-pwd",
+                                "type": "secret",
+                                "keyVaultObjectName": "hms-db-pwd"
+                            }                        ]
+                    },
+                    "serviceConfigsProfiles": [
+                        {
+                            "serviceName": "trino",
+                            "configs": [
+                                {
+                                    "component": "catalogs",
+                                    "files": [
+                                        {
+                                            "fileName": "hive1.properties",
+                                            "values": {
+                                                "connector.name": "hive"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "trinoProfile": {
+                        "catalogOptions": {
+                            "hive": [
+                                {
+                                    "catalogName": "hive1",
+                                    "metastoreDbConnectionURL": "jdbc:sqlserver://mysqlserver1.database.windows.net;database=myhmsdb1;encrypt=true;trustServerCertificate=true;create=false;loginTimeout=30",
+                                    "metastoreDbConnectionUserName": "trinoadmin",
+                                    "metastoreDbConnectionPassword": "${SECRET_REF:hms-db-pwd}",
+                                    "metastoreWarehouseDir": "abfs://container1@myadlsgen2account1.dfs.core.windows.net/hive/warehouse"
+                                }
+                            ]
+                        }
+                    }
+                }
+<cut>
+            }
+        }
+    ]
+}

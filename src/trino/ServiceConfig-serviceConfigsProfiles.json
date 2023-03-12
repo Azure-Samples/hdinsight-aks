@@ -1,0 +1,23 @@
+"serviceConfigsProfiles": [
+    {
+        "serviceName": "trino",
+        "configs": [
+            {
+                "component": "catalogs",
+                "files": [<file-spec>,…]
+            },
+            {
+                "component": "coordinator",
+                "files": [<file-spec>,…]
+            },
+            {
+                "component": "worker",
+                "files": [<file-spec>,…]
+            },
+            {
+                "component": " miscfiles",
+                "files": [<file-spec>,…]
+            },
+        ]
+    }
+]

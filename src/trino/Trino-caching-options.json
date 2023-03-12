@@ -1,0 +1,41 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "resources": [
+        {
+            "type": "microsoft.hdinsight/clusterpools/clusters",
+            "apiVersion": "2021-09-15-preview",
+            "name": "<cluster-pool-name>/<cluster-name>",
+            "location": "<region, e.g. westeurope>",
+            "tags": {},
+            "properties": {
+                "clusterType": "Trino",
+<cut>
+                "clusterProfile": {
+<cut>
+                    "serviceConfigsProfiles": [
+                        {
+                            "serviceName": "trino",
+                            "configs": [
+                                {
+                                    "component": "coordinator",
+                                    "files": [
+                                        {
+                                            "fileName": "config.properties",
+                                            "values": {
+                                                "query.cache.enabled": "true",
+                                                "query.cache.ttl": "10m"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+<cut>
+            }
+        }
+    ]
+}

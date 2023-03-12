@@ -1,0 +1,28 @@
+"serviceConfigsProfiles": [
+    {
+        "serviceName": "trino",
+        "configs": [
+            {
+                "component": "common",
+                "files": [
+                    {
+                        "fileName": "resource-groups.properties",
+                        "values": {
+                            "resource-groups.configuration-manager": "file",
+                            "resource-groups.config-file": "${MISC:resource-groups}"
+                        }                                            
+                    }
+                ]
+            },
+            {
+                "component": "miscfiles",
+                "files": [
+                    {
+                        "fileName": "resource-groups",
+                        "path": "/customDir/resource-groups.json",
+                        "content": "{\"rootGroups\":[{\"name\":\"global\",\"softMemoryLimit\":\"80%\",\"hardConcurrencyLimit\":100,\"maxQueued\":1000,\"schedulingPolicy\":\"weighted\",\"jmxExport\":true,\"subGroups\":[{\"name\":\"data_definition\",\"softMemoryLimit\":\"10%\",\"hardConcurrencyLimit\":5,\"maxQueued\":100,\"schedulingWeight\":1},{\"name\":\"adhoc\",\"softMemoryLimit\":\"10%\",\"hardConcurrencyLimit\":50,\"maxQueued\":1,\"schedulingWeight\":10,\"subGroups\":[{\"name\":\"other\",\"softMemoryLimit\":\"10%\",\"hardConcurrencyLimit\":2,\"maxQueued\":1,\"schedulingWeight\":10,\"schedulingPolicy\":\"weighted_fair\",\"subGroups\":[{\"name\":\"${USER}\",\"softMemoryLimit\":\"10%\",\"hardConcurrencyLimit\":1,\"maxQueued\":100}]}]}]},{\"name\":\"admin\",\"softMemoryLimit\":\"100%\",\"hardConcurrencyLimit\":50,\"maxQueued\":100,\"schedulingPolicy\":\"query_priority\",\"jmxExport\":true}],\"selectors\":[{\"group\":\"global.adhoc.other.${USER}\"}],\"cpuQuotaPeriod\":\"1h\"}"
+                    }
+                ]
+            }
+        ]
+    }

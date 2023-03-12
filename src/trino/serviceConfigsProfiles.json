@@ -1,0 +1,25 @@
+"serviceConfigsProfiles": [
+    {
+        "serviceName": "trino",
+        "configs": [
+            {
+                "component": "catalogs",
+                "files": [
+                    <cut>
+                        {
+                        "fileName": "memory.properties",
+                        "values": {
+                            "connector.name": "memory",
+                            "memory.max-data-per-node": "128MB"
+                        }
+                    },
+                    {
+                        "fileName": "trinotestdb1.properties",
+                        "content":"connector.name=sqlserver\nconnection-url=jdbc:sqlserver://mysqlserver1.database.windows.net:1433;database=db1;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;\nconnection-user=${SECRET_REF:trinotest-admin-user}\nconnection-password=${SECRET_REF:trinotest-admin-pwd}\n"
+                    },
+                    <cut>
+                ]
+            }
+        ]
+    }
+],  
