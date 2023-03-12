@@ -1,57 +1,12 @@
-# Project Name
+# HDInsight on AKS
 
-(short, 1-3 sentenced, description of the project)
+HDInsight on AKS, a new HDInsight version in Private Preview, provides enterprise ready managed cluster service with emerging open-source analytics projects like Apache Flink (for Streaming), Trino (for adhoc analytics and BI), and Apache Spark.
 
 ## Features
 
-This project framework provides the following features:
-
-* Feature 1
-* Feature 2
-* ...
-
-## Getting Started
-
-### Prerequisites
-
-(ideally very short, if any)
-
-- OS
-- Library version
-- ...
-
-### Installation
-
-(ideally very short)
-
-- npm install [package name]
-- mvn install
-- ...
-
-### Quickstart
-(Add steps to get up and running quickly)
-
-1. git clone [repository clone url]
-2. cd [repository name]
-3. ...
-
-
-## Demo
-
-A demo app is included to show how to use the project.
-
-To run the demo, follow these steps:
-
-(Add steps to start up the demo)
-
-1.
-2.
-3.
-
-## Resources
-
-(Any additional resources or related projects)
-
-- Link to supporting information
-- Link to similar sample
-- ...
+* In-place minor upgrade
+* Fast cluster creation & scaling
+* Better maintenance and security updates
+* Cluster resiliency using AKS features
+* Native support for Modern auth with OAuth
+* Deep integration with Azure Services – ADF, Power BI, Azure Monitor
