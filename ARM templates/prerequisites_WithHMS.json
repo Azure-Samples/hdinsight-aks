@@ -3,23 +3,27 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "resourcePrefix": {
-            "type": "string",
-          // "defaultValue": "",
+            "type": "String",
             "metadata": {
-                "description": "Provide a prefix for your resource, your resources will be named as [prefix + random string]."
+                "description": "Provide a unique prefix for creating necessary resources required for cluster creation, your resources will be named as [prefix + random string]."
             }
-        },    
-     
+        },
         "sqlServerAdministratorLogin": {
-            "type": "string",
+            "type": "String",
             "metadata": {
                 "description": "The administrator username of the SQL logical server. Please avoid using admin as username"
             }
         },
         "sqlServerAdministratorLoginPassword": {
-            "type": "securestring",
+            "type": "SecureString",
             "metadata": {
                 "description": "The administrator password of the SQL logical server."
+            }
+        },
+        "keyVaultSecretName": {
+            "type": "String",
+            "metadata": {
+                "description": "The secret name in the key vault where the SQL Server administrator password will be stored."
             }
         }
     },
@@ -28,30 +32,28 @@
         "sqlSeverName": "[concat(parameters('resourcePrefix'), 'SqlSever')]",
         "sqlDBName": "[concat(parameters('resourcePrefix'), 'SqlDB')]",
         "keyVaultName": "[concat(parameters('resourcePrefix'), 'KeyVault')]",
+        "storageContainer": "[concat(parameters('resourcePrefix'), 'container')]",
         "msiName": "[concat(parameters('resourcePrefix'), 'MSI')]"
     },
     "functions": [],
     "resources": [
-        //MSI creation
         {
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
             "apiVersion": "2018-11-30",
             "name": "[variables('msiName')]",
             "location": "[resourceGroup().location]",
-            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
             "properties": {}
-            
         },
-        //Storage account and container creation
         {
-            "name": "[variables('storageName')]",
             "type": "Microsoft.Storage/storageAccounts",
-            "location": "[resourceGroup().location]",
             "apiVersion": "2019-04-01",
+            "name": "[variables('storageName')]",
+            "location": "[resourceGroup().location]",
             "sku": {
                 "name": "Standard_RAGRS",
                 "tier": "Standard"
             },
-            
+            "kind": "StorageV2",
             "properties": {
                 "minimumTlsVersion": "TLS1_2",
                 "allowBlobPublicAccess": true,
@@ -63,13 +65,12 @@
                     "ipRules": [],
                     "defaultAction": "Allow"
                 }
-            },
-            "kind": "StorageV2"
+            }
         },
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
             "apiVersion": "2019-06-01",
-            "name": "[concat(variables('storageName'), '/default/', 'container1')]",
+            "name": "[concat(variables('storageName'),'/default/', variables('storageContainer'))]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
             ],
@@ -77,9 +78,6 @@
                 "publicAccess": "None"
             }
         },
-
-   
-        //SQL DB and Server creation
         {
             "type": "Microsoft.Sql/servers",
             "apiVersion": "2020-02-02-preview",
@@ -94,7 +92,6 @@
                 "version": "12.0",
                 "minimalTlsVersion": "1.2"
             }
-            
         },
         {
             "type": "Microsoft.Sql/servers/firewallRules",
@@ -113,6 +110,9 @@
             "apiVersion": "2021-02-01-preview",
             "name": "[concat(variables('sqlSeverName'), '/', variables('sqlDBName'))]",
             "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', variables('sqlSeverName'))]"
+            ],
             "sku": {
                 "name": "GP_Gen5",
                 "tier": "GeneralPurpose",
@@ -129,12 +129,8 @@
                 "readScale": "Disabled",
                 "requestedBackupStorageRedundancy": "Geo",
                 "isLedgerOn": false
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', variables('sqlSeverName'))]"
-            ]
+            }
         },
-        //Key Vault and secret creation
         {
             "type": "Microsoft.KeyVault/vaults",
             "apiVersion": "2019-09-01",
@@ -145,8 +141,8 @@
                 "enabledForDeployment": false,
                 "enabledForTemplateDeployment": false,
                 "enabledForDiskEncryption": false,
-                "enableRbacAuthorization": true,             
-                "accessPolicies": [ ],
+                "enableRbacAuthorization": true,
+                "accessPolicies": [],
                 "sku": {
                     "name": "Standard",
                     "family": "A"
@@ -160,7 +156,7 @@
         {
             "type": "Microsoft.KeyVault/vaults/secrets",
             "apiVersion": "2019-09-01",
-            "name": "[concat(variables('keyVaultName'), '/', 'hmssecret')]",
+            "name": "[concat(variables('keyVaultName'), '/', parameters('keyVaultSecretName'))]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]"
@@ -169,44 +165,39 @@
                 "value": "[parameters('sqlServerAdministratorLoginPassword')]"
             }
         },
-        //Role assignment for Storage account
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2018-09-01-preview",
             "name": "[guid(variables('storageName'), resourceGroup().id)]",
-            "scope": "[concat('Microsoft.Storage/storageAccounts', '/', variables('storageName'))]",
-            "properties": {
-                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b7e6dc6d-f1e8-4753-8033-0f276bb0955b')]",
-                //"principalId": "[reference(variables('msiName')).principalId]"
-                "principalId":"[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('msiName')), '2018-11-30').principalId]"
-            },
             "dependsOn": [
                 "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]",
                 "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('msiName'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]",
                 "[resourceId('Microsoft.Sql/servers/databases', variables('sqlSeverName'), variables('sqlDBName'))]",
                 "[resourceId('Microsoft.Sql/servers', variables('sqlSeverName'))]"
-            ]
-        },      
-        //Role assignment for Key Vault 
+            ],
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b7e6dc6d-f1e8-4753-8033-0f276bb0955b')]",
+                "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('msiName')), '2018-11-30').principalId]"
+            },
+            "scope": "[concat('Microsoft.Storage/storageAccounts', '/', variables('storageName'))]"
+        },
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2018-09-01-preview",
             "name": "[guid(variables('keyVaultName'), resourceGroup().id)]",
-            "scope": "[concat('Microsoft.KeyVault/vaults', '/', variables('keyVaultName'))]",
-            "properties": {
-                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '00482a5a-887f-4fb3-b363-3b7fe8e74483')]",
-                //"principalId": "[reference(variables('msiName')).principalId]"
-                "principalId":"[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('msiName')), '2018-11-30').principalId]"
-
-            },
             "dependsOn": [
                 "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]",
                 "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('msiName'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]",
                 "[resourceId('Microsoft.Sql/servers/databases', variables('sqlSeverName'), variables('sqlDBName'))]",
                 "[resourceId('Microsoft.Sql/servers', variables('sqlSeverName'))]"
-            ]
+            ],
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '00482a5a-887f-4fb3-b363-3b7fe8e74483')]",
+                "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('msiName')), '2018-11-30').principalId]"
+            },
+            "scope": "[concat('Microsoft.KeyVault/vaults', '/', variables('keyVaultName'))]"
         }
     ]
 }
