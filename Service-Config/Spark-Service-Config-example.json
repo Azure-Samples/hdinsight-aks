@@ -1,0 +1,27 @@
+"serviceConfigsProfiles": [
+    {
+        "serviceName": "spark-service",
+        "configs": [
+            {
+                "component": "livy-config",
+                "files": [
+                    {
+                        "fileName": "livy-client.conf",
+                        "values": {
+                            "livy.client.http.connection.timeout": "11s"
+                        }
+                    }
+                ]
+            },
+            {
+                "component": "spark-config",
+                "files": [
+                    {
+                        "fileName": "spark-env.sh",
+                        "content": "# - SPARK_HISTORY_OPTS, to set config properties only for the history server (e.g. \"-Dx=y\")\nexport HDP_VERSION=3.3.3.5.2-83515052\n"
+                    }
+                ]
+            }
+        ]
+    }
+]

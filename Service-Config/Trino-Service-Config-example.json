@@ -1,0 +1,25 @@
+"serviceConfigsProfiles": [
+    {
+        "serviceName": "trino",
+        "configs": [
+            {
+                "component": "coordinator",
+                "files": [
+                    {
+                        "fileName": "config.properties",
+                        "values": {
+                            "query.cache.enabled": "true",
+                            "query.cache.ttl": "1h",
+                            "query.enable-multi-statement-set-session": "true",
+                            "query.max-memory": "301GB"
+                        }
+                    },
+                    {
+                        "fileName": "log.properties",
+                        "values": {
+                            "io.trino": "INFO"
+                        }
+                    }
+                ]
+            }
+]

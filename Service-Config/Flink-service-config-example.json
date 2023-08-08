@@ -1,0 +1,21 @@
+"serviceConfigsProfiles": [
+    {
+        "serviceName": "flink-operator",
+        "configs": [
+            {
+                "component": "flink-configs",
+                "files": [
+                    {
+                        "fileName": "flink-conf.yaml",
+                        "values": {
+                            "taskmanager.memory.process.size": "4096mb",
+                            "classloader.check-leaked-classloader": "false",
+                            "jobmanager.memory.process.size": "4096mb",
+                            "classloader.parent-first-patterns.additional": "org.apache.parquet"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+]
