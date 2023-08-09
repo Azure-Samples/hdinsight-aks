@@ -2,16 +2,57 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "clusterpoolName": {
+        "clusterPoolName": {
             "type": "String",
             "metadata": {
                 "description": "The cluster pool name"
             }
         },
+        "clusterPoolVersion": {
+            "defaultValue": "1.0",
+            "type": "String",
+            "metadata": {
+                "description": "HDInsight on AKS cluster pool version to be created."
+            }
+        },
+        "clusterPoolNodeVmSize": {
+            "defaultValue": "Standard_F4s_v2",
+            "allowedValues": [
+                "Standard_F4s_v2",
+                "Standard_D4av_v4",
+                "Standard_D4as_v4",
+                "Standard_E4s_v3",
+                "Standard_E4_v3"
+            ],
+            "type": "String",
+            "metadata": {
+                "description": "VM SKU selected for the cluster pool"
+            }
+        },
         "resourcePrefix": {
             "type": "String",
             "metadata": {
-                "description": "Provide a prefix for creating mandatory resources required for cluster creation, your mandatory resources will be named as [prefix + random string]."
+                "description": "Provide a prefix for creating necessary resources required for cluster creation, your necessary resources will be named as [prefix + random string]."
+            }
+        },
+        "clusterName": {
+            "type": "String",
+            "metadata": {
+                "description": "The name of the cluster"
+            }
+        },
+        "hdinsightOnAksClusterVersion": {
+            "defaultValue": "1.0.5",
+            "type": "String",
+            "metadata": {
+                "description": "The HDInsight on AKS cluster version to be created"
+            }
+        },
+        "clusterOssVersion": {
+            "defaultValue": "1.16.0",
+            "type": "String",
+            "metadata": {
+                "description": "The OSS version of the cluster to be created"
             }
         },
         "clusterVMSize": {
@@ -41,7 +82,7 @@
         }
     },
     "variables": {
-        "clusterName": "[concat(parameters('clusterpoolName'), '/', parameters('resourcePrefix'), 'flinkcluster')]",
+        "clusterName": "[concat(parameters('clusterPoolName'), '/', parameters('clusterName'))]",
         "msiName": "[concat(parameters('resourcePrefix'), 'MSI')]",
         "roleAssignedGuid": "[guid(variables('msiName'), resourceGroup().id)]",
         "storageName": "[concat(parameters('resourcePrefix'), 'store')]"
@@ -50,11 +91,18 @@
         {
             "type": "microsoft.hdinsight/clusterpools",
             "apiVersion": "2021-09-15-preview",
-            "name": "[parameters('clusterpoolName')]",
+            "name": "[parameters('clusterPoolName')]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "networkProfile": {
                     "subnetId": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('customVnetName')),'/subnets/', parameters('subnetNameInCustomVnet'))]"
+                },
+                "clusterPoolProfile": {
+                    "clusterPoolVersion": "[parameters('clusterPoolVersion')]"
+                },
+                "computeProfile": {
+                    "vmSize": "[parameters('clusterPoolNodeVmSize')]",
+                    "count": 3
                 }
             }
         },
@@ -104,13 +152,13 @@
             "apiVersion": "2020-10-01-preview",
             "name": "[variables('roleAssignedGuid')]",
             "dependsOn": [
-                "[resourceId('microsoft.hdinsight/clusterpools',parameters('clusterpoolName'))]",
+                "[resourceId('microsoft.hdinsight/clusterpools',parameters('clusterPoolName'))]",
                 "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('msiName'))]",
                 "[variables('msiName')]"
             ],
             "properties": {
                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'f1a07417-d97a-45cb-824c-7a7467783830')]",
-                "principalId": "[reference(resourceId('microsoft.hdinsight/clusterpools', parameters('clusterpoolName')), '2021-09-15-preview').aksClusterProfile.aksClusterAgentPoolIdentityProfile.msiObjectId]"
+                "principalId": "[reference(resourceId('microsoft.hdinsight/clusterpools', parameters('clusterPoolName')), '2021-09-15-preview').aksClusterProfile.aksClusterAgentPoolIdentityProfile.msiObjectId]"
             },
             "scope": "[concat('Microsoft.ManagedIdentity/userAssignedIdentities', '/', variables('msiName'))]"
         },
@@ -121,7 +169,7 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]",
                 "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('msiName'))]",
-                "[resourceId('microsoft.hdinsight/clusterpools', parameters('clusterpoolName'))]",
+                "[resourceId('microsoft.hdinsight/clusterpools', parameters('clusterPoolName'))]",
                 "[variables('storageName')]"
             ],
             "properties": {
@@ -136,7 +184,7 @@
             "name": "[variables('clusterName')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('microsoft.hdinsight/clusterpools', parameters('clusterpoolName'))]",
+                "[resourceId('microsoft.hdinsight/clusterpools', parameters('clusterPoolName'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]",
                 "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('msiName'))]"
             ],
@@ -157,18 +205,8 @@
                     ]
                 },
                 "clusterProfile": {
-                    "clusterVersion": "1.0.4",
-                    "ossVersion": "1.16.0",
-                    "components": [
-                        {
-                            "name": "Flink",
-                            "version": "1.16.0"
-                        },
-                        {
-                            "name": "Hive Metastore",
-                            "version": "3.1.2"
-                        }
-                    ],
+                    "clusterVersion": "[parameters('hdinsightOnAksClusterVersion')]",
+				    "ossVersion": "[parameters('clusterOssVersion')]",
                     "identityProfile": {
                         "msiResourceId": "[string(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('msiName')))]",
                         "msiClientId": "[string(reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('msiName'))).clientId)]",
