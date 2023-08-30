@@ -3,7 +3,7 @@
 # due to the fact that it doesn't query an actual cluster
 kubeVersion:
 
-# Oauth client configuration specifics
+# OAuth client configuration specifics
 config:
   # OAuth client secret
   existingSecret: oauth2-secret
