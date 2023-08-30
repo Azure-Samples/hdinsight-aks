@@ -15,7 +15,7 @@ enable_oauth_login: |
      {
          "name": "azure",
          "icon": "fa-windows",
-         "whitelist": [ "{{VALID_DOMAINS}}" ], # this can be empty
+         "allowlist": [ "{{VALID_DOMAINS}}" ], # this can be empty
          "token_key": "access_token",
          "remote_app": {
            "client_id": "{{SERVICE_PRINCIPAL_APPLICATION_ID}}",
