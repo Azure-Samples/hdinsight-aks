@@ -21,12 +21,28 @@
                 "Standard_F4s_v2",
                 "Standard_D4a_v4",
                 "Standard_D4as_v4",
-                "Standard_E4s_v3",
-                "Standard_E4_v3"
+                "Standard_E4s_v3"
             ],
             "type": "String",
             "metadata": {
-                "description": "VM SKU selected for the cluster pool."
+                "description": "VM SKU size for the cluster pool."
+            }
+        },
+        "location": {
+            "defaultValue": "East US 2",
+            "allowedValues": [
+                "West US 2",
+                "West US 3",
+                "East US",
+                "East US 2",
+                "Central India",
+                "UK South",
+                "Korea Central",
+                "West Europe"
+            ],
+            "type": "String",
+            "metadata": {
+                "description": "Location where your resources will be deployed."
             }
         },
         "resourcePrefix": {
@@ -72,14 +88,14 @@
     "variables": {
         "clusterName": "[concat(parameters('clusterPoolName'), '/', parameters('clusterName'))]",
         "msiName": "[concat(parameters('resourcePrefix'), 'MSI')]",
-        "roleAssignedGuid": "[guid(variables('msiName'), resourceGroup().id)]"
+        "roleAssignedGuid": "[guid(variables('msiName'), resourceGroup().id, deployment().name)]"
     },
     "resources": [
         {
             "type": "microsoft.hdinsight/clusterpools",
             "apiVersion": "2023-06-01-preview",
             "name": "[parameters('clusterPoolName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "properties": {
                 "clusterPoolProfile": {
                     "clusterPoolVersion": "[parameters('clusterPoolVersion')]"
@@ -94,12 +110,12 @@
             "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
             "apiVersion": "2018-11-30",
             "name": "[variables('msiName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "properties": {}
         },
         {
             "type": "Microsoft.Authorization/roleAssignments",
-            "apiVersion": "2020-10-01-preview",
+            "apiVersion": "2018-09-01-preview",
             "name": "[variables('roleAssignedGuid')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('msiName'))]",
@@ -116,7 +132,7 @@
             "type": "microsoft.hdinsight/clusterpools/clusters",
             "apiVersion": "2023-06-01-preview",
             "name": "[variables('clusterName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "dependsOn": [
                 "[resourceId('microsoft.hdinsight/clusterpools', parameters('clusterPoolName'))]",
                 "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('msiName'))]"
