@@ -1,0 +1,93 @@
+import logging 
+from datetime import datetime 
+from time import time 
+ 
+import requests 
+from airflow import AirflowException 
+from airflow import DAG 
+from airflow.models import Variable 
+from airflow.operators.python_operator import PythonOperator 
+from azure.identity import ClientSecretCredential 
+ 
+API_VERSION = '2021-09-15-preview' 
+ 
+ 
+def get_token(**conf): 
+    """get oAuth Token""" 
+    # get Client Id, Tenant Id and Secreet for SPN from AKV (Azure Key Vault) 
+    client_id = Variable.get("api-client-id") 
+    api_secret = Variable.get("api-secret") 
+    tenant_id = Variable.get("tenant-id") 
+    client_credential = ClientSecretCredential(tenant_id=tenant_id, client_id=client_id, client_secret=api_secret) 
+    access_token = client_credential.get_token("https://management.azure.com/.default") 
+    if access_token is None: 
+        raise ValueError( 
+            "not able to retrieve OAuth token, please validate your environment and Azure service principal") 
+    else: 
+        conf['ti'].xcom_push(key='token', value=access_token.token) 
+ 
+ 
+def submit_flink_job(**conf): 
+    """submit flink job using Azure REST API""" 
+    if ("subscription" in conf["params"] and "rg" in conf["params"] and "poolNm" in conf["params"] and 
+            "clusterNm" in conf["params"] and "jarName" in conf["params"] and "jarDirectory" in conf["params"]): 
+        bearer_token = conf['ti'].xcom_pull(task_ids='get_token', key='token') 
+        conf_param = conf["params"] 
+        flink_job_submit_url = ( 
+            f"https://management.azure.com/subscriptions/{conf_param['subscription']}/resourceGroups/" 
+            f"{conf_param['rg']}/providers/Microsoft.HDInsight/clusterpools/{conf_param['poolNm']}" 
+            f"/clusters/{conf_param['clusterNm']}/runJob?api-version={API_VERSION}" 
+        ) 
+        output_folder = int(time() * 1000) 
+        request_payload = { 
+            "properties": { 
+                "jobType": "FlinkJob", 
+                "jobName": f"wordcountdemo{output_folder}", 
+                "action": "NEW", 
+                "jobJarDirectory": conf_param["jarDirectory"], 
+                "jarName": conf_param["jarName"], 
+                "entryClass": "org.apache.flink.examples.java.wordcount.WordCount", 
+                "args": f"--input /opt/flink/LICENSE --output /tmp/{output_folder}", 
+                "flinkConfiguration": { 
+                    "parallelism": "2" 
+                } 
+            } 
+        } 
+        logging.info(f"request payload: {request_payload}") 
+        logging.info(f"flink job submit url: {flink_job_submit_url}") 
+        headers = { 
+            'Authorization': f'Bearer {bearer_token}' 
+        } 
+        try: 
+            response = requests.post(flink_job_submit_url, json=request_payload, headers=headers) 
+            response.raise_for_status() 
+        except requests.exceptions.RequestException as exception: 
+            logging.warning(exception) 
+            raise AirflowException from exception 
+    else: 
+        logging.warning("required input parameters are" 
+                        "{'jarName':'','jarDirectory':'abfs://filesystem@<storageaccount>.dfs.core.windows.net'," 
+                        "'subscritpion':'','rg':'','poolNm':'','clusterNm':''}") 
+        raise ValueError("required input parameters are missing") 
+ 
+ 
+with DAG( 
+        "FlinkWordCountExample", 
+        default_args={ 
+            "depends_on_past": False, 
+            "retries": 0 
+        }, 
+        description="Submit Flink WordCount Job", 
+        start_date=datetime(2021, 1, 1), 
+        catchup=False, 
+        tags=["HDInsight on AKS example"], 
+) as dag: 
+    get_access_token = PythonOperator( 
+        task_id='get_token', 
+        python_callable=get_token 
+    ) 
+    submit_flink_example_job = PythonOperator( 
+        task_id="submit_flink_example_job", 
+        python_callable=submit_flink_job 
+    ) 
+ 
