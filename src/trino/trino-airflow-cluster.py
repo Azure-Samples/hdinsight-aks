@@ -12,7 +12,7 @@ connect_id="_trino_test_connection"
 #
 # Update with your HDInsight on AKS Trino cluster details.
 #
-scopes= [ "https://hilo.azurehdinsight.net/.default" ]
+scopes= [ "https://clusteraccess.hdinsightaks.net/.default" ]
 authority= "https://login.microsoftonline.com/<azure_tenant_id>"
 client_id= "<service_principal_client_id>"
 secret= "<service_principal_secret>"
