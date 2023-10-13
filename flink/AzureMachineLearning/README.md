@@ -99,7 +99,12 @@ we will use these images to try the predictions using above best model in Azure 
 Window: TimeWindow{start=1697164140000, end=1697164160000}, Image classification: [Image: abfs://<container>@<ADLSgen2 account>.dfs.core.windows.net/data/dataset/multilabelFridgeObjects/Images/\1.jpg, Prediction: [{"probs": [0.04639384523034096, 0.9998229146003723, 0.013027748093008995, 0.0031216121278703213], "labels": ["can", "carton", "milk_bottle", "water_bottle"]}], ...... Image: abfs://<container>@<ADLSgen2 account>.dfs.core.windows.net/data/dataset/multilabelFridgeObjects/Images/\99.jpg, Prediction: [{"probs": [0.028434578329324722, 0.9936914443969727, 0.9988549947738647, 0.04662548005580902], "labels": ["can", "carton", "milk_bottle", "water_bottle"]}]], Count: 60
 ```
 
-Above  prediction result is given in a JSON format with two arrays: **`probs` and `labels`**. 
+Take below for example,
+```
+ Image: abfs://<container>@<ADLSgen2 account>.dfs.core.windows.net/data/dataset/multilabelFridgeObjects/Images/\99.jpg, Prediction: [{"probs": [0.028434578329324722, 0.9936914443969727, 0.9988549947738647, 0.04662548005580902], "labels": ["can", "carton", "milk_bottle", "water_bottle"]}
+```
+
+Above prediction result is given in a JSON format with two arrays: **`probs` and `labels`**. 
 
 - The `labels` array represents the different classes that the model can predict. The classes are `"can"`, `"carton"`, `"milk_bottle"`, and `"water_bottle"`.
 
@@ -112,11 +117,8 @@ Here's how to interpret the prediction:
 - `"milk_bottle"`: The model is **99.89%** confident that there's a milk bottle in the image.
 - `"water_bottle"`: The model is **4.66%** confident that there's a water bottle in the image.
 
-Take below for example, According to this prediction, the model is highly confident that there's a carton and a milk bottle in the image, but it's not very confident about the presence of a can or a water bottle. 
-```
- Image: abfs://<container>@<ADLSgen2 account>.dfs.core.windows.net/data/dataset/multilabelFridgeObjects/Images/\99.jpg, Prediction: [{"probs": [0.028434578329324722, 0.9936914443969727, 0.9988549947738647, 0.04662548005580902], "labels": ["can", "carton", "milk_bottle", "water_bottle"]}
-```
-
+According to this prediction, the model is highly confident that there's a carton and a milk bottle in the image, but it's not very confident about the presence of a can or a water bottle. 
+ 
 **ProcessWindowFunction in the ImageClassificationJob.java** <br>
 The ProcessWindowFunction is a special type of window function in Apache Flink that provides more flexibility than other window functions like ReduceFunction or AggregateFunction. It gives you access to additional information such as the window and the timestamp of the elements.
 
