@@ -86,9 +86,6 @@ we will use these images to try the predictions using above best model in Azure 
 ![image](https://github.com/Baiys1234/hdinsight-aks-2/assets/35547706/38805770-88f0-48be-b5a2-a8160e830140)
 
 **Develep on maven project, packag the jar and submit to HDInsight Flink cluster to run(Flink UI or Cluster webssh)** <br>
-
-![image](https://github.com/Baiys1234/hdinsight-aks-2/assets/35547706/540a989b-fff9-411f-aa5c-5cf70c1f6571)
-
 **Check the Stream JOB on Flink UI** <br>
 
 ![image](https://github.com/Baiys1234/hdinsight-aks-2/assets/35547706/2744345a-ccc1-44e5-b781-85a74a468330)
