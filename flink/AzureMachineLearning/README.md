@@ -119,6 +119,9 @@ The ProcessWindowFunction is a special type of window function in Apache Flink t
 In my code, for each element in the window, we're calling an Azure ML service to classify an image and then collecting the results. 
 Once all elements have been processed, we’re emitting a string that contains the window information, image classification results, and count of images processed.
 
+#Ref
+https://nightlies.apache.org/flink/flink-docs-release-1.16/docs/dev/datastream/operators/windows/#processwindowfunction
+
 **callAzureML(String imageUrl) in the ImageClassificationJob.java** <br>
 This is a helper method that sends a POST request to an Azure ML service with base64-encoded image data in the request body. The response from the Azure ML service (which would be the classification result) is returned as a string.
 
