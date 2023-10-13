@@ -80,20 +80,20 @@ Azure ML service API key:<br>
 ![image](https://github.com/Baiys1234/hdinsight-aks-2/assets/35547706/2110659a-440a-4800-819d-e5afe34d939d)
 
 ## Implemetation <br>
-**upload source images file**:
+**upload source images file**: <br>
 https://cvbp-secondary.z19.web.core.windows.net/datasets/image_classification/multilabelFridgeObjects.zip into ADLS gen2,
 we will use these images to try the predictions using above best model in Azure ML.
 ![image](https://github.com/Baiys1234/hdinsight-aks-2/assets/35547706/38805770-88f0-48be-b5a2-a8160e830140)
 
-**Develep on maven project, packag the jar and submit to HDInsight Flink cluster to run(Flink UI or Cluster webssh)**
+**Develep on maven project, packag the jar and submit to HDInsight Flink cluster to run(Flink UI or Cluster webssh)** <br>
 
 ![image](https://github.com/Baiys1234/hdinsight-aks-2/assets/35547706/540a989b-fff9-411f-aa5c-5cf70c1f6571)
 
-**Check the Stream JOB on Flink UI**
+**Check the Stream JOB on Flink UI** <br>
 
 ![image](https://github.com/Baiys1234/hdinsight-aks-2/assets/35547706/2744345a-ccc1-44e5-b781-85a74a468330)
 
-**Check Image Prediction result file on ADLS gen2**
+**Check Image Prediction result file on ADLS gen2** <br>
 
 ```
 Window: TimeWindow{start=1697164140000, end=1697164160000}, Image classification: [Image: abfs://<container>@<ADLSgen2 account>.dfs.core.windows.net/data/dataset/multilabelFridgeObjects/Images/\1.jpg, Prediction: [{"probs": [0.04639384523034096, 0.9998229146003723, 0.013027748093008995, 0.0031216121278703213], "labels": ["can", "carton", "milk_bottle", "water_bottle"]}], ...... Image: abfs://<container>@<ADLSgen2 account>.dfs.core.windows.net/data/dataset/multilabelFridgeObjects/Images/\99.jpg, Prediction: [{"probs": [0.028434578329324722, 0.9936914443969727, 0.9988549947738647, 0.04662548005580902], "labels": ["can", "carton", "milk_bottle", "water_bottle"]}]], Count: 60
@@ -117,16 +117,16 @@ Take below for example, According to this prediction, the model is highly confid
  Image: abfs://<container>@<ADLSgen2 account>.dfs.core.windows.net/data/dataset/multilabelFridgeObjects/Images/\99.jpg, Prediction: [{"probs": [0.028434578329324722, 0.9936914443969727, 0.9988549947738647, 0.04662548005580902], "labels": ["can", "carton", "milk_bottle", "water_bottle"]}
 ```
 
-**ProcessWindowFunction in the ImageClassificationJob.java**
+**ProcessWindowFunction in the ImageClassificationJob.java** <br>
 The ProcessWindowFunction is a special type of window function in Apache Flink that provides more flexibility than other window functions like ReduceFunction or AggregateFunction. It gives you access to additional information such as the window and the timestamp of the elements.
 
 In my code, for each element in the window, we're calling an Azure ML service to classify an image and then collecting the results. 
 Once all elements have been processed, we’re emitting a string that contains the window information, image classification results, and count of images processed.
 
-**callAzureML(String imageUrl) in the ImageClassificationJob.java**
+**callAzureML(String imageUrl) in the ImageClassificationJob.java** <br>
 This is a helper method that sends a POST request to an Azure ML service with base64-encoded image data in the request body. The response from the Azure ML service (which would be the classification result) is returned as a string.
 
-## Clean up
+## Clean up <br>
 Donot forget to clean up the resources we created above.
 
 
