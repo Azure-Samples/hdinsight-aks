@@ -66,9 +66,6 @@ After Step2, you will get best Model and endpoint with registerred best model an
 best Model:<br>
 ![image](https://github.com/Baiys1234/hdinsight-aks-2/assets/35547706/641c69a7-4742-41b1-ad2f-c5fc57913461)
 
-model list:<br>
-![image](https://github.com/Baiys1234/hdinsight-aks-2/assets/35547706/ec77261f-9315-49d1-9ef0-bb559a1a09ee)
-
 endpoint:<br>
 ![image](https://github.com/Baiys1234/hdinsight-aks-2/assets/35547706/14c535c6-9e9a-4cf0-af31-c58cddc22a94)
 
