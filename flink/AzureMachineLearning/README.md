@@ -93,9 +93,7 @@ we will use these images to try the predictions using above best model in Azure 
 
 ![image](https://github.com/Baiys1234/hdinsight-aks-2/assets/35547706/2744345a-ccc1-44e5-b781-85a74a468330)
 
-**Check Image Prediction result**
-
-
+**Check Image Prediction result file on ADLS gen2**
 
 ```
 Window: TimeWindow{start=1697164140000, end=1697164160000}, Image classification: [Image: abfs://<container>@<ADLSgen2 account>.dfs.core.windows.net/data/dataset/multilabelFridgeObjects/Images/\1.jpg, Prediction: [{"probs": [0.04639384523034096, 0.9998229146003723, 0.013027748093008995, 0.0031216121278703213], "labels": ["can", "carton", "milk_bottle", "water_bottle"]}], ...... Image: abfs://<container>@<ADLSgen2 account>.dfs.core.windows.net/data/dataset/multilabelFridgeObjects/Images/\99.jpg, Prediction: [{"probs": [0.028434578329324722, 0.9936914443969727, 0.9988549947738647, 0.04662548005580902], "labels": ["can", "carton", "milk_bottle", "water_bottle"]}]], Count: 60
