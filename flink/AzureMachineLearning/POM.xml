@@ -59,6 +59,22 @@
             <artifactId>json</artifactId>
             <version>20210307</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/ai.djl.pytorch/pytorch-model-zoo -->
+        <dependency>
+            <groupId>ai.djl.pytorch</groupId>
+            <artifactId>pytorch-model-zoo</artifactId>
+            <version>0.24.0</version>
+        </dependency>
+        <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>2.13.0</version>
+        </dependency>
+        <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>2.13.0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
