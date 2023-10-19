@@ -14,11 +14,7 @@ import java.io.IOException;
 public class ImageStreamFormat implements BulkFormat<ImageDataWithPath, FileSourceSplit> {
     @Override
     public Reader createReader(Configuration config, FileSourceSplit split) throws IOException {
-        // Only process .jpg files
-        if (!split.path().getName().endsWith(".jpg")) {
-            return new EmptyReader();
-        }
-
+   
         // Your existing reader creation logic here
         return new Reader() {
             private final org.apache.flink.core.fs.FSDataInputStream stream;
