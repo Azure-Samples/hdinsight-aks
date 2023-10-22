@@ -284,11 +284,13 @@ FROM (
 GROUP BY date_str,time_str;
 ```
 On Flink WEB UI:
-![image.png](/.attachments/image-6f75bd17-e507-41a9-a911-39ebf123ccdb.png)
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/36261870-288f-4475-ba52-2cce0bb3057d)
+
 
 After submitting this query, we create an elastic_cumulative_uv index pattern in Kibana. We then create a “Line” (line graph) on the dashboard, by selecting the elastic_cumulative_uv index, and drawing the cumulative UV curve according to the configuration on the left side of the following figure before finally saving the curve.
 
-![image.png](/.attachments/image-20ea2c8e-4460-40b8-a84b-a7b5acea5841.png)
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/7ec724f7-4253-4d14-af68-d97671c6486d)
+
 
 **Top Categories**
 
