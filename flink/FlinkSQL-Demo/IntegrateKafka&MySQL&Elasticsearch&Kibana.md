@@ -243,7 +243,7 @@ GROUP BY TUMBLE(ts, INTERVAL '1' HOUR);
 
 After running the previous query in the Flink SQL CLI, we can observe the submitted task on Flink WEB UI
 
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/4815f50b-f4b3-4cdf-a922-ee229c827c07)
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/cab7121c-f8e4-45e8-a5d7-1e2033d8e6da)
 
 
 Using Kibana to Visualize Results:
