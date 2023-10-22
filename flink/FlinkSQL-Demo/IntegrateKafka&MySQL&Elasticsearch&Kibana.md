@@ -188,3 +188,173 @@ insert into kafka_user_behavior_json select user_id,item_id,category_id,behavior
 
 ## Real-world scenarios
 
+Run the following DDL statement in SQL CLI to create a table that connects to the topic in the Kafka cluster:
+
+``` SQL
+CREATE TABLE kafka_user_behavior (
+    user_id BIGINT,
+    item_id BIGINT,
+    category_id BIGINT,
+    behavior STRING,
+    ts TIMESTAMP(3),
+    proctime AS PROCTIME(),   -- generates processing-time attribute using computed column
+    WATERMARK FOR ts AS ts - INTERVAL '5' SECOND  -- generates processing-time attribute using computed column
+) WITH (
+    'connector' = 'kafka',  -- using kafka connector
+    'topic' = 'user_behavior_json',  -- kafka topic
+    'scan.startup.mode' = 'earliest-offset',  -- reading from the beginning
+    'properties.bootstrap.servers'='<broker1>:96,<broker2>:9092,<broker3>:9092',  -- kafka broker address
+    'format' = 'json');   -- the data format is json
+select * from kafka_user_behavior;
+```
+
+The Above snippet declares five fields based on the data format. In addition, it uses the computed column syntax and built-in PROCTIME() function to declare a virtual column that generates the processing-time attribute. It also uses the WATERMARK syntax to declare the watermark strategy on the ts field (tolerate 5-seconds out-of-order). Therefore, the ts field becomes an event-time attribute.
+
+After creating the kafka_user_behavior table in the SQL CLI, run **SHOW TABLES;** and **DESCRIBE kafka_user_behavior ;** to see registered tables and table details. Also, run the command **SELECT * FROM kafka_user_behavior ;** directly in the SQL CLI to preview the data (press q to exit).
+
+**Hourly Trading Volume**
+
+create an Elasticsearch result table in the SQL CLI. We need two columns in this case: hour_of_day and buy_cnt (trading volume).
+
+There is no need to create the buy_cnt_per_hour index in Elasticsearch in advance since Elasticsearch will automatically create the index if it does not exist.
+
+``` SQL
+CREATE TABLE elastic_buy_cnt_per_hour (
+    hour_of_day BIGINT,
+    buy_cnt BIGINT
+) WITH (
+    'connector' = 'elasticsearch-7', -- using elasticsearch connector 
+    'hosts' = 'http://10.0.0.7:9200',  -- elasticsearch address
+    'index' = 'elastic_buy_cnt_per_hour'  -- elasticsearch index name, similar to database table name
+);
+```
+
+The hourly trading volume is the number of “buy” behaviors completed each hour. Therefore, we can use a TUMBLE window function to assign data into hourly windows. Then, we count the number of “buy” records in each window. To implement this, we can filter out the “buy” data first and then apply COUNT(*).
+
+Here, we use the built-in HOUR function to extract the value for each hour in the day from a TIMESTAMP column. Use INSERT INTO to start a Flink SQL job that continuously writes results into the Elasticsearch buy_cnt_per_hour index. The Elasticearch result table can be seen as a materialized view of the query.
+
+``` SQL
+INSERT INTO elastic_buy_cnt_per_hour
+SELECT HOUR(TUMBLE_START(ts, INTERVAL '1' HOUR)), COUNT(*)
+FROM kafka_user_behavior
+WHERE behavior = 'buy'
+GROUP BY TUMBLE(ts, INTERVAL '1' HOUR);
+```
+
+After running the previous query in the Flink SQL CLI, we can observe the submitted task on Flink WEB UI
+
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/4815f50b-f4b3-4cdf-a922-ee229c827c07)
+
+
+Using Kibana to Visualize Results:
+
+Access Kibana at http://<elasticsearch>:5601. First, configure an index pattern by clicking "Management" in the left-side toolbar and find "Index Patterns". Next, click "Create Index Pattern" and enter the full index name elastic_buy_cnt_per_hour to create the index pattern. After creating the index pattern, we can explore data in Kibana.
+
+You can see that during 11:00~15:00 the number of transactions have the Highest value for the entire day.
+
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/b894f0f0-1f6f-4abc-9e92-57a196e82ae8)
+
+
+**Cumulative number of Unique Visitors every 10-min**
+
+Let’s create another Elasticsearch table in the SQL CLI to store the UV results. This table contains 3 columns: date, time and cumulative UVs. The date_str and time_str column are defined as primary key, Elasticsearch sink will use them to calculate the document ID and work in upsert mode to update UV values under the document ID.
+
+``` SQL
+CREATE TABLE elastic_cumulative_uv(
+    date_str STRING,
+    time_str STRING,
+    uv BIGINT,
+    PRIMARY KEY (date_str, time_str) NOT ENFORCED
+) WITH (
+    'connector' = 'elasticsearch-7',
+    'hosts' = 'http://10.0.0.7:9200',
+    'index' = 'elastic_cumulative_uv'
+);
+```
+
+We can extract the date and time using DATE_FORMAT function based on the ts field. As the section title describes, we only need to report every 10 minutes. So, we can use SUBSTR and the string concat function || to convert the time value into a 10-minute interval time string, such as 12:00, 12:10. Next, we group data by date_str and perform a COUNT DISTINCT aggregation on user_id to get the current cumulative UV in this day. Additionally, we perform a MAX aggregation on time_str field to get the current stream time: the maximum event time observed so far. As the maximum time is also a part of the primary key of the sink, the final result is that we will insert a new point into the elasticsearch every 10 minute. And every latest point will be updated continuously until the next 10-minute point is generated.
+``` SQL
+INSERT INTO elastic_cumulative_uv
+SELECT date_str, MAX(time_str), COUNT(DISTINCT user_id) as uv
+FROM (
+  SELECT
+    DATE_FORMAT(ts, 'yyyy-MM-dd') as date_str,
+    SUBSTR(DATE_FORMAT(ts, 'HH:mm'),1,4) || '0' as time_str,
+    user_id
+  FROM kafka_user_behavior)
+GROUP BY date_str,time_str;
+```
+On Flink WEB UI:
+![image.png](/.attachments/image-6f75bd17-e507-41a9-a911-39ebf123ccdb.png)
+
+After submitting this query, we create an elastic_cumulative_uv index pattern in Kibana. We then create a “Line” (line graph) on the dashboard, by selecting the elastic_cumulative_uv index, and drawing the cumulative UV curve according to the configuration on the left side of the following figure before finally saving the curve.
+
+![image.png](/.attachments/image-20ea2c8e-4460-40b8-a84b-a7b5acea5841.png)
+
+**Top Categories**
+
+The last visualization represents the category rankings to inform us on the most popular categories in our e-commerce site. Since our data source offers events for more than 5,000 categories without providing any additional significance to our analytics, we would like to reduce it so that it only includes the top-level categories. We will use the data in our MySQL database by joining it as a dimension table with our Kafka events to map sub-categories to top-level categories.
+
+Create a table in the SQL CLI to make the data in MySQL accessible to Flink SQL.
+
+The underlying JDBC connector implements the LookupTableSource interface, so the created JDBC table category_dim can be used as a temporal table (i.e. lookup table) out-of-the-box in the data enrichment.
+
+``` SQL
+CREATE TABLE category_dim (
+    sub_category_id BIGINT,
+    parent_category_name STRING
+) WITH (
+  'connector' = 'jdbc',
+  'url' = 'jdbc:mysql://<mysql server>.mysql.database.azure.com:3306/mydb',
+  'table-name' = 'category',
+  'username' = '<Username>',
+  'password' = '<Password>',
+    'lookup.cache.max-rows' = '5000',
+    'lookup.cache.ttl' = '10min'
+);
+```
+
+In addition, create an Elasticsearch table to store the category statistics.
+
+``` SQL
+CREATE TABLE top_category (
+    category_name STRING PRIMARY KEY NOT ENFORCED,
+    buy_cnt BIGINT
+) WITH (
+    'connector' = 'elasticsearch-7',
+    'hosts' = 'http://10.0.0.7:9200',
+    'index' = 'top_category'
+);
+```
+
+In order to enrich the category names, we use Flink SQL’s temporal table joins to join a dimension table. You can access more information about temporal joins in the Flink documentation.
+
+Additionally, we use the CREATE VIEW syntax to register the query as a logical view, allowing us to easily reference this query in subsequent queries and simplify nested queries. Please note that creating a logical view does not trigger the execution of the job and the view results are not persisted. Therefore, this statement is lightweight and does not have additional overhead.
+
+``` SQL
+CREATE VIEW rich_user_behavior AS
+SELECT U.user_id, U.item_id, U.behavior, C.parent_category_name as category_name
+FROM kafka_user_behavior AS U LEFT JOIN category_dim FOR SYSTEM_TIME AS OF U.proctime AS C
+ON U.category_id = C.sub_category_id;
+```
+
+Finally, we group the dimensional table by category name to count the number of buy events and write the result to Elasticsearch’s top_category index.
+``` SQL
+INSERT INTO top_category
+SELECT category_name, COUNT(*) buy_cnt
+FROM rich_user_behavior
+WHERE behavior = 'buy'
+GROUP BY category_name;
+```
+
+on Flink WEB UI:
+![image.png](/.attachments/image-2cc91f4b-7d80-4d7b-b6ab-0c32ed865571.png)
+
+After submitting the query, we create a top_category index pattern in Kibana. We then create a “Horizontal Bar” (bar graph) on the dashboard, by selecting the top_category index and drawing the category ranking according to the configuration on the left side of the following diagram before finally saving the list.
+
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/27b1e3c9-0833-4793-86b8-a9834067335e)
+
+
+
+## Ref
+https://flink.apache.org/2020/07/28/flink-sql-demo-building-an-end-to-end-streaming-application/
