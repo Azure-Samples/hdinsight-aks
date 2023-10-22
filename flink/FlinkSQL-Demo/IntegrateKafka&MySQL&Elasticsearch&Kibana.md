@@ -243,7 +243,7 @@ GROUP BY TUMBLE(ts, INTERVAL '1' HOUR);
 
 After running the previous query in the Flink SQL CLI, we can observe the submitted task on Flink WEB UI
 
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/cab7121c-f8e4-45e8-a5d7-1e2033d8e6da)
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/8854c0ed-9f18-480e-b245-975ab0b52277)
 
 
 Using Kibana to Visualize Results:
@@ -252,8 +252,7 @@ Access Kibana at http://<elasticsearch>:5601. First, configure an index pattern 
 
 You can see that during 11:00~15:00 the number of transactions have the Highest value for the entire day.
 
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/b894f0f0-1f6f-4abc-9e92-57a196e82ae8)
-
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/e0c48451-376e-4eab-9739-09c31b384f28)
 
 **Cumulative number of Unique Visitors every 10-min**
 
