@@ -1,6 +1,5 @@
 package contoso.example;
 
-
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.connector.file.src.FileSourceSplit;
@@ -12,10 +11,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class ImageStreamFormat implements BulkFormat<ImageDataWithPath, FileSourceSplit> {
+
+    // read image data and its associated file path from a file system.
     @Override
     public Reader createReader(Configuration config, FileSourceSplit split) throws IOException {
    
-        // Your existing reader creation logic here
+        // The Reader reads the image data from the file system using an FSDataInputStream
         return new Reader() {
             private final org.apache.flink.core.fs.FSDataInputStream stream;
             private boolean end = false;
@@ -25,6 +26,7 @@ public class ImageStreamFormat implements BulkFormat<ImageDataWithPath, FileSour
                 this.stream = filePath.getFileSystem().open(filePath);
             }
 
+            //  reads the entire image file into a byte array 
             @Override
             public RecordIterator<ImageDataWithPath> readBatch() throws IOException {
                 return new RecordIterator<ImageDataWithPath>() {
@@ -62,7 +64,7 @@ public class ImageStreamFormat implements BulkFormat<ImageDataWithPath, FileSour
             }
         };
     }
-
+    // restores a reader from a checkpointed position
     @Override
     public Reader restoreReader(Configuration config, FileSourceSplit split) throws IOException {
         return createReader(config, split);
@@ -72,11 +74,14 @@ public class ImageStreamFormat implements BulkFormat<ImageDataWithPath, FileSour
     public TypeInformation<ImageDataWithPath> getProducedType() {
         return TypeInformation.of(ImageDataWithPath.class);
     }
+
+    //indicates whether the format is splittable. In this case, it returns false, meaning that the image files cannot be read in parallel.
     @Override
     public boolean isSplittable() {
         return false;
     }
 
+    // creates an ImageDataWithPath object with this byte array and the file path
     private byte[] readAllBytes(org.apache.flink.core.fs.FSDataInputStream stream) throws IOException {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         int nRead;
