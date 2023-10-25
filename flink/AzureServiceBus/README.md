@@ -1,8 +1,8 @@
-**This Flink job demo reads messages from an Azure Service Bus topic and writes them to ADLS gen2.**
+## This Flink job demo reads messages from an Azure Service Bus topic and writes them to ADLS gen2.**
 
 Here’s a breakdown of what each part does!
 
-Main code: ServiceBusToAdlsgen2.java
+**Main code: ServiceBusToAdlsgen2.java**
 
 1. **Setting up the execution environment**: The StreamExecutionEnvironment.getExecutionEnvironment() method is used to set up the execution environment for the Flink job.
 
@@ -17,6 +17,18 @@ Main code: ServiceBusToAdlsgen2.java
 6. **Adding the sink function to the processed stream**: The processedStream.sinkTo(sink) method is used to add the sink function to the processed stream. Each processed element will be written to a file in Azure Data Lake Storage Gen2.
 
 7. **Executing the job**: Finally, the env.execute("ServiceBusToDataLakeJob") method is used to execute the Flink job. This will start reading messages from the Azure Service Bus topic, process them, and write them to Azure Data Lake Storage Gen2.
+
+**Flink source function: SessionBasedServiceBusSource.java**
+
+1. **Class Definition**: The SessionBasedServiceBusSource class extends RichParallelSourceFunction<String>, which is a base class for implementing a parallel data source in Flink.
+
+2. **Instance Variables**: The connectionString, topicName, and subscriptionName variables hold the connection string, topic name, and subscription name for your Azure Service Bus. The isRunning flag is used to control the execution of the source function. The sessionReceiver is an instance of ServiceBusSessionReceiverAsyncClient, which is used to receive messages from the Service Bus.
+
+3. **Constructor**: The constructor initializes the instance variables with the provided values.
+
+4. **run() Method**: This method is where the source function starts to emit data to Flink. It creates a ServiceBusSessionReceiverAsyncClient, accepts the next available session, and starts receiving messages from that session. Each message’s body is then collected into the Flink source context.
+
+5. **cancel() Method**: This method is called when the source function needs to be stopped. It sets the isRunning flag to false and closes the sessionReceiver.
 
 ## Requirements
 
