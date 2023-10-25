@@ -12,7 +12,7 @@ This is the context in which the program is executed. The environment provides m
  Checkpointing is enabled with an interval of 5000 milliseconds, and the checkpoint storage path is set to a location in ADLS Gen2
 
 ```        env.enableCheckpointing(5000);
-        String checkPointPath = "abfs://flink@cicihilogen2.dfs.core.windows.net/CheckPoint";
+        String checkPointPath = "abfs://<container>@<account>.dfs.core.windows.net/CheckPoint";
         env.getCheckpointConfig().setCheckpointStorage(checkPointPath);
         String path = "abfs://<container>@<account>.dfs.core.windows.net/data/dataset/multilabelFridgeObjects/Images/";
 ```
