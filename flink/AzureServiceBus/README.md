@@ -1,4 +1,4 @@
-## This Flink job demo reads messages from an Azure Service Bus topic and writes them to ADLS gen2.**
+## This Flink job demo reads messages from an Azure Service Bus topic and writes them to ADLS gen2.
 
 Here’s a breakdown of what each part does!
 
