@@ -54,11 +54,14 @@ Job has been submitted with JobID fc5793361a914821c968b5746a804570
 
 **Confirm job on Flink UI:**
 
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/bacaeba2-47fc-4e65-a8eb-a916af64550e)
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/eeb5fb08-c15c-4917-9899-7fbb9ce8277c)
 
 **Sending message from Azure portal Serice Bus Explorer**
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/d4ba1c3c-0b48-458c-b082-0a1a8c1d3624)
+
+**Checking job running details on Flink UI:**
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/50f5ad9a-d841-4636-bce7-bc0be68e5959)
 
 **Confirm output file in ADLS gen2 on Portal**
 
