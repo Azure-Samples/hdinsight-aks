@@ -1,4 +1,6 @@
-This example Java code is for Apache Flink Streaming job(DataStream API) that reads image files from a directory in ADLS gen2, sends them to an Azure Machine Learning (AML) service for image classification, and outputs the image classification result to a file in ADLS gen2.
+# Real-time inference using deep learning with Azure Machine Learning and Apache Flink on HDInsight on AKS
+
+This example Java code is for Apache Flink Streaming job (DataStream API) that reads image files from a directory in ADLS gen2, sends them to an Azure Machine Learning (AML) service for image classification, and outputs the image classification result to a file in ADLS gen2.
 
 Here’s a breakdown of what each part does!
 
