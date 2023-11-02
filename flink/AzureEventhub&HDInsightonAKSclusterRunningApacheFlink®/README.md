@@ -180,8 +180,8 @@ Job has been submitted with JobID 4678dbf011f5a54e565aeb2e3b532ad2
 
 ## Clean Up the resource
 
-• Flink 1.16.0 on HDInsight on AKS
-• Azure Eventhub
+• Flink 1.16.0 on HDInsight on AKS <br>
+• Azure Eventhub <br>
 
 ## Reference
 https://learn.microsoft.com/en-us/azure/hdinsight-aks/flink/flink-how-to-setup-event-hub
