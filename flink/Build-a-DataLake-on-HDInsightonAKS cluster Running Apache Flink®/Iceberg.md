@@ -50,7 +50,7 @@ Add dependencies to server classpath in Flink SQL
 
 ``` SQL
 ADD JAR '/opt/flink-webssh/lib/iceberg-flink-runtime-1.16-1.3.0.jar';
-  ADD JAR '/opt/flink-webssh/lib/parquet-column-1.12.2.jar';
+ADD JAR '/opt/flink-webssh/lib/parquet-column-1.12.2.jar';
 ```
 
 or
@@ -63,22 +63,22 @@ Add dependencies to server classpath in sql-client.sh
 ## Create Database
 ``` SQL
 CREATE DATABASE iceberg_db_2;
-  USE iceberg_db_2;
+USE iceberg_db_2;
 ```
 
 ## Create Table
 ``` SQL
-    CREATE TABLE `hive_catalog`.`iceberg_db_2`.`iceberg_sample_2`
-    (
-    id BIGINT COMMENT 'unique id',
-    data STRING
-    )
-    PARTITIONED BY (data);
+CREATE TABLE `hive_catalog`.`iceberg_db_2`.`iceberg_sample_2`
+(
+id BIGINT COMMENT 'unique id',
+data STRING
+)
+PARTITIONED BY (data);
 ```
 
 ## Insert Data into the Iceberg Table
 ``` SQL
- INSERT INTO `hive_catalog`.`iceberg_db_2`.`iceberg_sample_2` VALUES (1, 'a');
+INSERT INTO `hive_catalog`.`iceberg_db_2`.`iceberg_sample_2` VALUES (1, 'a');
 ```
 
 ## REf
