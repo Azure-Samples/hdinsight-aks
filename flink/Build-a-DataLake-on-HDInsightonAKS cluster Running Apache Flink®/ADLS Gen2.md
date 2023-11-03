@@ -96,9 +96,6 @@ Flink SQL> CREATE TABLE csvtab (
 > 
 [INFO] Execute statement succeed.
 
-Flink SQL> select count(*) from csvtab;
-[INFO] Result retrieval cancelled.
-
 Flink SQL> SET 'execution.runtime-mode' = 'batch';
 [INFO] Session property has been set.
 
@@ -113,4 +110,56 @@ Flink SQL> select count(*) from csvtab;
 +--------+
 ```
 
+## Apache Hive on Apache Flink
 
+Flink offers a two-fold integration with Hive. <br>
+
+.The first step is to use Hive Metastore (HMS) as a persistent catalog with Flink’s HiveCatalog for storing Flink specific metadata across sessions.
+For example, users can store their Kafka or ElasticSearch or ADLS gen2 or CDC SQL or JDBC tables in Hive Metastore by using HiveCatalog, and reuse them later on in SQL queries.
+
+.The second is to offer Flink as an alternative engine for reading and writing Hive tables.
+The HiveCatalog is designed to be “out of the box” compatible with existing Hive installations. You don't need to modify your existing Hive Metastore or change the data placement or partitioning of your tables.
+
+Please refer README.md for more details
+
+## Create a ADLS gen2 file in persistent catalog with Flink’s HiveCatalog 
+
+**Create Hive catalog and connect to the hive catalog on Flink SQL on webssh pod** <br>
+Note: As we already prepared HMS running on our Flink cluster, no need to do any configuration on current Flink with hms cluster.
+
+on webssh pod <br>
+```
+pod@sshnode-0 [ ~ ]$ bin/sql-client.sh
+```
+
+Flink SQL:<br>
+``` SQL
+CREATE CATALOG myhive WITH (
+    'type' = 'hive'
+);
+
+USE CATALOG myhive;
+
+CREATE TABLE csvtab (
+  c0 STRING,
+  c1 STRING,
+  c2 STRING,
+  c3 STRING,
+  c4 STRING,
+  c5 STRING,
+  c6 STRING
+) WITH (
+  'connector' = 'filesystem',
+  'path' = 'abfss://flink@cicihilogen2.dfs.core.windows.net/data/testdelta.csv',
+  'format' = 'csv'
+);
+
+Flink SQL> show tables;
++------------------+
+|       table name |
++------------------+
+|           csvtab |
+|  hivesampletable |
++------------------+
+2 rows in set
+``` 
