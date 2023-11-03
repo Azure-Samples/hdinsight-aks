@@ -12,7 +12,7 @@ Now, let us learn how to use Change Data Capture (CDC) of MySQL using Flink SQL.
 
 ## Prerequisites
 •	Prepare MySQL(8.0) on Azure SQL Server 2012 <br>
-•	Hilo Flink 1.16.0
+•	HDInsight Flink 1.16.0 on AKS
 
 ## Flink MySQL CDC Connector
 
