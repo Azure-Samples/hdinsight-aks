@@ -43,7 +43,7 @@ Flink SQL> CREATE TABLE csvtab (
 >   c6 STRING
 > ) WITH (
 >   'connector' = 'filesystem',
->   'path' = 'abfss://<container>@<accountname>.dfs.core.windows.net/data/testdelta.csv',
+>   'path' = 'abfss://<container>@<storage_name>.dfs.core.windows.net/data/testdelta.csv',
 >   'format' = 'csv'
 > );
 [INFO] Execute statement succeed.
@@ -90,7 +90,7 @@ Flink SQL> CREATE TABLE csvtab (
 >   c6 STRING
 > ) WITH (
 >   'connector' = 'filesystem',
->   'path' = 'abfss://<container>@<accountname>.dfs.core.windows.net/data/testdelta.csv',
+>   'path' = 'abfss://<container>@<storage_name>.dfs.core.windows.net/data/testdelta.csv',
 >   'format' = 'csv'
 > );
 > 
@@ -150,7 +150,7 @@ CREATE TABLE csvtab (
   c6 STRING
 ) WITH (
   'connector' = 'filesystem',
-  'path' = 'abfss://<container>@<accountname>.dfs.core.windows.net/data/testdelta.csv',
+  'path' = 'abfss://<container>@<storage_name>.dfs.core.windows.net/data/testdelta.csv',
   'format' = 'csv'
 );
 
