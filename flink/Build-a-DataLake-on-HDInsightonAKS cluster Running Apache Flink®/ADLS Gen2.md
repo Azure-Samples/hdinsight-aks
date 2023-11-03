@@ -53,7 +53,7 @@ Flink SQL> select * from csvtab;
 java.lang.ClassNotFoundException: org.apache.flink.table.planner.delegation.DialectFactory
 ```
 
-**Error Cause** <br>
+**Cause** <br>
 
 The org.apache.flink.table.planner.delegation.DialectFactory class is part of the flink-table-planner_2.12-1.16.0-0.0.18.jar and 
 not part of the flink-table-planner-loader-1.16.0-0.0.18.jar.
