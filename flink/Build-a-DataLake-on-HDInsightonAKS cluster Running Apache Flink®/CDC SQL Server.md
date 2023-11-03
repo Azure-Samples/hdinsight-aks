@@ -114,7 +114,20 @@ bin/sql-client.sh -j flink-sql-connector-sqlserver-cdc-2.4.1.jar
 
 ## Create SQLServer CDC table
 ```sql
+CREATE CATALOG delta_catalog WITH (
+     'type' = 'delta-catalog',
+     'catalog-type' = 'hive');
+```
+
+Using the delta catalog
+
+```sql
+USE CATALOG delta_catalog;
+```
+
+```sql
 SET 'sql-client.execution.result-mode' = 'tableau';
+
 
 CREATE TABLE orders (
     id INT,
