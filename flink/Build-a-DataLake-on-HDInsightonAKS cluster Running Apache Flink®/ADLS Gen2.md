@@ -162,4 +162,7 @@ Flink SQL> show tables;
 |  hivesampletable |
 +------------------+
 2 rows in set
-``` 
+```
+
+## Clean up the resource
+ 
