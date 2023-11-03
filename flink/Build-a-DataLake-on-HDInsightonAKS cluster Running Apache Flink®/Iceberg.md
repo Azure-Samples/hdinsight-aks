@@ -81,6 +81,9 @@ CREATE DATABASE iceberg_db_2;
  INSERT INTO `hive_catalog`.`iceberg_db_2`.`iceberg_sample_2` VALUES (1, 'a');
 ```
 
+## REf
+https://learn.microsoft.com/en-us/azure/hdinsight-aks/flink/flink-catalog-iceberg-hive
+
 ## Output of the Iceberg Table
 
 You can view the Iceberg Table output on the ABFS container <br>
