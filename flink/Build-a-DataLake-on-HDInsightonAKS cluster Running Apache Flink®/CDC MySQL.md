@@ -59,7 +59,25 @@ bin/sql-client.sh -j flink-sql-connector-mysql-cdc-2.4-SNAPSHOT.jar
 
 ## Create Flink MySql cdc table on Flink SQL
 
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/63c7cb8c-f86c-4e58-bf73-3f0af3716030)
+``` SQL
+CREATE TABLE orders (
+  `order_id` INT,
+  `order_date` TIMESTAMP(0),
+  `customer_name` STRING,
+  `price` DECIMAL(10,5),
+  `product_id` INT,
+  `order_status` BOOLEAN,
+  PRIMARY KEY(order_id) not enforced
+) WITH (
+  'connector' = 'jdbc',
+  'url' = 'jdbc:mysql://<hostname>.mysql.database.azure.com',
+  'table-name' = 'orders',
+  'username' = 'user',
+  'password' = 'password',
+  'database-name' = 'database',
+  'table-name' = 'orders'
+);
+```
 
 ![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/94af656a-f579-4851-a0b0-12fb2396d876)
 
