@@ -18,9 +18,9 @@ wget https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/12.4.0.jr
 ```
 
 ```
-xcao@sshnode-0 [ ~ ]$ ls -l *.jar
--rw-rw-r-- 1 xcao xcao  264302 Apr 13 14:05 flink-connector-jdbc-3.1.0-1.16.jar
--rw-rw-r-- 1 xcao xcao 1183551 Jul 31 21:08 mssql-jdbc-12.4.0.jre11.jar
+user@sshnode-0 [ ~ ]$ ls -l *.jar
+-rw-rw-r-- 1 user user  264302 Apr 13 14:05 flink-connector-jdbc-3.1.0-1.16.jar
+-rw-rw-r-- 1 user user 1183551 Jul 31 21:08 mssql-jdbc-12.4.0.jre11.jar
 ```
 
 ## Create SQL Server table on Flink SQL
