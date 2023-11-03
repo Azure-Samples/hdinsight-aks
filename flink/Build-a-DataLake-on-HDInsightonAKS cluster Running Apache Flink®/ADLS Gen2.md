@@ -8,7 +8,7 @@ Ref#<br>
 https://nightlies.apache.org/flink/flink-docs-release-1.16/docs/connectors/table/filesystem/
 
 ## In Azure HDInsight on AKS running Flink cluster 
-We provide `flink-azure-fs-hadoop' which is located in `/opt/flink-webssh/plugins/azure-fs-hadoop` of the Flink distribution.
+We provide `flink-azure-fs-hadoop` which is located in `/opt/flink-webssh/plugins/azure-fs-hadoop` of the Flink distribution.
 This JAR file contains the Azure Blob File System (ABFS) driver, which enables Flink to access Azure Blob Storage data directly.
 
 **JAR location on webssh pob** <br>
