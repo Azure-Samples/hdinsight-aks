@@ -20,10 +20,10 @@ total 27152
 -rw-rw-rw- 1 flink flink 27800309 Aug  7 11:36 flink-azure-fs-hadoop-1.16.0-0.0.18.jar
 ```
 
-**Credential Configuration**
+**Credential Configuration** <br>
 In Azure HDInsight on AKS running Flink cluster, basically we uses Azure user managed identity to access the ADLS Gen2 storage accounts using abfs.
 
-## Create ADLS gen2 table on Flink SQL 
+## Create ADLS gen2 table on Flink SQL  
 
 **create ADLS gen2 table by using SQL Client CLI on webssh pob to enter Flink SQL environment** <br>
 
@@ -150,7 +150,7 @@ CREATE TABLE csvtab (
   c6 STRING
 ) WITH (
   'connector' = 'filesystem',
-  'path' = 'abfss://flink@cicihilogen2.dfs.core.windows.net/data/testdelta.csv',
+  'path' = 'abfss://<container>@<accountname>.dfs.core.windows.net/data/testdelta.csv',
   'format' = 'csv'
 );
 
