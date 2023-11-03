@@ -122,7 +122,7 @@ The HiveCatalog is designed to be “out of the box” compatible with existing 
 
 Please refer README.md for more details
 
-## Create a ADLS gen2 file in persistent catalog with Flink’s HiveCatalog 
+## Create a ADLS gen2 table in persistent catalog with Flink’s HiveCatalog 
 
 **Create Hive catalog and connect to the hive catalog on Flink SQL on webssh pod** <br>
 Note: As we already prepared HMS running on our Flink cluster, no need to do any configuration on current Flink with hms cluster.
