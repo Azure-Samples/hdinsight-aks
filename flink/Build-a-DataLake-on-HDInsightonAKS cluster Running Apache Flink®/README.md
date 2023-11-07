@@ -12,7 +12,8 @@ This post shows you how to integrate Apache Flink in Azure HDInsight on AKS with
 
 Apache Flink employs a connector for data interaction and a catalog for metadata interaction. The architecture of the Apache Flink connector, which handles data read/write operations, and the catalog, which manages metadata read/write operations, is depicted in the following diagram.
 
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/a53831b7-98d7-4bd0-97ac-caf421634883)
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/75fb915a-a772-4dcb-9992-69a7cc640d2b)
+
 
 **Catalog Types**
 
