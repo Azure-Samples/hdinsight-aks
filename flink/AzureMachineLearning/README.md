@@ -216,7 +216,7 @@ endpoint:<br>
 ![image](https://github.com/Baiys1234/hdinsight-aks-2/assets/35547706/14c535c6-9e9a-4cf0-af31-c58cddc22a94)
 
 Azure ML service API key:<br>
-![image](https://github.com/Baiys1234/hdinsight-aks-2/assets/35547706/607534ec-75f3-4dad-b5b3-d39d05fb5fd8)
+![image](https://github.com/Azure-Samples/hdinsight-aks/assets/35547706/0308ea34-2ab7-4930-868f-215f458cc9d1)
 
 ### HDInsight Flink 1.16.0 on AKS
 
