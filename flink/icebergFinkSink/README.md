@@ -132,9 +132,9 @@ This data is then written into an Iceberg table.
 It extends the RichParallelSourceFunction class, which is a base class for implementing a parallel data source in Flink.
 
 **Schema** <br>
-  . character string
-  . location string
-  . event_time timestamp
+  . character string <br>
+  . location string <br>
+  . event_time timestamp <br>
 
 ``` java
 public class LordSourceFunction extends RichParallelSourceFunction<RowData> {
