@@ -1,0 +1,183 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Apache_Spark_Job_Submit_on_HDInsight_on_AKS": {
+                "inputs": {
+                    "body": "@body('Parse_Trigger_Request_Body')?['spark_submit_payload']",
+                    "headers": {
+                        "Authorization": "Bearer @{body('ParseOAuthTokenResponse')?['access_token']}"
+                    },
+                    "method": "POST",
+                    "uri": "https://@{body('Parse_Trigger_Request_Body')?['cluster_fqdn_name']}/p/livy/batches"
+                },
+                "runAfter": {
+                    "ParseOAuthTokenResponse": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "Http"
+            },
+            "KeyVault-GetClientID": {
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "referenceName": "keyvault"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/secrets/@{encodeURIComponent('hilo-variables-api-client-id')}/value"
+                },
+                "runAfter": {
+                    "Parse_Trigger_Request_Body": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "ApiConnection"
+            },
+            "KeyVault-GetSecret": {
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "referenceName": "keyvault"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/secrets/@{encodeURIComponent('hilo-variables-api-secret')}/value"
+                },
+                "runAfter": {
+                    "KeyVault-GetClientID": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "ApiConnection"
+            },
+            "OAuth-Request_Query": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "oAuthBody",
+                            "type": "string",
+                            "value": "grant_type=@{variables('grant_type')}&scope=@{variables('scope')}&client_id=@{body('KeyVault-GetClientID')?['value']}&client_secret=@{body('KeyVault-GetSecret')?['value']}"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Variable-Grant_Type": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "OAuthToken-HttpPost": {
+                "inputs": {
+                    "body": "@variables('oAuthBody')",
+                    "headers": {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    "method": "POST",
+                    "uri": "https://login.microsoftonline.com/@{body('Parse_Trigger_Request_Body')?['tenantId']}/oauth2/v2.0/token"
+                },
+                "runAfter": {
+                    "OAuth-Request_Query": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "Http"
+            },
+            "ParseOAuthTokenResponse": {
+                "inputs": {
+                    "content": "@body('OAuthToken-HttpPost')",
+                    "schema": {
+                        "properties": {
+                            "access_token": {
+                                "type": "string"
+                            },
+                            "expires_in": {
+                                "type": "integer"
+                            },
+                            "ext_expires_in": {
+                                "type": "integer"
+                            },
+                            "token_type": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "runAfter": {
+                    "OAuthToken-HttpPost": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "ParseJson"
+            },
+            "Parse_Trigger_Request_Body": {
+                "inputs": {
+                    "content": "@triggerBody()",
+                    "schema": {
+                        "properties": {
+                            "cluster_fqdn_name": {
+                                "type": "string"
+                            },
+                            "spark_submit_payload": {
+                                "properties": {},
+                                "type": "object"
+                            },
+                            "tenantId": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "runAfter": {},
+                "type": "ParseJson"
+            },
+            "Variable-Grant_Type": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "grant_type",
+                            "type": "string",
+                            "value": "client_credentials"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Variable-OAuth-Scope": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "Variable-OAuth-Scope": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "scope",
+                            "type": "string",
+                            "value": "https://hilo.azurehdinsight.net/.default"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "KeyVault-GetSecret": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "InitializeVariable"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "triggers": {
+            "Trigger_-_When_a_HTTP_request_is_received": {
+                "kind": "Http",
+                "type": "Request"
+            }
+        }
+    },
+    "kind": "Stateless"
+}
