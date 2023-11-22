@@ -402,10 +402,11 @@ spark.hadoop.fs.azure.account.oauth2.client.endpoint.<storage_account>.dfs.core.
 # Define the catalog
 spark.conf.set("spark.sql.catalog.spark_catalog", "org.apache.iceberg.spark.SparkCatalog")
 spark.conf.set("spark.sql.catalog.spark_catalog.type", "hadoop")
-spark.conf.set("spark.sql.catalog.spark_catalog.warehouse", "abfs://iceberg@cicihilogen2.dfs.core.windows.net/iceberg-output/")
+spark.conf.set("spark.sql.catalog.spark_catalog.warehouse", "abfs://<container>@<storage_account>.dfs.core.windows.net/iceberg-output/")
 
 spark.conf.set("spark.sql.iceberg.handle-timestamp-without-timezone", "true");
 
+# read the iceberg table
 df = spark.read.format("iceberg").load("spark_catalog.lord.character_sightings")
 
 df.show()
