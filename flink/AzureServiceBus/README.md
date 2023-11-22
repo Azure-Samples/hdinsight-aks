@@ -53,7 +53,9 @@ https://learn.microsoft.com/en-us/azure/service-bus-messaging/explorer
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/a61a13a9-d53b-423c-8e43-477e13e32fc2)
 
 Getting the connection string, topic name, and subscription name for your Azure Service Bus
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/bc0016b6-81de-4c27-b2c3-5dadd2800f48
+
+![image](https://github.com/Azure-Samples/hdinsight-aks/assets/35547706/0fdd9386-aa66-4212-9105-37dc63af708a)
+
 
 ## Running
 
