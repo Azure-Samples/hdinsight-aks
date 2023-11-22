@@ -356,7 +356,7 @@ Flink UI: <br>
 
 ## Check iceberg table data:
 
-**Flink SQL**
+**1: Flink SQL**
 
 ```
 select * from lord.character_sightings;
@@ -364,9 +364,75 @@ select * from lord.character_sightings;
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/3d6252b6-c93b-450b-8d34-5f6fb160facc)
 
-**On Azure Storage side**
+**2: Azure Storage side**
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/f671201c-f543-4f9e-a93d-64e522261f5a)
+
+**3: Read data on Azure Databricks**
+
+. Customize the same hive metastore as HDInsight Flink Cluster on AKS.
+. Set Credential(Service Principle on this demo) to access iceberg Data Warehouse(ADLS gen2)
+
+**On Azure Databricks Cluster Advanced Options to configure**
+
+```
+spark.hadoop.javax.jdo.option.ConnectionDriverName com.microsoft.sqlserver.jdbc.SQLServerDriver
+spark.hadoop.javax.jdo.option.ConnectionURL jdbc:sqlserver://<sqlserverhost>.database.windows.net:1433;database=hivedb;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+spark.hadoop.fs.azure.account.oauth2.client.id.<storage_account>.dfs.core.windows.net <client_id>
+# Driver class name for a JDBC metastore
+spark.databricks.delta.preview.enabled true
+spark.hadoop.javax.jdo.option.ConnectionUserName dbadmin@<hivemetastore sqlserverhost>
+spark.hadoop.fs.azure.account.oauth.provider.type.<storage_account>.dfs.core.windows.net org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider
+spark.hadoop.fs.azure.account.auth.type.<storage_account>.dfs.core.windows.net OAuth
+spark.hadoop.javax.jdo.option.ConnectionPassword Password01!
+spark.sql.hive.metastore.jars /databricks/hive_metastore_jars/*
+spark.hadoop.fs.azure.account.oauth2.client.secret.<storage_account>.dfs.core.windows.net <secret_key>
+spark.sql.hive.metastore.version 3.1.0
+spark.hadoop.fs.azure.account.oauth2.client.endpoint.<storage_account>.dfs.core.windows.net https://login.microsoftonline.com/<tenant ID>/oauth2/token
+```
+
+**Install iceberg Flink runtime maven jar: org.apache.iceberg:iceberg-spark-runtime-3.3_2.12:1.4.2**
+
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/328f0f47-7d0e-499d-af7c-feae6dd6b2a3)
+
+
+**Notebook**
+
+``` python
+# Define the catalog
+spark.conf.set("spark.sql.catalog.spark_catalog", "org.apache.iceberg.spark.SparkCatalog")
+spark.conf.set("spark.sql.catalog.spark_catalog.type", "hadoop")
+spark.conf.set("spark.sql.catalog.spark_catalog.warehouse", "abfs://iceberg@cicihilogen2.dfs.core.windows.net/iceberg-output/")
+
+spark.conf.set("spark.sql.iceberg.handle-timestamp-without-timezone", "true");
+
+df = spark.read.format("iceberg").load("spark_catalog.lord.character_sightings")
+
+df.show()
+
++-------------------+--------------------+--------------------+
+|          character|            location|          event_time|
++-------------------+--------------------+--------------------+
+|     Arwen Evenstar|        Eastfarthing|1965-08-23 18:21:...|
+|       Tom Bombadil|            Meduseld|1670-05-09 21:30:...|
+|     Arwen Evenstar|           Dark Land|1876-06-24 17:44:...|
+|             Gollum|       Eithel Sirion|1872-01-29 06:52:...|
+|             Sauron|     Falls of Rauros|1625-05-04 19:03:...|
+|            Théoden|             Bag End|1781-09-02 03:37:...|
+|      Peregrin Took|        Maglor's Gap|1603-06-11 17:45:...|
+|Meriadoc Brandybuck|        Minas Tirith|1628-03-05 14:58:...|
+|          Galadriel|      Fens of Serech|1612-06-21 08:48:...|
+|            Legolas|               Vista|1630-04-12 17:29:...|
+|         Glorfindel|     Land of the Sun|1937-08-07 23:12:...|
+|         Glorfindel|            Greenway|1630-10-11 19:38:...|
+|         Glorfindel|     Land of the Sun|1861-04-27 07:07:...|
+|          Galadriel|  Haven of the Eldar|1535-10-08 05:59:...|
+|         Glorfindel|          Hyarnustar|1768-06-02 19:29:...|
+| Barliman Butterbur|   Houses of Healing|1610-03-10 04:52:...|
+|     Samwise Gamgee|            Aglarond|1538-07-14 17:45:...|
+|     Arwen Evenstar|  Haven of the Eldar|1667-08-01 22:31:...|
+
+```
 
 ## Clean up resource
 
