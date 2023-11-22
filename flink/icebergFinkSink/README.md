@@ -370,8 +370,8 @@ select * from lord.character_sightings;
 
 **3: Read data on Azure Databricks**
 
-. Customize the same hive metastore as HDInsight Flink Cluster on AKS.
-. Set Credential(Service Principle on this demo) to access iceberg Data Warehouse(ADLS gen2)
+. Customize the same hive metastore as HDInsight Flink Cluster on AKS. <br>
+. Set Credential(Service Principle on this demo) to access iceberg Data Warehouse(ADLS gen2)  <br>
 
 **On Azure Databricks Cluster Advanced Options to configure**
 
