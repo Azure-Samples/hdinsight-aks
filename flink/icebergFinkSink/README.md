@@ -277,7 +277,7 @@ https://github.com/DiUS/java-faker
         DataStream<RowData> streamSource = env.addSource(new LordSourceFunction());
         streamSource.print();
 ```
-**Define the Iceberg schema
+**Define the Iceberg schema**
 
 ``` java
         Schema icebergSchema = new Schema(
