@@ -299,7 +299,7 @@ https://github.com/DiUS/java-faker
 ``` java
         HiveConf hiveConf = new HiveConf();
         hiveConf.set("hive.metastore.uris", "thrift://hive-metastore:9083");
-        hiveConf.set("hive.metastore.warehouse.dir", "abfs://iceberg@cicihilogen2.dfs.core.windows.net/iceberg-output");
+        hiveConf.set("hive.metastore.warehouse.dir", "abfs://<container>@<storage_account>.dfs.core.windows.net/iceberg-output");
 ```
 
 **Convert HiveConf to Configuration** <br>
