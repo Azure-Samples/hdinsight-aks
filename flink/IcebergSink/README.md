@@ -266,7 +266,7 @@ https://github.com/DiUS/java-faker
 
 ``` java
         env.enableCheckpointing(10000);
-        String checkPointPath = "abfs://iceberg@cicihilogen2.dfs.core.windows.net/CheckPoint";
+        String checkPointPath = "abfs://<container>@<storage_account>.dfs.core.windows.net/CheckPoint";
         env.getCheckpointConfig().setCheckpointStorage(checkPointPath);
 ```
 
