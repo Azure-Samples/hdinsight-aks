@@ -1,8 +1,8 @@
-**This demo will use a java-faker library to generate Streaming Lord of the Rings data using Flink’s native support
-for rich functions, and then sink the stream data into an Iceberg table on HDInsight on AKS running Flink cluster.**
+# Using Iceberg Sink with Apache Flink on HDInsight on AKS
 
-You can also use a single shared catalog, both HDInsight on AKS running Flink cluster and Spark on Azure Databricks can 
-operate on the same Iceberg warehouse.
+**This demo uses a java library to generate data using Flink’s native support for rich functions, and then sink the stream data into an Iceberg table on HDInsight on AKS running Flink cluster.**
+
+You can also use a single shared catalog, both HDInsight on AKS running Flink cluster and Spark on Azure Databricks can  operate on the same Iceberg warehouse.
 
 ## Requirements <br>
 Azure HDInsight Flink 1.16 on AKS
