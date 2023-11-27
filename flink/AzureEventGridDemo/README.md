@@ -10,15 +10,11 @@ Below is the Graph: <br>
 
 Azure IoT Hub emits the following event types: <br>
 
-Microsoft.Devices.DeviceCreated: Published when a device is registered to an IoT hub. <br>
-
-Microsoft.Devices.DeviceDeleted: Published when a device is deleted from an IoT hub. <br>
-
-Microsoft.Devices.DeviceConnected: Published when a device is connected to an IoT hub. <br>
-
-Microsoft.Devices.DeviceDisconnected: Published when a device is disconnected from an IoT hub. <br>
-
-Microsoft.Devices.DeviceTelemetry: Published when a telemetry message is sent to an IoT hub. <br>
+. Microsoft.Devices.DeviceCreated: Published when a device is registered to an IoT hub. <br>
+. Microsoft.Devices.DeviceDeleted: Published when a device is deleted from an IoT hub. <br>
+. Microsoft.Devices.DeviceConnected: Published when a device is connected to an IoT hub. <br>
+. Microsoft.Devices.DeviceDisconnected: Published when a device is disconnected from an IoT hub. <br>
+. Microsoft.Devices.DeviceTelemetry: Published when a telemetry message is sent to an IoT hub. <br>
 
 **IOT hub** <br>
 In this demo, I chose the Microsoft.Devices.DeviceTelemetry.
