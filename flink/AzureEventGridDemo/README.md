@@ -1,7 +1,7 @@
 
-## This blog will stimulate an IoT device and send a message to it. Then, use the MQTT protocol to publish the messages to Azure Eventgrid. 
-## After that, enable the MQTT broker to an Eventhub entity topic. Finally, write Flink java data streaming code to consume the messages from the Eventhub topic. 
-## The streaming code deserializes the message’s body part, which is in JSON format, and sink it to ADLS Gen2.
+**This blog will stimulate an IoT device and send a message to it. Then, use the MQTT protocol to publish the messages to Azure Eventgrid. 
+After that, enable the MQTT broker to an Eventhub entity topic. Finally, write Flink java data streaming code to consume the messages from the Eventhub topic. 
+The streaming code deserializes the message’s body part, which is in JSON format, and sink it to ADLS Gen2.**
 
 Below is the Graph: <br>
 
