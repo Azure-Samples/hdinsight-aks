@@ -8,7 +8,7 @@ Below is the Graph: <br>
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/b29b249a-f453-4436-a8cf-3e15cdf5fd18)
 
 ## Requirements:
-. Azure HDInsight Flink 1.16 on AKS <br>
+. Flink 1.16 on Azure HDInsight on AKS<br>
 . Azure IOT hub <br>
 . Azure Eventgrid <br>
 . Azure Eventhub <br>
@@ -222,7 +222,7 @@ https://learn.microsoft.com/en-us/azure/iot-hub/tutorial-connectivity
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/a165cc8e-cfa7-4fa9-92e1-f78715bb5b32)
 
 ## Clearup
-. Azure HDInsight Flink 1.16 on AKS <br>
+. Flink 1.16 on Azure HDInsight on AKS<br>
 . Azure IOT hub <br>
 . Azure Eventgrid <br>
 . Azure Eventhub <br>
