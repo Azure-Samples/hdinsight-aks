@@ -1,41 +1,49 @@
+This blog will stimulate an IoT device and send a message to it. Then, use the MQTT protocol to publish the messages to Azure Eventgrid. 
+After that, I enabled the MQTT broker to an Eventhub entity topic. Finally, I write Flink java data streaming code to consume the messages from the Eventhub topic. 
+The streaming code deserializes the message’s body part, which is in JSON format, and sink it to ADLS Gen2.
+
+Below is the Graph: <br>
+
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/b29b249a-f453-4436-a8cf-3e15cdf5fd18)
 
 
-Azure IoT Hub as an Event Grid source
-
-Azure IoT Hub emits the following event types:
+Azure IoT Hub emits the following event types: <br>
+```
 Event type	                             Description
 Microsoft.Devices.DeviceCreated	         Published when a device is registered to an IoT hub.
 Microsoft.Devices.DeviceDeleted	         Published when a device is deleted from an IoT hub.
 Microsoft.Devices.DeviceConnected	       Published when a device is connected to an IoT hub.
 Microsoft.Devices.DeviceDisconnected	   Published when a device is disconnected from an IoT hub.
 Microsoft.Devices.DeviceTelemetry        Published when a telemetry message is sent to an IoT hub.
+```
 
-In this demo,
+**IOT hub**
+In this demo, I chose the Microsoft.Devices.DeviceTelemetry.
 
 Azure IoT Hub integrates with Azure Event Grid so that you can send event notifications to other services and trigger downstream processes.
+In this demo, Azure IoT Hub as an Event Grid source.
 
-
-Search IOT hub on Azure Portal:
+Create IOT hub on Azure Portal: <br>
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/98ef9409-6a59-420c-8600-bdf04afb28b5)
 
-
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/e1da19fc-a621-4cc8-a290-64fd5a021bd2)
-
-
-Azure Event Grid is a fully managed event routing service that uses a publish-subscribe model. Event Grid has built-in support for Azure services like Azure Functions and Azure Logic Apps, and can deliver event alerts to non-Azure services using webhooks. For a complete list of the event handlers that Event Grid supports, see https://learn.microsoft.com/en-us/azure/event-grid/overview
-
-MQTT messaging:
-IoT devices and applications can communicate with each other over MQTT. 
-Event Grid can also be used to route MQTT messages to Azure services or custom endpoints for further data analysis, visualization, or storage. This integration with Azure services enables you to build data pipelines that start with data ingestion from your IoT devices.
-
-
 
 Use the Azure portal to configure which events to publish from each IoT hub.
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/94355b46-800a-4210-bd76-56db6f8cac6e)
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/ea91c910-7f1c-443a-962c-36b8a59abf6e)
+
+**Azure Event Grid**
+Azure Event Grid is a fully managed event routing service that uses a publish-subscribe model. Event Grid has built-in support for Azure services like Azure Functions and Azure Logic Apps, and can deliver event alerts to non-Azure services using webhooks. For a complete list of the event handlers that Event Grid supports, see https://learn.microsoft.com/en-us/azure/event-grid/overview
+
+MQTT messaging: <br>
+IoT devices and applications can communicate with each other over MQTT. 
+Event Grid can also be used to route MQTT messages to Azure services or custom endpoints for further data analysis, visualization, or storage. This integration with Azure services enables you to build data pipelines that start with data ingestion from your IoT devices.
+
+In this demo, Event Grid routed MQTT messages to Azure Eventhub.
+
+Use the Azure portal to configure which events to publish from each IoT hub. <br>
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/a82c1c22-8047-4c72-ba89-b3e59ce6153e)
 
@@ -110,6 +118,7 @@ String outputPath  = "abfs://flink@cicihilogen2.dfs.core.windows.net/eventhub/te
                                 .withMaxPartSize(MemorySize.ofMebiBytes(5))
                                 .build())
                 .build();
+```
 
 **source function:  <CustomDeserializationSchema.java>**
 
