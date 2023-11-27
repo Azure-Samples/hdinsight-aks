@@ -80,7 +80,7 @@ Use the Azure portal to configure which events to publish from each IoT hub. <br
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/32843958-7fcb-461e-959c-68e6d6405f38)
 
-Run the Flink Consumer adding the bootstrap.servers and the consumer.config:
+**Run the Flink Consumer adding the bootstrap.servers and the consumer.config**
 ``` XML
 bootstrap.servers=<eventhub>.servicebus.windows.net:9093
 client.id=<consumer>
@@ -92,7 +92,7 @@ username="$ConnectionString" \
 password="Endpoint=sb://<eventhub>.servicebus.windows.net/;SharedAccessKeyName=policy1;SharedAccessKey=<access_key>";
 ```
 
-pom.xml
+**maven dependencies: pom.xml**
 ``` XML
         <dependency>
             <groupId>org.apache.flink</groupId>
@@ -113,7 +113,7 @@ pom.xml
 
 **main source code:  <EventhubSinkToGen2.java>**
 
-Read eventhub consumer properties:(resources/input)
+**Read eventhub consumer properties:(resources/input)**
 ``` java
         ParameterTool parameters = ParameterTool.fromArgs(args);
         String input = parameters.get("input");
@@ -121,7 +121,7 @@ Read eventhub consumer properties:(resources/input)
         properties.load(new FileReader(input));
 ```
 
-Read  eventhub kafka message as stream input
+**Read eventhub kafka message as stream input**
 ``` java
  KafkaSource<String> source = KafkaSource.<String>builder().setProperties(properties)
                 .setTopics("test")
@@ -131,7 +131,7 @@ Read  eventhub kafka message as stream input
                 .build();
 ```
 
-Sink to Gen2
+**Sink to Gen2**
 ``` java
 String outputPath  = "abfs://flink@cicihilogen2.dfs.core.windows.net/eventhub/test";
         final FileSink<String> sink = FileSink
@@ -147,7 +147,7 @@ String outputPath  = "abfs://flink@cicihilogen2.dfs.core.windows.net/eventhub/te
 
 **source function:  <CustomDeserializationSchema.java>**
 
-json format message on Azure eventhub entity: <br>
+**json format message on Azure eventhub entity** <br>
 
 ``` json
  {
@@ -171,9 +171,10 @@ json format message on Azure eventhub entity: <br>
     "EventProcessedUtcTime": "2023-11-27T05:50:22.6230858Z",
     "PartitionId": 0,
     "EventEnqueuedUtcTime": "2023-11-27T05:48:36.0980000Z"
-  },
+  }
+```
 
-Custom deserialization schema to decode the body data with the base64 string <br>
+**Custom deserialization schema to decode the body data with the base64 string** <br>
 
 ``` java
 public String deserialize(byte[] message) throws IOException {
