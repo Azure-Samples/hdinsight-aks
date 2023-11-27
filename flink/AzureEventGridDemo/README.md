@@ -7,16 +7,22 @@ Below is the Graph: <br>
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/b29b249a-f453-4436-a8cf-3e15cdf5fd18)
 
+## Requirements:
+. Azure HDInsight Flink 1.16 on AKS
+. Azure IOT hub
+. Azure Eventgrid
+. Azure Eventhub
+. ADLS gen2
 
-Azure IoT Hub emits the following event types: <br>
-
-. Microsoft.Devices.DeviceCreated: Published when a device is registered to an IoT hub. <br>
-. Microsoft.Devices.DeviceDeleted: Published when a device is deleted from an IoT hub. <br>
-. Microsoft.Devices.DeviceConnected: Published when a device is connected to an IoT hub. <br>
-. Microsoft.Devices.DeviceDisconnected: Published when a device is disconnected from an IoT hub. <br>
-. Microsoft.Devices.DeviceTelemetry: Published when a telemetry message is sent to an IoT hub. <br>
 
 ## IOT hub
+
+Azure IoT Hub emits the following event types: <br>
+        . Microsoft.Devices.DeviceCreated: Published when a device is registered to an IoT hub. <br>
+        . Microsoft.Devices.DeviceDeleted: Published when a device is deleted from an IoT hub. <br>
+        . Microsoft.Devices.DeviceConnected: Published when a device is connected to an IoT hub. <br>
+        . Microsoft.Devices.DeviceDisconnected: Published when a device is disconnected from an IoT hub. <br>
+        . Microsoft.Devices.DeviceTelemetry: Published when a telemetry message is sent to an IoT hub. <br>
 
 Azure IoT Hub integrates with Azure Event Grid so that you can send event notifications to other services and trigger downstream processes.
 In this demo, Azure IoT Hub as an Event Grid source.
