@@ -1,4 +1,5 @@
-This blog will stimulate an IoT device and send a message to it. Then, use the MQTT protocol to publish the messages to Azure Eventgrid. 
+
+## This blog will stimulate an IoT device and send a message to it. Then, use the MQTT protocol to publish the messages to Azure Eventgrid. 
 After that, I enabled the MQTT broker to an Eventhub entity topic. Finally, I write Flink java data streaming code to consume the messages from the Eventhub topic. 
 The streaming code deserializes the message’s body part, which is in JSON format, and sink it to ADLS Gen2.
 
@@ -8,14 +9,13 @@ Below is the Graph: <br>
 
 
 Azure IoT Hub emits the following event types: <br>
-```
+
 Event type	                             Description
 Microsoft.Devices.DeviceCreated	         Published when a device is registered to an IoT hub.
 Microsoft.Devices.DeviceDeleted	         Published when a device is deleted from an IoT hub.
 Microsoft.Devices.DeviceConnected	       Published when a device is connected to an IoT hub.
 Microsoft.Devices.DeviceDisconnected	   Published when a device is disconnected from an IoT hub.
 Microsoft.Devices.DeviceTelemetry        Published when a telemetry message is sent to an IoT hub.
-```
 
 **IOT hub**
 In this demo, I chose the Microsoft.Devices.DeviceTelemetry.
