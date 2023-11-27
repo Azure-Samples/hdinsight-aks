@@ -16,8 +16,7 @@ Azure IoT Hub emits the following event types: <br>
 . Microsoft.Devices.DeviceDisconnected: Published when a device is disconnected from an IoT hub. <br>
 . Microsoft.Devices.DeviceTelemetry: Published when a telemetry message is sent to an IoT hub. <br>
 
-**IOT hub** <br>
-In this demo, I chose the Microsoft.Devices.DeviceTelemetry.
+## IOT hub
 
 Azure IoT Hub integrates with Azure Event Grid so that you can send event notifications to other services and trigger downstream processes.
 In this demo, Azure IoT Hub as an Event Grid source.
@@ -28,12 +27,14 @@ Create IOT hub on Azure Portal: <br>
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/e1da19fc-a621-4cc8-a290-64fd5a021bd2)
 
 Use the Azure portal to configure which events to publish from each IoT hub.
+In this demo, I chose the Microsoft.Devices.DeviceTelemetry.
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/94355b46-800a-4210-bd76-56db6f8cac6e)
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/ea91c910-7f1c-443a-962c-36b8a59abf6e)
 
-**Azure Event Grid**
+## Azure Event Grid
+
 Azure Event Grid is a fully managed event routing service that uses a publish-subscribe model. Event Grid has built-in support for Azure services like Azure Functions and Azure Logic Apps, and can deliver event alerts to non-Azure services using webhooks. For a complete list of the event handlers that Event Grid supports, see https://learn.microsoft.com/en-us/azure/event-grid/overview
 
 MQTT messaging: <br>
