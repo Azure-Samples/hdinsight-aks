@@ -80,6 +80,8 @@ Use the Azure portal to configure which events to publish from each IoT hub. <br
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/32843958-7fcb-461e-959c-68e6d6405f38)
 
+## Source breakdown
+
 **Run the Flink Consumer adding the bootstrap.servers and the consumer.config**
 ``` XML
 bootstrap.servers=<eventhub>.servicebus.windows.net:9093
@@ -193,7 +195,8 @@ public String deserialize(byte[] message) throws IOException {
         }
 ```
 
-## Submit job on web ssh
+## Running
+### Submit job on web ssh
 
 You're required to select SSH during creation of Flink Cluster
 Once the Flink cluster is created, you can observe on the left pane the Settings option to access Secure Shell.
@@ -212,11 +215,18 @@ Job has been submitted with JobID ffd5cc6699fd58643fa7aa6414958b4b
 
 https://learn.microsoft.com/en-us/azure/iot-hub/tutorial-connectivity
 
-## Confirm streaming job on Flink Dashboard
+### Confirm streaming job on Flink Dashboard
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/c532bacd-2197-4eb3-8c62-6349369ea609)
 
-## Check output file in ADLS gen2 on Azure portal
+### Check output file in ADLS gen2 on Azure portal
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/a165cc8e-cfa7-4fa9-92e1-f78715bb5b32)
+
+## Clearup
+. Azure HDInsight Flink 1.16 on AKS
+. Azure IOT hub
+. Azure Eventgrid
+. Azure Eventhub
+. ADLS gen2
 
 
 
