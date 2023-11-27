@@ -21,10 +21,29 @@ Azure IoT Hub emits the following event types: <br>
 Azure IoT Hub integrates with Azure Event Grid so that you can send event notifications to other services and trigger downstream processes.
 In this demo, Azure IoT Hub as an Event Grid source.
 
-Create IOT hub on Azure Portal: <br>
+**Create an IOT hub on Azure Portal** <br>
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/98ef9409-6a59-420c-8600-bdf04afb28b5)
 
+**Register a device** <br>
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/e1da19fc-a621-4cc8-a290-64fd5a021bd2)
+
+**Use a simple device simulator that  run on your desktop machine to test connectivity with the IoT HUB**
+
+https://learn.microsoft.com/en-us/azure/iot-hub/tutorial-connectivity
+
+Step1: <br>
+download Node.js for multiple platforms from https://nodejs.org/en
+node --version <br>
+
+Step2: <br>
+Clone or download the sample Node.js project from [Azure IoT samples for Node.js](https://github.com/Azure-Samples/azure-iot-samples-node) <br>
+
+Step3: npm install <br>
+
+Step4: Send device-to-cloud messages
+node SimulatedDevice-3.js "{your_device_connection_string}" <br>
+
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/51cd5f83-e799-41e5-b049-84cc9120dda4)
 
 Use the Azure portal to configure which events to publish from each IoT hub.
 In this demo, I chose the Microsoft.Devices.DeviceTelemetry.
@@ -184,7 +203,7 @@ bin/flink run -c contoso.example.EventhubSinkToGen2 -jar FlinkEventhubDemo-1.0-S
 Job has been submitted with JobID ffd5cc6699fd58643fa7aa6414958b4b
 ```
 
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/51cd5f83-e799-41e5-b049-84cc9120dda4)
+https://learn.microsoft.com/en-us/azure/iot-hub/tutorial-connectivity
 
 ## Confirm streaming job on Flink Dashboard
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/c532bacd-2197-4eb3-8c62-6349369ea609)
