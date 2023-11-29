@@ -9,7 +9,7 @@ from airflow.operators.python_operator import PythonOperator
 from azure.identity import ClientSecretCredential
 
 
-def submit_spark_job(**kwargs):
+def submit_spark_job(**conf):
     """submit Spark job using Livy REST API"""
     client_id = Variable.get("api-client-id")
     api_secret = Variable.get("api-secret")
