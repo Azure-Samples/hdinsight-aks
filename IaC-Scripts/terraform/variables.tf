@@ -44,6 +44,12 @@ variable "rg_name" {
   description = "resource group name for the HDI on AKS"
 }
 
+variable "create_rg_for_pool" {
+  type        = bool
+  description = "Flag to indicate to create a resource group or not for the HDInsight on AKS"
+}
+
+
 /*variable "user_assigned_identity_name" {
   type        = string
   description = "user assigned identity used for the cluster"
