@@ -12,8 +12,9 @@ terraform {
 }
 
 # Terraform supports a number of different methods for authenticating to Azure
-# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_certificate
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs
 # In this case we are using Authenticating using managed identities
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_certificate
 # You can make necessary changes based on your organization policy
 provider "azapi" {
   subscription_id = var.subscription
@@ -33,10 +34,11 @@ provider "azurerm" {
 # Resource group module to create resource group to hold
 # HDInsight on AKS Pool and ClusterR
 module "resource-group" {
-  source        = "./modules/resource-group"
-  location_name = var.location_name
-  rg_name       = "${local.prefix}${var.rg_name}${local.suffix}"
-  tags          = local.tags
+  source             = "./modules/resource-group"
+  location_name      = var.location_name
+  rg_name            = "${local.prefix}${var.rg_name}${local.suffix}"
+  create_rg_for_pool = var.create_rg_for_pool
+  tags               = local.tags
 }
 
 # This module will setup  the VNet for your cluster and pool, The vnet_rg_name is resource group for the VNet
@@ -81,14 +83,4 @@ module "hdi_on_aks_pool" {
   managed_resource_group_name = var.managed_resource_group_name
   subnet_id                   = var.subnet_name=="" ? var.empty : module.hdi_on_aks_vnet[0].subnet_id
 }
-
-# This module creates user managed identity for the cluster
-/*module "user_managed_identity" {
-  source                      = "./modules/identity"
-  user_assigned_identity_name = var.user_assigned_identity_name
-  rg_name                     = module.resource-group.resource_group_name
-  location_name               = var.location_name
-  tags                        = local.tags
-  depends_on                  = [module.resource-group]
-}*/
 

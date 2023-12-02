@@ -4,16 +4,16 @@ variable "rg_name" {
 }
 
 variable "location_name" {
+  type        = string
+  description = "location name/region"
+}
+
+variable "user_assigned_identity_name" {
   type = string
-  description = "location/region name"
+  description = "user assigned identity used for the cluster"
 }
 
 variable "tags" {
   type = map(string)
   description = "list of tags for resources"
-}
-
-variable "create_rg_for_pool" {
-  type        = bool
-  description = "Flag to indicate to create a resource group or not for the HDInsight on AKS"
 }

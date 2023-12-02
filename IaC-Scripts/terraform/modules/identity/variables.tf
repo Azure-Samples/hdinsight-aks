@@ -1,4 +1,3 @@
-/*
 variable "rg_name" {
   type = string
   description = "resource group name"
@@ -17,4 +16,4 @@ variable "user_assigned_identity_name" {
 variable "tags" {
   type = map(string)
   description = "list of tags for resources"
-}*/
+}
