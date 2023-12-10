@@ -1,0 +1,1 @@
+## Using a combination of Vector.dev (a logging agent), Azure HDInsight Kafka and Azure HDInsight Flink on AKS can provide a hugely cost effective and powerful logging solution worth looking at the following diagram:
