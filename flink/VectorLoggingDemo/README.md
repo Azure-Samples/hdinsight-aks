@@ -285,6 +285,10 @@ Apache Iceberg for long term and low cost storage
 
 ## Cleanup the resource
 
+. Delete Apache Flink Cluster on HDInsight on AKS  <br>
+. Delete Apache Kafka cluster on HDInsight <br>
+. Uninstall Vector 0.34.0  <br>
+
 
 
 
