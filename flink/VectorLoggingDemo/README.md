@@ -264,7 +264,7 @@ CREATE TABLE  IF NOT EXISTS  archive_apache_logs (
 );
 ```
 
-**5. Iceberg for long term and low cost storage**
+**6. Iceberg for long term and low cost storage**
 
 ``` SQL
 SET 'execution.checkpointing.interval' = '60 s';
@@ -276,11 +276,11 @@ Flink SQL> INSERT INTO archive_apache_logs(`bytes`, `datetime`, `host`, `method`
 Job ID: 80e6a48543655c41567eb38eaf29f840
 ```
 
-**6. Check job on Flink Dashboard UI**
+**7. Check job on Flink Dashboard UI**
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/687215d4-b8d8-4439-b0cd-194b9ca9ddfa)
 
-**7. Check Archived file on ADLS gen2 using a table format from Apache Iceberg**
+**8. Check Archived file on ADLS gen2 using a table format from Apache Iceberg**
 
 Apache Iceberg for long term and low cost storage
 
