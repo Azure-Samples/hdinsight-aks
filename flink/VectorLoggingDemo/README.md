@@ -164,11 +164,14 @@ root@hn0-kafkad:~/.vector/config# vector --config /root/.vector/config/vector2.t
 
 ## Flink job to read from the logs topic
 
-Flink can read the data from the logs topic and save it to ADLSgen2 using a table format from Apache Iceberg.   <br>
-Apache Iceberg is "is a high-performance format for huge analytic tables.   <br>
-Iceberg brings the reliability and simplicity of SQL tables to big data". <br>
-
+Flink can read the data from the logs topic and save it to ADLSgen2 using a table format from Apache Iceberg. <br>
 Flink is then pulling in the data and storing it for long term storage in Iceberg format on ADLS gen2 with Flink ready to work on your data to spot patterns such as errors or malicious use and send it wherever you need.
+
+Details:<br>
+HDInsight Kafka will hold the newest logs as they come in and Flink can copy that data to ADLS gen2 in a format that is efficient and available to query at any time for any historic queries you might like to run.<br>
+In Flink you can create a new Catalog which facilitates the storage to ADLS gen2 for you.<br>
+Then you can create a table in the catalog and send data to it.<br>
+Heres the full Job for flink to read the data and send it to ADLS gen2
 
 **1. Download iceberg, parquet, Kafka client and flink kafka connector dependencies into webssh pod**
 
