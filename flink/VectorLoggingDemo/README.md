@@ -1,9 +1,9 @@
-## Using a combination of Vector.dev (a logging agent), Azure HDInsight Kafka and Azure HDInsight Flink on AKS can provide a hugely cost effective and powerful logging solution worth looking at the following diagram:
+## Using a combination of Vector.dev (a logging agent), Azure HDInsight Kafka and Azure HDInsight Flink on AKS to store logs in Iceberg format can provide a hugely cost effective and powerful logging solution worth looking at the following diagram:
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/f0ce02d0-1293-427c-916d-500aa4e3a833)
 
 
-Logs coming from a source to Azure HDInsight Kafka. Flink reads the data from Azure HDInsight Kafka and allows you to run queries on the data and then the data back to ADLSgen2 in a format suitable for long time storage and querying.
+Logs coming from a source to Azure HDInsight Kafka. Flink reads the data from Azure HDInsight Kafka and allows you to run queries on the data and then the data back to ADLSgen2 in a Iceberg format table suitable for long time storage and querying.
 
 
 ## Prerequisites
@@ -76,6 +76,14 @@ root@hn0-kafkad:/home/sshuser# source ~/.bashrc
 root@hn0-kafkad:/home/sshuser# vector --version
 vector 0.34.0 (x86_64-unknown-linux-gnu c909b66 2023-11-07 15:07:26.748571656)
 ```
+
+## Iceberg Catalog in Apache Flink® on HDInsight on AKS
+
+Apache Iceberg is an open table format for huge analytic datasets. Iceberg adds tables to compute engines like Apache Flink, using a high-performance table format that works just like a SQL table. Apache Iceberg supports both Apache Flink’s DataStream API and Table API.
+
+How use Iceberg Table managed in Hive catalog, with Apache Flink on HDInsight on AKS cluster.<br>
+
+https://learn.microsoft.com/en-us/azure/hdinsight-aks/flink/flink-catalog-iceberg-hive
 
 ## Running Vector to generate sample data to Kafka topic
 
@@ -253,7 +261,8 @@ CREATE TABLE  IF NOT EXISTS  archive_apache_logs (
 );
 ```
 
-**5. Create Iceberg Table**
+**5. Iceberg for long term and low cost storage**
+
 ``` SQL
 SET 'execution.checkpointing.interval' = '60 s';
 
