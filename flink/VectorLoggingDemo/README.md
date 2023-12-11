@@ -156,7 +156,7 @@ root@hn0-kafkad:~/.vector/config# vector --config /root/.vector/config/vector2.t
 ```
 **Confirming Kafka message**
 ```
-/usr/hdp/current/kafka-broker/bin/kafka-console-consumer.sh --bootstrap-server 10.0.0.96:9092 --topic apache_logs --from-beginning
+/usr/hdp/current/kafka-broker/bin/kafka-console-consumer.sh --bootstrap-server <broker_ip>:9092 --topic apache_logs --from-beginning
 
 {"bytes":13819,"datetime":"10/Dec/2023:09:19:57","host":"35.97.94.126","method":"DELETE","protocol":"HTTP/1.0","referer":"https://for.eus/observability/metrics/production","request":"/wp-admin","service":"vector","source_type":"demo_logs","status":"404","timestamp":"2023-12-10T09:19:57.442369206Z","user_identifier":"meln1ks"}
 {"bytes":31286,"datetime":"10/Dec/2023:09:20:00","host":"182.132.243.149","method":"PUT","protocol":"HTTP/1.0","referer":"https://we.abudhabi/apps/deploy","request":"/wp-admin","service":"vector","source_type":"demo_logs","status":"500","timestamp":"2023-12-10T09:20:00.442309537Z","user_identifier":"BryanHorsey"}
@@ -199,7 +199,7 @@ CREATE CATALOG hive_catalog WITH (
   'uri'='thrift://hive-metastore:9083',
   'clients'='5',
   'property-version'='1',
-  'warehouse'='abfs://container02@contosoflinkgen2.dfs.core.windows.net/ieberg-output');
+  'warehouse'='abfs://<container>@<storage_account>.dfs.core.windows.net/ieberg-output');
 
 USE CATALOG hive_catalog;
 
@@ -232,7 +232,7 @@ CREATE TEMPORARY TABLE apache_logs (
 ) WITH (
     'connector' = 'kafka',
     'topic' = 'apache_logs',
-    'properties.bootstrap.servers' = '10.0.0.96:9092,10.0.0.97:9092,10.0.0.101:9092',
+    'properties.bootstrap.servers' = '<broker_ip1>:9092,<broker_ip2>:9092,<broker_ip3>:9092',
     'properties.group.id' = 'flink',
     'scan.startup.mode' = 'earliest-offset',
     'format' = 'json',
