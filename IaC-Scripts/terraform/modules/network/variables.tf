@@ -23,12 +23,12 @@ variable "vnet_rg_name" {
   description = "VNet resource group name, where VNet should be created or exist"
 }
 
-variable "create_vnet" {
+variable "create_vnet_flag" {
   type        = bool
   description = "create vnet or not, if it is existing then false (0) else true (1)"
 }
 
-variable "create_subnet" {
+variable "create_subnet_flag" {
   type        = bool
   description = "create subnet or not, if it is existing then false (0) else true (1)"
 }

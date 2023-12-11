@@ -1,26 +1,3 @@
-variable "tenant_id" {
-  type        = string
-  description = "azure tenant id"
-}
-
-variable "subscription" {
-  type        = string
-  description = "azure subscription"
-}
-
-
-variable "client_id" {
-  type        = string
-  sensitive   = true
-  description = "authenticate terraform using service principal- SP app id/client id"
-}
-
-variable "client_secret" {
-  type        = string
-  sensitive   = true
-  description = "authenticate terraform using service principal- SP secret"
-}
-
 variable "hdi_on_aks_pool_name" {
   type        = string
   description = "Pool name for HDI on AKS"
@@ -34,6 +11,11 @@ variable "managed_resource_group_name" {
 variable "rg_id" {
   type        = string
   description = "resource group id"
+}
+
+variable "rg_name" {
+  type        = string
+  description = "resource group name for the HDI on AKS"
 }
 
 variable "pool_version" {
@@ -59,4 +41,18 @@ variable "pool_node_vm_size" {
 variable "subnet_id" {
   type        = string
   description = "SubNet Id"
+}
+
+variable "create_log_analytics_flag" {
+  type        = bool
+  description = "Create LA or not"
+}
+variable "la_name" {
+  type        = string
+  description = "Log Analytics workspace name"
+}
+
+variable "la_retention_in_days" {
+  type        = number
+  description = "retention days"
 }
