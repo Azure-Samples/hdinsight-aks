@@ -7,6 +7,11 @@ variable "hdi_on_aks_pool_id" {
   type        = string
 }
 
+variable "env" {
+  type        = string
+  description = "Environment name like dev/test/prod/etc."
+}
+
 variable "location_name" {
   type        = string
   description = "location name/region"
@@ -118,9 +123,14 @@ variable "sql_server_id" {
   description = "SQL server Id"
 }
 
-variable "flink_hive_enabled" {
+variable "flink_hive_enabled_flag" {
   type        = bool
   description = "enable hive for the flink"
+}
+
+variable "auto_scale_flag" {
+  type        = bool
+  description = "enable auto scale for the Flink cluster, if yes specify auto scale configuration from flink_auto_scale_config.json"
 }
 
 variable "flink_hive_db" {

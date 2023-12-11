@@ -11,9 +11,7 @@ storage_name                       = "tfonakssteststorage"
 create_storage_flag                = true
 # key vault name
 key_vault_name                     = "hdi-on-aks-kv"
-# create key vault or use existing one
-# It is going to create a new Key Vault if it is true else use existing vault
-# if Key Vault Name is empty then value is irrelevant
+# create key vault or use existing one if Key Vault Name is empty then value is irrelevant
 create_key_vault_flag              = true
 # Create or use existing SQL server, if sql_server_name name is empty that means skip the sql server module
 sql_server_name                    = "terraform-hdi-on-aks"

@@ -35,10 +35,10 @@ locals {
   kv_name = var.create_key_vault_flag ? azurerm_key_vault.hdi_on_aks_kv[0].id : data.azurerm_key_vault.hdi_on_aks_kv_data[0].name
 }
 
-resource "azurerm_key_vault_access_policy" "hdi_kv_access_policy" {
+resource "azurerm_key_vault_access_policy" "hdi_kv_access_policy_for_msi" {
   key_vault_id       = local.kv_id
   tenant_id          = var.user_managed_tenant_id
-  object_id          = var.user_managed_object_id
+  object_id          = var.user_managed_principal_id
   secret_permissions = [
     "Get",
     "Backup",

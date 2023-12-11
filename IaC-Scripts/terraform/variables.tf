@@ -10,6 +10,11 @@ variable "suffix" {
   description = "suffix all resource name"
 }
 
+variable "env" {
+  type        = string
+  description = "Environment name like dev/test/prod/etc., to load require configuration values from conf/env folder, set value using export env=\"dev\""
+}
+
 # Variables for HDI on AKS resources
 variable "location_name" {
   type        = string

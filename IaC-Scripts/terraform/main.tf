@@ -109,24 +109,9 @@ module "sql-vnet" {
   subnet_id     = module.hdi_on_aks_vnet[0].subnet_id
 }
 
-# Allows you to manage rules for allowing traffic between an Azure SQL server and a subnet of a virtual network.
-/*resource "azurerm_mssql_firewall_rule" "metastore_server_rule" {
-  count            = (var.subnet_name!="" &&  var.sql_server_name!="") ? 1 : 0
-  name             = "AllowAzureServices"
-  start_ip_address = "0.0.0.0"
-  end_ip_address   = "0.0.0.0"
-  server_id        = module.cluster_init.sql_server_id
-}
-
-resource "azurerm_mssql_virtual_network_rule" "sql_vnet_rule" {
-  count     = (var.subnet_name!="" &&  var.sql_server_name!="") ? 1 : 0
-  name      = "sql-vnet-rule"
-  server_id = module.cluster_init.sql_server_id
-  subnet_id = module.hdi_on_aks_vnet[0].subnet_id
-}*/
-
 module "flink_cluster" {
   source                           = "./modules/flink"
+  env                              = var.env
   flink_cluster_default_container  = var.flink_cluster_default_container
   cluster_version                  = var.cluster_version
   create_flink_cluster_flag        = var.create_flink_cluster_flag
@@ -155,7 +140,7 @@ module "flink_cluster" {
   use_log_analytics_for_flink      = var.use_log_analytics_for_flink
   # flink hive enabled
   flink_hive_db                    = var.flink_hive_db
-  flink_hive_enabled               = var.flink_hive_enabled
+  flink_hive_enabled_flag          = var.flink_hive_enabled_flag
   # sql server details, if name is empty that means no sql server is defined
   sql_server_id                    = var.sql_server_name!="" ? module.cluster_init.sql_server_id : ""
   sql_server_admin_user_name       = var.sql_server_admin_user_name
@@ -163,5 +148,6 @@ module "flink_cluster" {
   # key vault for SQL server secret
   kv_id                            = var.key_vault_name !="" ? module.cluster_init.kv_id : ""
   kv_sql_server_secret_name        = var.kv_sql_server_secret_name
+  auto_scale_flag                  = var.auto_scale_flag
   depends_on                       = [module.cluster_init]
 }

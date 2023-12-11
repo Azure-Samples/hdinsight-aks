@@ -21,16 +21,16 @@ module "storage_account" {
 
 # call Key Vault only when key_vault_name is not empty
 module "key_vault" {
-  count                  = var.key_vault_name!="" ? 1 : 0
-  source                 = "../key-vault"
-  location_name          = var.location_name
-  rg_name                = var.rg_name
-  create_key_vault_flag  = var.create_key_vault_flag
-  key_vault_name         = var.key_vault_name
-  tags                   = var.tags
-  user_managed_object_id = module.user_managed_identity.user_managed_principal_id
-  user_managed_tenant_id = module.user_managed_identity.user_managed_tenant_id
-  depends_on             = [module.user_managed_identity]
+  count                     = var.key_vault_name!="" ? 1 : 0
+  source                    = "../key-vault"
+  location_name             = var.location_name
+  rg_name                   = var.rg_name
+  create_key_vault_flag     = var.create_key_vault_flag
+  key_vault_name            = var.key_vault_name
+  tags                      = var.tags
+  user_managed_principal_id = module.user_managed_identity.user_managed_principal_id
+  user_managed_tenant_id    = module.user_managed_identity.user_managed_tenant_id
+  depends_on                = [module.user_managed_identity]
 }
 
 # call sql server when sql_server_name is not empty

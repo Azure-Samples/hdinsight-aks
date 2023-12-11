@@ -71,7 +71,12 @@ variable "use_log_analytics_for_flink" {
   description = "use LA or not for the flink cluster"
 }
 
-variable "flink_hive_enabled" {
+variable "auto_scale_flag" {
+  type        = bool
+  description = "enable auto scale for the Flink cluster, if yes specify auto scale configuration from flink_auto_scale_config.json"
+}
+
+variable "flink_hive_enabled_flag" {
   type        = bool
   description = "enable hive for the flink"
 }

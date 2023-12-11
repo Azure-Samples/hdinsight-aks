@@ -20,7 +20,7 @@ variable "create_key_vault_flag" {
   description = "create or use existing Key Vault"
 }
 
-variable "user_managed_object_id" {
+variable "user_managed_principal_id" {
   type        = string
   description = "Id for User managed identity / principal id"
 }
