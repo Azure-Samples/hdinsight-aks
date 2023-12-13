@@ -1,4 +1,5 @@
-# Terraform
+# environment
+env                         = "dev"
 # use prefix and suffix for resource group name and managed identity name
 prefix                      = "terraform"
 suffix                      = "hdionaks"
@@ -8,8 +9,8 @@ rg_name                     = "demo"
 create_rg_for_pool_flag     = true
 # Location/Region where you would like to create all your resources
 location_name               = "eastus2"
-# Pool name for HDI on AKS, use HDInsight on AKS documentation for the naming rules c
-hdi_on_aks_pool_name        = "aot-n-zeaus-prism-hdi-pool"
+# Pool name for HDI on AKS, use HDInsight on AKS documentation for the naming rules
+hdi_on_aks_pool_name        = "demo-hdi-pool"
 # Virtual machine size for the cluster pool based on your requirement. Use HDInsight on AKS documentation for detail.
 pool_node_vm_size           = "Standard_D4as_v4"
 # Managed resource group holds ancillary resources created by HDInsight on AKS.
@@ -22,7 +23,7 @@ pool_node_vm_size           = "Standard_D4as_v4"
 managed_resource_group_name = "hdi-prim-n"
 # VNet and Subnet related variables (no prefix and suffix)
 vnet_name                   = "hilovnet"
-# if VNet should be created it will be created in rg_name and rg_name is prefix and suffix
+# if VNet should be created it will be created in rg_name (prefix_rg_name_suffix)
 vnet_rg_name                = "terraform_demo_hdionaks"
 subnet_name                 = "default"
 # if vnet_name or subnet_name is empty these will not have any impact

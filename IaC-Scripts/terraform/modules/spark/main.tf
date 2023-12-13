@@ -14,6 +14,7 @@ locals {
   # and Log Analytics is created earlier then mark log analytics enabled
   la_flag           = (var.use_log_analytics_for_spark && var.la_workspace_id!="") ? true : false
   metastore_enabled = (var.spark_hive_enabled_flag && var.sql_server_name!="") ? true : false
+  payload           = var.spark_auto_scale_type=="ScheduleBased" ? local.schedule_based_autoscale_payload : local.load_based_autoscale_payload
 }
 
 # create spark cluster container
