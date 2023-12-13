@@ -10,27 +10,9 @@ variable "suffix" {
   description = "suffix all resource name"
 }
 
-variable "tenant_id" {
+variable "env" {
   type        = string
-  description = "azure tenant id"
-}
-
-variable "subscription" {
-  type        = string
-  description = "azure subscription"
-}
-
-
-variable "client_id" {
-  type        = string
-  sensitive   = true
-  description = "authenticate terraform using service principal- SP app id/client id"
-}
-
-variable "client_secret" {
-  type        = string
-  sensitive   = true
-  description = "authenticate terraform using service principal- SP secret"
+  description = "Environment name like dev/test/prod/etc., to load require configuration values from conf/env folder, set value using export env=\"dev\""
 }
 
 # Variables for HDI on AKS resources
@@ -44,16 +26,10 @@ variable "rg_name" {
   description = "resource group name for the HDI on AKS"
 }
 
-variable "create_rg_for_pool" {
+variable "create_rg_for_pool_flag" {
   type        = bool
   description = "Flag to indicate to create a resource group or not for the HDInsight on AKS"
 }
-
-
-/*variable "user_assigned_identity_name" {
-  type        = string
-  description = "user assigned identity used for the cluster"
-}*/
 
 variable "hdi_on_aks_pool_name" {
   type        = string
@@ -75,7 +51,7 @@ variable "vnet_name" {
 
 # would you like to use existing VNet or create a new one. In both case it will use vnet_name
 # if vnet_name is empty the network module will be skipped
-variable "create_vnet" {
+variable "create_vnet_flag" {
   type        = bool
   description = "create vnet or not, if it is existing then false (0) else true (1)"
   default     = false
@@ -95,7 +71,7 @@ variable "subnet_name" {
 
 # would you like to use existing Subnet or create a new one. In both case it will use subnet_name
 # if subnet_name is empty the network module will be skipped
-variable "create_subnet" {
+variable "create_subnet_flag" {
   type        = bool
   description = "create subnet or not, if it is existing then false (0) else true (1)"
   default     = false
@@ -107,11 +83,35 @@ variable "pool_version" {
   default     = "1.0"
 }
 
-variable empty {
-  default = ""
-}
-
 variable "pool_node_vm_size" {
   type        = string
   description = "VM SKU selected for the cluster pool."
+}
+
+# storage and identity
+
+variable "user_assigned_identity_name" {
+  type        = string
+  description = "user assigned identity used for the cluster"
+}
+
+variable "create_user_assigned_identity_flag" {
+  type        = bool
+  description = "create or use existing user assigned identity (user_assigned_identity_name)"
+}
+
+variable "storage_name" {
+  type        = string
+  description = "the storage account to associate with the cluster"
+}
+
+variable "create_storage_flag" {
+  type        = bool
+  description = "should use existing storage or create a new one"
+}
+
+variable "cluster_version" {
+  type        = string
+  default     = "1.0.6"
+  description = "Cluster version"
 }
