@@ -1,20 +1,8 @@
+# Spark cluster related variables
+
 variable "spark_cluster_name" {
   description = "Spark cluster name"
   type        = string
-}
-variable "hdi_on_aks_pool_id" {
-  description = "HDI on AKS pool id"
-  type        = string
-}
-
-variable "env" {
-  type        = string
-  description = "Environment name like dev/test/prod/etc."
-}
-
-variable "location_name" {
-  type        = string
-  description = "location name/region"
 }
 
 variable "spark_head_node_sku" {
@@ -43,19 +31,9 @@ variable "spark_secure_shell_node_count" {
   description = "Number of secure shell nodes"
 }
 
-variable "cluster_version" {
-  type        = string
-  description = "Cluster version"
-}
-
 variable "spark_version" {
   type        = string
   description = "Spark version"
-}
-
-variable "tags" {
-  type        = map(string)
-  description = "list of tags for resources"
 }
 
 variable "create_spark_cluster_flag" {
@@ -63,50 +41,14 @@ variable "create_spark_cluster_flag" {
   description = "create spark cluster"
 }
 
-variable "user_managed_client_id" {
-  type        = string
-  description = "User managed client identity"
-}
-
-variable "user_managed_principal_id" {
-  type        = string
-  description = "User managed identity / principal id"
-}
-
-variable "user_managed_resource_id" {
-  type        = string
-  description = "User managed identity"
-}
-
-variable "storage_account_primary_dfs_host" {
-  type        = string
-  description = "storage account DFS host"
-}
-
-variable "storage_account_name" {
-  type        = string
-  description = "storage account name"
-}
-
 variable "spark_cluster_default_container" {
   type        = string
   description = "default container for the cluster"
 }
 
-
 variable "use_log_analytics_for_spark" {
   type        = bool
   description = "use LA or not for the spark cluster"
-}
-
-variable "la_workspace_id" {
-  type        = string
-  description = "Log Analytics workspace Id"
-}
-
-variable "sql_server_id" {
-  type        = string
-  description = "SQL server Id"
 }
 
 variable "spark_hive_enabled_flag" {
@@ -132,34 +74,16 @@ variable "spark_graceful_decommission_timeout" {
 variable "spark_cooldown_period_for_load_based_autoscale" {
   type        = number
   description = "After an auto scaling event occurs, the amount of time to wait before enforcing another scaling policy. The default value is 180 sec."
+  default     = 180
 }
 
 variable "spark_max_load_based_auto_scale_worker_nodes" {
   type        = number
   description = "spark maximum worker nodes for load based auto scale"
+  default     = 0
 }
 
 variable "spark_hive_db" {
   type        = string
   description = "Spark Hive Database name in case of spark_hive_enabled is enabled"
-}
-
-variable "kv_id" {
-  type        = string
-  description = "Key Vault Id"
-}
-
-variable "kv_sql_server_secret_name" {
-  type        = string
-  description = "Key Vault secret name to store sql server password"
-}
-
-variable "sql_server_name" {
-  type        = string
-  description = "SQL Server name for the hive database"
-}
-
-variable "sql_server_admin_user_name" {
-  type        = string
-  description = "SQL server admin user name"
 }

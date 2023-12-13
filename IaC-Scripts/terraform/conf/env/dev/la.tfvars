@@ -9,3 +9,5 @@ la_name                     = ""
 la_retention_in_days        = 30
 # use LA for Flink Cluster
 use_log_analytics_for_flink = true
+# use LA for spark Cluster
+use_log_analytics_for_spark = true

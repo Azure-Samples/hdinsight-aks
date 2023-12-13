@@ -18,6 +18,7 @@ locals {
 
 # create flink cluster container
 resource "azurerm_storage_container" "flink_cluster_container" {
+  count                 = var.create_flink_cluster_flag ? 1 : 0
   name                  = var.flink_cluster_default_container
   storage_account_name  = var.storage_account_name
   container_access_type = "private"
@@ -85,12 +86,12 @@ resource "azapi_resource" "hdi_aks_cluster_flink" {
           count     = var.flink_secure_shell_node_count,
           podPrefix = "pod"
         },
-        autoscaleProfile = (var.auto_scale_flag) ? {
-          enabled                     = var.auto_scale_flag
-          autoscaleType               = "ScheduleBased",
+        autoscaleProfile = (var.flink_auto_scale_flag) ? {
+          enabled                     = var.flink_auto_scale_flag,
+          autoscaleType               = var.flink_auto_scale_type,
           gracefulDecommissionTimeout = -1,
           scheduleBasedConfig         = {
-            schedules    = jsondecode(file("${path.cwd}/conf/env/${var.env}/cluster_conf/flink/flink_auto_scale_config.json")),
+            schedules    = jsondecode(file("${path.cwd}/conf/env/${var.env}/cluster_conf/flink/flink_${var.flink_auto_scale_type}_auto_scale_config.json")),
             timeZone     = "UTC",
             defaultCount = var.flink_worker_node_count
           }
@@ -116,7 +117,7 @@ resource "azapi_resource" "hdi_aks_cluster_flink" {
           },
           {
             storage = {
-              storageUri = "abfs://${var.flink_cluster_default_container}@${var.storage_account_primary_dfs_host}"
+              storageUri = "abfs://${azurerm_storage_container.flink_cluster_container[0].name}@${var.storage_account_primary_dfs_host}"
             }
           },
           coalesce(local.catalog_profile ?
