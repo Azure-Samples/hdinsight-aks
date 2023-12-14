@@ -148,6 +148,44 @@ module "flink_cluster" {
   # key vault for SQL server secret
   kv_id                            = var.key_vault_name !="" ? module.cluster_init.kv_id : ""
   kv_sql_server_secret_name        = var.kv_sql_server_secret_name
-  auto_scale_flag                  = var.auto_scale_flag
+  flink_auto_scale_flag            = var.flink_auto_scale_flag
+  flink_auto_scale_type            = var.flink_auto_scale_type
   depends_on                       = [module.cluster_init]
+}
+
+module "spark_cluster" {
+  source                                         = "./modules/spark"
+  env                                            = var.env
+  cluster_version                                = var.cluster_version
+  create_spark_cluster_flag                      = var.create_spark_cluster_flag
+  hdi_on_aks_pool_id                             = module.hdi_on_aks_pool.pool_id
+  kv_id                                          = var.key_vault_name !="" ? module.cluster_init.kv_id : ""
+  kv_sql_server_secret_name                      = var.kv_sql_server_secret_name
+  la_workspace_id                                = module.hdi_on_aks_pool.log_analytics_workspace_id
+  location_name                                  = var.location_name
+  spark_auto_scale_flag                          = var.spark_auto_scale_flag
+  spark_auto_scale_type                          = var.spark_auto_scale_type
+  spark_cluster_default_container                = var.spark_cluster_default_container
+  spark_cluster_name                             = var.spark_cluster_name
+  spark_head_node_count                          = var.spark_head_node_count
+  spark_head_node_sku                            = var.spark_head_node_sku
+  spark_hive_db                                  = var.spark_hive_db
+  spark_hive_enabled_flag                        = var.spark_hive_enabled_flag
+  spark_secure_shell_node_count                  = var.spark_secure_shell_node_count
+  spark_version                                  = var.spark_version
+  spark_worker_node_count                        = var.spark_worker_node_count
+  sql_server_admin_user_name                     = var.sql_server_admin_user_name
+  sql_server_id                                  = var.sql_server_name!="" ? module.cluster_init.sql_server_id : ""
+  sql_server_name                                = module.cluster_init.sql_server_name
+  storage_account_name                           = module.cluster_init.storage_name
+  storage_account_primary_dfs_host               = module.cluster_init.storage_dfs_host
+  tags                                           = local.tags
+  use_log_analytics_for_spark                    = var.use_log_analytics_for_spark
+  user_managed_client_id                         = module.cluster_init.msi_client_id
+  user_managed_principal_id                      = module.cluster_init.msi_principal_id
+  user_managed_resource_id                       = module.cluster_init.msi_resource_id
+  depends_on                                     = [module.cluster_init]
+  spark_cooldown_period_for_load_based_autoscale = var.spark_cooldown_period_for_load_based_autoscale
+  spark_graceful_decommission_timeout            = var.spark_graceful_decommission_timeout
+  spark_max_load_based_auto_scale_worker_nodes   = var.spark_max_load_based_auto_scale_worker_nodes
 }

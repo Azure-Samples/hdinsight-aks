@@ -128,9 +128,14 @@ variable "flink_hive_enabled_flag" {
   description = "enable hive for the flink"
 }
 
-variable "auto_scale_flag" {
+variable "flink_auto_scale_flag" {
   type        = bool
   description = "enable auto scale for the Flink cluster, if yes specify auto scale configuration from flink_auto_scale_config.json"
+}
+
+variable "flink_auto_scale_type" {
+  type        = string
+  description = "auto scale type, it supports only schedule based"
 }
 
 variable "flink_hive_db" {
