@@ -77,6 +77,11 @@ variable "flink_auto_scale_type" {
   default     = "schedule"
 }
 
+variable "flink_graceful_decommission_timeout" {
+  type        = number
+  description = "This is the maximum time to wait for running containers and applications to complete before transitioning a DECOMMISSIONING node to DECOMMISSIONED. it is useful only when we enable auto scale"
+}
+
 variable "flink_hive_enabled_flag" {
   type        = bool
   description = "enable hive for the flink"

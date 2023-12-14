@@ -23,10 +23,13 @@ history_server_conf = {
 }
 # if hive is enabled, please ensure you supply sql_server_name part if cluster.tfvars
 # it is assumed that we need to create new hive database
-flink_hive_enabled_flag = true
+flink_hive_enabled_flag             = true
 # change the database name if you want to use different hive metastore for flink and spark
-flink_hive_db           = "terraform_hive_db"
+flink_hive_db                       = "terraform_hive_db"
 # enable auto scale for the Flink cluster, if yes specify auto scale configuration from flink_ScheduleBased_auto_scale_config.json
 # use schedule based only here, load based is not support
-flink_auto_scale_type   = "ScheduleBased"
-flink_auto_scale_flag   = true
+flink_auto_scale_type               = "ScheduleBased"
+flink_auto_scale_flag               = true
+# applicable only when auto flag is true
+# flink does not support GracefulDecommissionTimeout, setting this value throws GracefulDecommissionTimeoutNotSupported.
+flink_graceful_decommission_timeout = -1

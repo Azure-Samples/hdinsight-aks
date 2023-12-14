@@ -24,6 +24,7 @@ resource "azurerm_storage_container" "flink_cluster_container" {
   container_access_type = "private"
 }
 
+
 # create Hive database only when sql server is defined and hive is enabled
 resource "azurerm_mssql_database" "flink_hive_db" {
   count     = local.catalog_profile ? 1 : 0
@@ -35,7 +36,7 @@ resource "azurerm_mssql_database" "flink_hive_db" {
 
 resource "azapi_resource" "hdi_aks_cluster_flink" {
   count                     = var.create_flink_cluster_flag ? 1 : 0
-  type                      = "Microsoft.HDInsight/clusterpools/clusters@2023-06-01-preview"
+  type                      = var.hdi_arm_api_version
   name                      = var.flink_cluster_name
   parent_id                 = var.hdi_on_aks_pool_id
   location                  = var.location_name
@@ -89,9 +90,9 @@ resource "azapi_resource" "hdi_aks_cluster_flink" {
         autoscaleProfile = (var.flink_auto_scale_flag) ? {
           enabled                     = var.flink_auto_scale_flag,
           autoscaleType               = var.flink_auto_scale_type,
-          gracefulDecommissionTimeout = -1,
+          gracefulDecommissionTimeout = var.flink_graceful_decommission_timeout,
           scheduleBasedConfig         = {
-            schedules    = jsondecode(file("${path.cwd}/conf/env/${var.env}/cluster_conf/flink/flink_${var.flink_auto_scale_type}_auto_scale_config.json")),
+            schedules    = jsondecode(file("${path.cwd}/conf/env/${var.env}/cluster_conf/flink/flink_schedulebased_auto_scale_config.json")),
             timeZone     = "UTC",
             defaultCount = var.flink_worker_node_count
           }

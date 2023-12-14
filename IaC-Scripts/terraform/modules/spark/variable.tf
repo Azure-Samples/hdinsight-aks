@@ -7,6 +7,11 @@ variable "hdi_on_aks_pool_id" {
   type        = string
 }
 
+variable "hdi_arm_api_version" {
+  type        = string
+  description = "Azure HDI on AKS API version"
+}
+
 variable "env" {
   type        = string
   description = "Environment name like dev/test/prod/etc."
@@ -106,7 +111,7 @@ variable "la_workspace_id" {
 
 variable "sql_server_id" {
   type        = string
-  description = "SQL server Id"
+  description = "SQL database used for the Hive Metastore."
 }
 
 variable "spark_hive_enabled_flag" {

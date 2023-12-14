@@ -11,3 +11,5 @@ la_retention_in_days        = 30
 use_log_analytics_for_flink = true
 # use LA for spark Cluster
 use_log_analytics_for_spark = true
+# use LA for Trino
+use_log_analytics_for_trino = true

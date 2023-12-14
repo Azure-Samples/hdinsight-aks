@@ -5,5 +5,5 @@ variable "subnet_id" {
 
 variable "sql_server_id" {
   type        = string
-  description = "sql server id"
+  description = "SQL database used for the Hive Metastore."
 }

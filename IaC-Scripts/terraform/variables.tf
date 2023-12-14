@@ -26,6 +26,13 @@ variable "rg_name" {
   description = "resource group name for the HDI on AKS"
 }
 
+# change only when API version changes
+variable "hdi_arm_api_version" {
+  type = string
+  description = "Azure HDI on AKS API version"
+  default = "Microsoft.HDInsight/clusterpools/clusters@2023-06-01-preview"
+}
+
 variable "create_rg_for_pool_flag" {
   type        = bool
   description = "Flag to indicate to create a resource group or not for the HDInsight on AKS"
