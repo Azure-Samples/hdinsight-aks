@@ -3,6 +3,7 @@
 ## Modules
    - [Resource-group](./terraform/modules/resource-group/main.tf) - Creates Resource group, if create_rg_for_pool_flag=false, It will use existing resource group.
    - [Network](./terraform/modules/network/main.tf) - Creates VNet and Subnet
+
    | vnet_name  |create_vnet_flag|subnet_name|create_subnet_flag|Action                      |
    |------------|----------------|-----------|------------------|----------------------------|
    |not empty   |            true|not empty  |              true|create a new Vnet and Subnet|
@@ -12,11 +13,13 @@
    |empty       |              NA|NA         |                NA|No VNet and SubNet|
    |not empty   |           false|empty      |                NA|No VNet and SubNet|
    - [Log Analytics](./terraform/modules/log-analytics/main.tf) - Creates Log Analytics Workspace.   
+   
    | create_log_analytics_flag  |la_name  |Action                      |
    |----------------------------|-------  |----------------------------|
    |true                        |non empty|create a Log Analytics workspace|
    |false                       |non empty|use existing Log Analytics workspace|
    |NA                          |empty    |don't use any Log Analytics workspace|
+   
    - [Cluster-pool](./terraform/modules/cluster-pool/main.tf) - Creates HDInsight on AKS Cluster pool
    - [Cluster-init](./terraform/modules/cluster-init/main.tf) - Initialize cluster prerequisites
       - [User Managed Identity](./terraform/modules/identity/main.tf) - Creates an user-assigned managed identity (MSI)
