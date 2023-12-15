@@ -7,6 +7,11 @@ variable "hdi_on_aks_pool_id" {
   type        = string
 }
 
+variable "hdi_arm_api_version" {
+  type        = string
+  description = "Azure HDI on AKS API version"
+}
+
 variable "env" {
   type        = string
   description = "Environment name like dev/test/prod/etc."
@@ -30,7 +35,6 @@ variable "flink_head_node_count" {
 variable "flink_worker_node_sku" {
   type        = string
   description = "Flink worker node size"
-  default     = "Standard_D8ds_v5"
 }
 
 variable "flink_worker_node_count" {
@@ -120,7 +124,7 @@ variable "la_workspace_id" {
 
 variable "sql_server_id" {
   type        = string
-  description = "SQL server Id"
+  description = "SQL database used for the Hive Metastore."
 }
 
 variable "flink_hive_enabled_flag" {
@@ -161,4 +165,9 @@ variable "sql_server_name" {
 variable "sql_server_admin_user_name" {
   type        = string
   description = "SQL server admin user name"
+}
+
+variable "flink_graceful_decommission_timeout" {
+  type        = number
+  description = "This is the maximum time to wait for running containers and applications to complete before transitioning a DECOMMISSIONING node to DECOMMISSIONED. it is useful only when we enable auto scale"
 }

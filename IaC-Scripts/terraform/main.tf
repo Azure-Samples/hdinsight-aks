@@ -21,7 +21,13 @@ provider "azapi" {
 }
 
 provider "azurerm" {
-  features {}
+  features {
+    resource_group {
+      # keep false if you want to delete resource group managed by terraform, this will delete any resources
+      # created outside of terraform state
+      prevent_deletion_if_contains_resources = false
+    }
+  }
 }
 
 data "azurerm_client_config" "current" {}
@@ -55,7 +61,9 @@ module "hdi_on_aks_vnet" {
   create_vnet_flag   = var.create_vnet_flag
   create_subnet_flag = var.create_subnet_flag
   count              = var.vnet_name!="" && var.subnet_name!="" ? 1 : 0
-  depends_on         = [module.resource-group]
+  depends_on         = [
+    module.resource-group
+  ]
 }
 
 # This module is creates HDInsight cluster pool
@@ -63,12 +71,14 @@ module "hdi_on_aks_vnet" {
 # for all supported pool_node_vm_size, please refer HDInsight on AKS documentation on Azure
 # managed_resource_group_name is
 module "hdi_on_aks_pool" {
-  source                      = "./modules/cluster-pool"
-  hdi_on_aks_pool_name        = var.hdi_on_aks_pool_name
-  location_name               = var.location_name
-  rg_id                       = module.resource-group.resource_group_id
-  tags                        = local.tags
-  depends_on                  = [module.resource-group, module.hdi_on_aks_vnet]
+  source               = "./modules/cluster-pool"
+  hdi_on_aks_pool_name = var.hdi_on_aks_pool_name
+  location_name        = var.location_name
+  rg_id                = module.resource-group.resource_group_id
+  tags                 = local.tags
+  depends_on           = [
+    module.resource-group, module.hdi_on_aks_vnet
+  ]
   pool_node_vm_size           = var.pool_node_vm_size
   pool_version                = var.pool_version
   managed_resource_group_name = var.managed_resource_group_name
@@ -110,82 +120,140 @@ module "sql-vnet" {
 }
 
 module "flink_cluster" {
-  source                           = "./modules/flink"
-  env                              = var.env
-  flink_cluster_default_container  = var.flink_cluster_default_container
-  cluster_version                  = var.cluster_version
-  create_flink_cluster_flag        = var.create_flink_cluster_flag
-  flink_cluster_name               = var.flink_cluster_name
-  flink_version                    = var.flink_version
-  hdi_on_aks_pool_id               = module.hdi_on_aks_pool.pool_id
-  location_name                    = var.location_name
+  source                              = "./modules/flink"
+  env                                 = var.env
+  cluster_version                     = var.cluster_version
+  hdi_arm_api_version                 = var.hdi_arm_api_version
+  create_flink_cluster_flag           = var.create_flink_cluster_flag
+  flink_cluster_name                  = var.flink_cluster_name
+  flink_version                       = var.flink_version
+  hdi_on_aks_pool_id                  = module.hdi_on_aks_pool.pool_id
+  location_name                       = var.location_name
   # flink default storage
-  storage_account_primary_dfs_host = module.cluster_init.storage_dfs_host
-  storage_account_name             = module.cluster_init.storage_name
-  user_managed_client_id           = module.cluster_init.msi_client_id
-  user_managed_principal_id        = module.cluster_init.msi_principal_id
-  user_managed_resource_id         = module.cluster_init.msi_resource_id
+  storage_account_primary_dfs_host    = module.cluster_init.storage_dfs_host
+  storage_account_name                = module.cluster_init.storage_name
+  flink_cluster_default_container     = var.flink_cluster_default_container
+  # MSI related
+  user_managed_client_id              = module.cluster_init.msi_client_id
+  user_managed_principal_id           = module.cluster_init.msi_principal_id
+  user_managed_resource_id            = module.cluster_init.msi_resource_id
   # flink worker and head node configuration
-  flink_head_node_count            = var.flink_head_node_count
-  flink_head_node_sku              = var.flink_head_node_sku
-  flink_worker_node_count          = var.flink_worker_node_count
-  flink_secure_shell_node_count    = var.flink_secure_shell_node_count
+  flink_head_node_count               = var.flink_head_node_count
+  flink_head_node_sku                 = var.flink_head_node_sku
+  flink_worker_node_count             = var.flink_worker_node_count
+  flink_worker_node_sku               = var.flink_worker_node_sku
+  flink_secure_shell_node_count       = var.flink_secure_shell_node_count
   # flink configuration
-  history_server_conf              = var.history_server_conf
-  job_manager_conf                 = var.job_manager_conf
-  task_manager_conf                = var.task_manager_conf
-  tags                             = local.tags
+  history_server_conf                 = var.history_server_conf
+  job_manager_conf                    = var.job_manager_conf
+  task_manager_conf                   = var.task_manager_conf
+  tags                                = local.tags
   # log analytics
-  la_workspace_id                  = module.hdi_on_aks_pool.log_analytics_workspace_id
-  use_log_analytics_for_flink      = var.use_log_analytics_for_flink
-  # flink hive enabled
-  flink_hive_db                    = var.flink_hive_db
-  flink_hive_enabled_flag          = var.flink_hive_enabled_flag
-  # sql server details, if name is empty that means no sql server is defined
-  sql_server_id                    = var.sql_server_name!="" ? module.cluster_init.sql_server_id : ""
-  sql_server_admin_user_name       = var.sql_server_admin_user_name
-  sql_server_name                  = module.cluster_init.sql_server_name
+  la_workspace_id                     = module.hdi_on_aks_pool.log_analytics_workspace_id
+  use_log_analytics_for_flink         = var.use_log_analytics_for_flink
+  # sql server and hive enabled details, if name is empty that means no sql server is defined
+  flink_hive_db                       = var.flink_hive_db
+  flink_hive_enabled_flag             = var.flink_hive_enabled_flag
+  sql_server_id                       = var.sql_server_name!="" ? module.cluster_init.sql_server_id : ""
+  sql_server_admin_user_name          = var.sql_server_admin_user_name
+  sql_server_name                     = module.cluster_init.sql_server_name
   # key vault for SQL server secret
-  kv_id                            = var.key_vault_name !="" ? module.cluster_init.kv_id : ""
-  kv_sql_server_secret_name        = var.kv_sql_server_secret_name
-  flink_auto_scale_flag            = var.flink_auto_scale_flag
-  flink_auto_scale_type            = var.flink_auto_scale_type
-  depends_on                       = [module.cluster_init]
+  kv_id                               = var.key_vault_name !="" ? module.cluster_init.kv_id : ""
+  kv_sql_server_secret_name           = var.kv_sql_server_secret_name
+  # auto scale
+  flink_auto_scale_flag               = var.flink_auto_scale_flag
+  flink_auto_scale_type               = var.flink_auto_scale_type
+  flink_graceful_decommission_timeout = var.flink_graceful_decommission_timeout
+  depends_on                          = [module.cluster_init]
 }
 
 module "spark_cluster" {
   source                                         = "./modules/spark"
   env                                            = var.env
   cluster_version                                = var.cluster_version
+  hdi_arm_api_version                            = var.hdi_arm_api_version
   create_spark_cluster_flag                      = var.create_spark_cluster_flag
   hdi_on_aks_pool_id                             = module.hdi_on_aks_pool.pool_id
+  # Key Vault
   kv_id                                          = var.key_vault_name !="" ? module.cluster_init.kv_id : ""
   kv_sql_server_secret_name                      = var.kv_sql_server_secret_name
+  # Log Analytics
   la_workspace_id                                = module.hdi_on_aks_pool.log_analytics_workspace_id
+  use_log_analytics_for_spark                    = var.use_log_analytics_for_spark
   location_name                                  = var.location_name
+  # Auto scale
   spark_auto_scale_flag                          = var.spark_auto_scale_flag
   spark_auto_scale_type                          = var.spark_auto_scale_type
-  spark_cluster_default_container                = var.spark_cluster_default_container
-  spark_cluster_name                             = var.spark_cluster_name
-  spark_head_node_count                          = var.spark_head_node_count
-  spark_head_node_sku                            = var.spark_head_node_sku
-  spark_hive_db                                  = var.spark_hive_db
-  spark_hive_enabled_flag                        = var.spark_hive_enabled_flag
-  spark_secure_shell_node_count                  = var.spark_secure_shell_node_count
-  spark_version                                  = var.spark_version
-  spark_worker_node_count                        = var.spark_worker_node_count
-  sql_server_admin_user_name                     = var.sql_server_admin_user_name
-  sql_server_id                                  = var.sql_server_name!="" ? module.cluster_init.sql_server_id : ""
-  sql_server_name                                = module.cluster_init.sql_server_name
-  storage_account_name                           = module.cluster_init.storage_name
-  storage_account_primary_dfs_host               = module.cluster_init.storage_dfs_host
-  tags                                           = local.tags
-  use_log_analytics_for_spark                    = var.use_log_analytics_for_spark
-  user_managed_client_id                         = module.cluster_init.msi_client_id
-  user_managed_principal_id                      = module.cluster_init.msi_principal_id
-  user_managed_resource_id                       = module.cluster_init.msi_resource_id
-  depends_on                                     = [module.cluster_init]
   spark_cooldown_period_for_load_based_autoscale = var.spark_cooldown_period_for_load_based_autoscale
   spark_graceful_decommission_timeout            = var.spark_graceful_decommission_timeout
   spark_max_load_based_auto_scale_worker_nodes   = var.spark_max_load_based_auto_scale_worker_nodes
+  # spark related
+  spark_cluster_name                             = var.spark_cluster_name
+  spark_head_node_count                          = var.spark_head_node_count
+  spark_head_node_sku                            = var.spark_head_node_sku
+  spark_secure_shell_node_count                  = var.spark_secure_shell_node_count
+  spark_version                                  = var.spark_version
+  spark_worker_node_count                        = var.spark_worker_node_count
+  # sql server detail and hive metastore
+  spark_hive_db                                  = var.spark_hive_db
+  spark_hive_enabled_flag                        = var.spark_hive_enabled_flag
+  sql_server_admin_user_name                     = var.sql_server_admin_user_name
+  sql_server_id                                  = var.sql_server_name!="" ? module.cluster_init.sql_server_id : ""
+  sql_server_name                                = module.cluster_init.sql_server_name
+  # storage account and container
+  storage_account_name                           = module.cluster_init.storage_name
+  storage_account_primary_dfs_host               = module.cluster_init.storage_dfs_host
+  spark_cluster_default_container                = var.spark_cluster_default_container
+  # MSI related
+  user_managed_client_id                         = module.cluster_init.msi_client_id
+  user_managed_principal_id                      = module.cluster_init.msi_principal_id
+  user_managed_resource_id                       = module.cluster_init.msi_resource_id
+  tags                                           = local.tags
+  depends_on                                     = [module.cluster_init]
+}
+
+module "trino_cluster" {
+  source                              = "./modules/trino"
+  cluster_version                     = var.cluster_version
+  create_trino_cluster_flag           = var.create_trino_cluster_flag
+  env                                 = var.env
+  hdi_on_aks_pool_id                  = module.hdi_on_aks_pool.pool_id
+  hdi_arm_api_version                 = var.hdi_arm_api_version
+  # Key Vault
+  kv_id                               = var.key_vault_name !="" ? module.cluster_init.kv_id : ""
+  kv_sql_server_secret_name           = var.kv_sql_server_secret_name
+  # Log Analytics
+  la_workspace_id                     = module.hdi_on_aks_pool.log_analytics_workspace_id
+  use_log_analytics_for_trino         = false
+  location_name                       = var.location_name
+  # SQL Server
+  sql_server_admin_user_name          = var.sql_server_admin_user_name
+  sql_server_id                       = var.sql_server_name!="" ? module.cluster_init.sql_server_id : ""
+  sql_server_name                     = module.cluster_init.sql_server_name
+  # hive catalog related
+  trino_hive_catalog_name             = var.trino_hive_catalog_name
+  trino_hive_db                       = var.trino_hive_db
+  trino_hive_enabled_flag             = var.trino_hive_enabled_flag
+  # storage account and container
+  storage_account_name                = module.cluster_init.storage_name
+  trino_cluster_default_container     = var.trino_cluster_default_container
+  storage_account_primary_dfs_host    = module.cluster_init.storage_dfs_host
+  # for auto scale
+  trino_auto_scale_flag               = var.trino_auto_scale_flag
+  trino_auto_scale_type               = var.trino_auto_scale_type
+  # cluster related information
+  trino_cluster_name                  = var.trino_cluster_name
+  trino_head_node_count               = var.trino_head_node_count
+  trino_head_node_sku                 = var.trino_head_node_sku
+  trino_worker_node_count             = var.trino_worker_node_count
+  trino_worker_node_sku               = var.trino_worker_node_sku
+  trino_secure_shell_node_count       = var.trino_secure_shell_node_count
+  trino_version                       = var.trino_version
+  trino_graceful_decommission_timeout = var.trino_graceful_decommission_timeout
+  # MSI related
+  user_managed_client_id              = module.cluster_init.msi_client_id
+  user_managed_principal_id           = module.cluster_init.msi_principal_id
+  user_managed_resource_id            = module.cluster_init.msi_resource_id
+  tags                                = local.tags
+  depends_on                          = [module.cluster_init]
 }
