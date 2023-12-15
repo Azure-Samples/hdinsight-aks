@@ -18,7 +18,7 @@ module "log_analytics" {
 
 # create HDInsight on AKS pool, It will use managed_resource_group_name and subnet if they are defined
 resource "azapi_resource" "hdi_aks_cluster_pool" {
-  type                      = "Microsoft.HDInsight/clusterpools@2023-06-01-preview"
+  type                      = "Microsoft.HDInsight/clusterpools@${var.hdi_arm_api_version}"
   name                      = var.hdi_on_aks_pool_name
   parent_id                 = var.rg_id
   location                  = var.location_name

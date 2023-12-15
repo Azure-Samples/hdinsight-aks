@@ -36,7 +36,7 @@ resource "azurerm_mssql_database" "spark_hive_db" {
 
 resource "azapi_resource" "hdi_aks_cluster_spark" {
   count                     = var.create_spark_cluster_flag ? 1 : 0
-  type                      = var.hdi_arm_api_version
+  type                      = "Microsoft.HDInsight/clusterpools/clusters@${var.hdi_arm_api_version}"
   name                      = var.spark_cluster_name
   parent_id                 = var.hdi_on_aks_pool_id
   location                  = var.location_name

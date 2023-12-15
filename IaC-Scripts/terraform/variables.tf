@@ -30,7 +30,7 @@ variable "rg_name" {
 variable "hdi_arm_api_version" {
   type = string
   description = "Azure HDI on AKS API version"
-  default = "Microsoft.HDInsight/clusterpools/clusters@2023-06-01-preview"
+  default = "2023-06-01-preview"
 }
 
 variable "create_rg_for_pool_flag" {

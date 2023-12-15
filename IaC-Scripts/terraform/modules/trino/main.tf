@@ -24,14 +24,6 @@ resource "azurerm_storage_container" "trino_cluster_container" {
   container_access_type = "private"
 }
 
-# assign HDInsight on AKS Cluster Admin role to MSI for auto scale
-#resource "azurerm_role_assignment" "cluster_admin_auto_scale" {
-#  count                = var.trino_auto_scale_flag ? 1 : 0
-#  principal_id         = var.user_managed_principal_id
-#  scope                = ""
-#  role_definition_name = "HDInsight on AKS Cluster Admin"
-#}
-
 # create Hive database only when sql server is defined and hive is enabled
 resource "azurerm_mssql_database" "trino_hive_db" {
   count     = local.catalog_profile ? 1 : 0
@@ -43,7 +35,7 @@ resource "azurerm_mssql_database" "trino_hive_db" {
 
 resource "azapi_resource" "hdi_aks_cluster_trino" {
   count                     = var.create_trino_cluster_flag ? 1 : 0
-  type                      = var.hdi_arm_api_version
+  type                      = "Microsoft.HDInsight/clusterpools/clusters@${var.hdi_arm_api_version}"
   name                      = var.trino_cluster_name
   parent_id                 = var.hdi_on_aks_pool_id
   location                  = var.location_name

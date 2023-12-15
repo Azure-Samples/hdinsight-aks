@@ -36,7 +36,7 @@ resource "azurerm_mssql_database" "flink_hive_db" {
 
 resource "azapi_resource" "hdi_aks_cluster_flink" {
   count                     = var.create_flink_cluster_flag ? 1 : 0
-  type                      = var.hdi_arm_api_version
+  type                      = "Microsoft.HDInsight/clusterpools/clusters@${var.hdi_arm_api_version}"
   name                      = var.flink_cluster_name
   parent_id                 = var.hdi_on_aks_pool_id
   location                  = var.location_name

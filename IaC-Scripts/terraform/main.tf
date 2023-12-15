@@ -71,14 +71,12 @@ module "hdi_on_aks_vnet" {
 # for all supported pool_node_vm_size, please refer HDInsight on AKS documentation on Azure
 # managed_resource_group_name is
 module "hdi_on_aks_pool" {
-  source               = "./modules/cluster-pool"
-  hdi_on_aks_pool_name = var.hdi_on_aks_pool_name
-  location_name        = var.location_name
-  rg_id                = module.resource-group.resource_group_id
-  tags                 = local.tags
-  depends_on           = [
-    module.resource-group, module.hdi_on_aks_vnet
-  ]
+  source                      = "./modules/cluster-pool"
+  hdi_on_aks_pool_name        = var.hdi_on_aks_pool_name
+  hdi_arm_api_version         = var.hdi_arm_api_version
+  location_name               = var.location_name
+  rg_id                       = module.resource-group.resource_group_id
+  tags                        = local.tags
   pool_node_vm_size           = var.pool_node_vm_size
   pool_version                = var.pool_version
   managed_resource_group_name = var.managed_resource_group_name
@@ -87,6 +85,9 @@ module "hdi_on_aks_pool" {
   la_name                     = var.la_name
   la_retention_in_days        = var.la_retention_in_days
   rg_name                     = module.resource-group.resource_group_name
+  depends_on                  = [
+    module.resource-group, module.hdi_on_aks_vnet
+  ]
 }
 
 module "cluster_init" {
@@ -125,8 +126,6 @@ module "flink_cluster" {
   cluster_version                     = var.cluster_version
   hdi_arm_api_version                 = var.hdi_arm_api_version
   create_flink_cluster_flag           = var.create_flink_cluster_flag
-  flink_cluster_name                  = var.flink_cluster_name
-  flink_version                       = var.flink_version
   hdi_on_aks_pool_id                  = module.hdi_on_aks_pool.pool_id
   location_name                       = var.location_name
   # flink default storage
@@ -138,6 +137,8 @@ module "flink_cluster" {
   user_managed_principal_id           = module.cluster_init.msi_principal_id
   user_managed_resource_id            = module.cluster_init.msi_resource_id
   # flink worker and head node configuration
+  flink_cluster_name                  = var.flink_cluster_name
+  flink_version                       = var.flink_version
   flink_head_node_count               = var.flink_head_node_count
   flink_head_node_sku                 = var.flink_head_node_sku
   flink_worker_node_count             = var.flink_worker_node_count
@@ -256,4 +257,25 @@ module "trino_cluster" {
   user_managed_resource_id            = module.cluster_init.msi_resource_id
   tags                                = local.tags
   depends_on                          = [module.cluster_init]
+}
+
+module "flink_job_submission" {
+  source                     = "./modules/flink-job"
+  count                      = var.create_flink_cluster_flag && var.flink_job_action_flag ? 1 : 0
+  env                        = var.env
+  flink_job_action_flag      = var.flink_job_action_flag
+  hdi_arm_api_version        = var.hdi_arm_api_version
+  flink_cluster_id           = module.flink_cluster.flink_cluster_id
+  hdi_on_aks_pool_id         = module.hdi_on_aks_pool.pool_id
+  location_name              = var.location_name
+  # job related information
+  storage_account_name       = module.cluster_init.storage_name
+  flink_jar_container        = var.flink_cluster_default_container
+  flink_job_args             = var.flink_job_args
+  flink_job_entry_class_name = var.flink_job_entry_class_name
+  flink_job_jar_file         = var.flink_job_jar_file
+  flink_job_name             = var.flink_job_name
+  flink_job_action           = var.flink_job_action
+  tags                       = local.tags
+  depends_on                 = [module.flink_cluster, module.cluster_init]
 }
