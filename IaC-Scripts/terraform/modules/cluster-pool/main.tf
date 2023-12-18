@@ -7,7 +7,7 @@ terraform {
 }
 
 module "log_analytics" {
-  count                     = var.la_name!="" ? 1 : 0
+  count                     = length(var.la_name)>0 ? 1 : 0
   source                    = "../log-analytics"
   create_log_analytics_flag = var.create_log_analytics_flag
   la_name                   = var.la_name
@@ -38,14 +38,14 @@ resource "azapi_resource" "hdi_aks_cluster_pool" {
         }
       },
       coalesce(
-        var.managed_resource_group_name!="" ?
+        length(var.managed_resource_group_name)>0 ?
         {
           managedResourceGroupName = var.managed_resource_group_name
         } :
         {}
       ),
       coalesce(
-        var.la_name!="" ?
+        length(var.la_name)>0 ?
         {
           logAnalyticsProfile = {
             enabled     = true,
@@ -55,7 +55,7 @@ resource "azapi_resource" "hdi_aks_cluster_pool" {
         {}
       ),
       coalesce(
-        var.subnet_id!="" ?
+        length(var.subnet_id)>0 ?
         {
           networkProfile = {
             subnetId = var.subnet_id

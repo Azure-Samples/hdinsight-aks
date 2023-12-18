@@ -60,7 +60,7 @@ module "hdi_on_aks_vnet" {
   vnet_rg_name       = var.vnet_rg_name
   create_vnet_flag   = var.create_vnet_flag
   create_subnet_flag = var.create_subnet_flag
-  count              = var.vnet_name!="" && var.subnet_name!="" ? 1 : 0
+  count              = length(var.vnet_name)>0 && length(var.subnet_name)>0 ? 1 : 0
   depends_on         = [
     module.resource-group
   ]
@@ -108,13 +108,12 @@ module "cluster_init" {
   kv_sql_server_secret_name          = var.kv_sql_server_secret_name
   tags                               = local.tags
   depends_on                         = [module.hdi_on_aks_pool]
-
 }
 
 ## manage rules for allowing traffic between an Azure SQL server and a subnet of a virtual network only
 ## if Subnet is not defined and sql server is not used this module will not do anything
 module "sql-vnet" {
-  count         = (var.subnet_name!="" &&  var.sql_server_name!="") ? 1 : 0
+  count         = (length(var.subnet_name)>0 &&  length(var.sql_server_name)>0) ? 1 : 0
   source        = "./modules/sql-vnet"
   sql_server_id = module.cluster_init.sql_server_id
   subnet_id     = module.hdi_on_aks_vnet[0].subnet_id
@@ -155,11 +154,11 @@ module "flink_cluster" {
   # sql server and hive enabled details, if name is empty that means no sql server is defined
   flink_hive_db                       = var.flink_hive_db
   flink_hive_enabled_flag             = var.flink_hive_enabled_flag
-  sql_server_id                       = var.sql_server_name!="" ? module.cluster_init.sql_server_id : ""
+  sql_server_id                       = length(var.sql_server_name)>0 ? module.cluster_init.sql_server_id : ""
   sql_server_admin_user_name          = var.sql_server_admin_user_name
   sql_server_name                     = module.cluster_init.sql_server_name
   # key vault for SQL server secret
-  kv_id                               = var.key_vault_name !="" ? module.cluster_init.kv_id : ""
+  kv_id                               = length(var.key_vault_name)>0 ? module.cluster_init.kv_id : ""
   kv_sql_server_secret_name           = var.kv_sql_server_secret_name
   # auto scale
   flink_auto_scale_flag               = var.flink_auto_scale_flag
@@ -176,7 +175,7 @@ module "spark_cluster" {
   create_spark_cluster_flag                      = var.create_spark_cluster_flag
   hdi_on_aks_pool_id                             = module.hdi_on_aks_pool.pool_id
   # Key Vault
-  kv_id                                          = var.key_vault_name !="" ? module.cluster_init.kv_id : ""
+  kv_id                                          = length(var.key_vault_name)>0 ? module.cluster_init.kv_id : ""
   kv_sql_server_secret_name                      = var.kv_sql_server_secret_name
   # Log Analytics
   la_workspace_id                                = module.hdi_on_aks_pool.log_analytics_workspace_id
@@ -199,7 +198,7 @@ module "spark_cluster" {
   spark_hive_db                                  = var.spark_hive_db
   spark_hive_enabled_flag                        = var.spark_hive_enabled_flag
   sql_server_admin_user_name                     = var.sql_server_admin_user_name
-  sql_server_id                                  = var.sql_server_name!="" ? module.cluster_init.sql_server_id : ""
+  sql_server_id                                  = length(var.sql_server_name)>0 ? module.cluster_init.sql_server_id : ""
   sql_server_name                                = module.cluster_init.sql_server_name
   # storage account and container
   storage_account_name                           = module.cluster_init.storage_name
@@ -221,7 +220,7 @@ module "trino_cluster" {
   hdi_on_aks_pool_id                  = module.hdi_on_aks_pool.pool_id
   hdi_arm_api_version                 = var.hdi_arm_api_version
   # Key Vault
-  kv_id                               = var.key_vault_name !="" ? module.cluster_init.kv_id : ""
+  kv_id                               = length(var.key_vault_name)>0 ? module.cluster_init.kv_id : ""
   kv_sql_server_secret_name           = var.kv_sql_server_secret_name
   # Log Analytics
   la_workspace_id                     = module.hdi_on_aks_pool.log_analytics_workspace_id
@@ -229,7 +228,7 @@ module "trino_cluster" {
   location_name                       = var.location_name
   # SQL Server
   sql_server_admin_user_name          = var.sql_server_admin_user_name
-  sql_server_id                       = var.sql_server_name!="" ? module.cluster_init.sql_server_id : ""
+  sql_server_id                       = length(var.sql_server_name)>0 ? module.cluster_init.sql_server_id : ""
   sql_server_name                     = module.cluster_init.sql_server_name
   # hive catalog related
   trino_hive_catalog_name             = var.trino_hive_catalog_name

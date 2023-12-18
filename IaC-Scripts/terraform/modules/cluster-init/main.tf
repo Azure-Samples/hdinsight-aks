@@ -21,7 +21,7 @@ module "storage_account" {
 
 # call Key Vault only when key_vault_name is not empty
 module "key_vault" {
-  count                     = var.key_vault_name!="" ? 1 : 0
+  count                     = length(var.key_vault_name)>0 ? 1 : 0
   source                    = "../key-vault"
   location_name             = var.location_name
   rg_name                   = var.rg_name
@@ -35,14 +35,14 @@ module "key_vault" {
 
 # call sql server when sql_server_name is not empty
 module "sql_server" {
-  count                      = var.sql_server_name!="" ? 1 : 0
+  count                      = length(var.sql_server_name)>0 ? 1 : 0
   source                     = "../sql-database"
   location_name              = var.location_name
   rg_name                    = var.rg_name
   create_sql_server_flag     = var.create_sql_server_flag
   sql_server_name            = var.sql_server_name
   # key vault to store secret
-  kv_id                      = var.key_vault_name!="" ? module.key_vault[0].kv_id : ""
+  kv_id                      = length(var.key_vault_name)>0 ? module.key_vault[0].kv_id : ""
   kv_sql_server_secret_name  = var.kv_sql_server_secret_name
   # sql server admin user name
   sql_server_admin_user_name = var.sql_server_admin_user_name

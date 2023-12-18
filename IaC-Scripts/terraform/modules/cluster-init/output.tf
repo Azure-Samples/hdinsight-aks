@@ -20,17 +20,17 @@ output "msi_principal_id" {
 }
 
 output "kv_id" {
-  value = var.key_vault_name!="" ? module.key_vault[0].kv_id : ""
+  value = length(var.key_vault_name)>0 ? module.key_vault[0].kv_id : ""
 }
 
 output "kv_name" {
-  value = var.key_vault_name!="" ? module.key_vault[0].kv_name : ""
+  value = length(var.key_vault_name)>0 ? module.key_vault[0].kv_name : ""
 }
 
 output "sql_server_id" {
-  value = var.sql_server_name!="" ? module.sql_server[0].sql_server_id : ""
+  value = length(var.sql_server_name)>0 ? module.sql_server[0].sql_server_id : ""
 }
 
 output "sql_server_name" {
-  value = var.sql_server_name!="" ? module.sql_server[0].sql_server_name : ""
+  value = length(var.sql_server_name)>0 ? module.sql_server[0].sql_server_name : ""
 }

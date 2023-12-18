@@ -45,7 +45,7 @@ variable "flink_job_action" {
   type        = string
   description = "Job action can be NEW, UPDATE or DELETE."
   validation {
-    condition     = contains(["NEW", "UPDATE", "DELETE"], var.flink_job_action)
+    condition     = contains(["NEW", "UPDATE", "DELETE","CANCEL","STOP"], var.flink_job_action)
     error_message = "Valid values for flink_job_action are (NEW, UPDATE, DELETE, CANCEL, STOP)"
   }
 }

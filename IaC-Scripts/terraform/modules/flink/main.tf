@@ -12,8 +12,8 @@ data "azurerm_client_config" "current" {}
 locals {
   # when it is indicated that use log analytics for Flink Cluster
   # and Log Analytics is created earlier then mark log analytics enabled
-  la_flag         = (var.use_log_analytics_for_flink && var.la_workspace_id!="") ? true : false
-  catalog_profile = (var.flink_hive_enabled_flag && var.sql_server_name!="") ? true : false
+  la_flag         = (var.use_log_analytics_for_flink && length(var.la_workspace_id)>0) ? true : false
+  catalog_profile = (var.flink_hive_enabled_flag && length(var.sql_server_name)>0) ? true : false
 }
 
 # create flink cluster container
