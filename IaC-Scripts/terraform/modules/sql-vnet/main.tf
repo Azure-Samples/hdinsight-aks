@@ -1,6 +1,8 @@
 # Allows you to manage rules for allowing traffic between an Azure SQL server and a subnet of a virtual network.
+# We can't use count            = length(var.sql_server_id)>0 ? 1 : 0
+# because "count" value depends on resource attributes that cannot be determined until apply
+
 resource "azurerm_mssql_firewall_rule" "metastore_server_rule" {
-  count            = length(var.sql_server_id)>0 ? 1 : 0
   name             = "AllowAzureServices"
   start_ip_address = "0.0.0.0"
   end_ip_address   = "0.0.0.0"
@@ -8,7 +10,6 @@ resource "azurerm_mssql_firewall_rule" "metastore_server_rule" {
 }
 
 resource "azurerm_mssql_virtual_network_rule" "sql_vnet_rule" {
-  count     = length(var.sql_server_id)>0 && length(var.subnet_id)>0 ? 1 : 0
   name      = "sql-vnet-rule"
   server_id = var.sql_server_id
   subnet_id = var.subnet_id
