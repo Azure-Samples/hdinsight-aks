@@ -12,8 +12,8 @@ data "azurerm_client_config" "current" {}
 locals {
   # when it is indicated that use log analytics for Flink Cluster
   # and Log Analytics is created earlier then mark log analytics enabled
-  la_flag         = (var.use_log_analytics_for_flink && var.la_workspace_id!="") ? true : false
-  catalog_profile = (var.flink_hive_enabled_flag && var.sql_server_name!="") ? true : false
+  la_flag         = (var.use_log_analytics_for_flink && length(var.la_workspace_id)>0) ? true : false
+  catalog_profile = (var.flink_hive_enabled_flag && length(var.sql_server_name)>0) ? true : false
 }
 
 # create flink cluster container
@@ -36,7 +36,7 @@ resource "azurerm_mssql_database" "flink_hive_db" {
 
 resource "azapi_resource" "hdi_aks_cluster_flink" {
   count                     = var.create_flink_cluster_flag ? 1 : 0
-  type                      = var.hdi_arm_api_version
+  type                      = "Microsoft.HDInsight/clusterpools/clusters@${var.hdi_arm_api_version}"
   name                      = var.flink_cluster_name
   parent_id                 = var.hdi_on_aks_pool_id
   location                  = var.location_name

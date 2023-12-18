@@ -1,5 +1,3 @@
-# environment
-env                         = "dev"
 # use prefix and suffix for resource group name and managed identity name
 prefix                      = "terraform"
 suffix                      = "hdionaks"

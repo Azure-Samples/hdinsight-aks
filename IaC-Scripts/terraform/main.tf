@@ -60,7 +60,7 @@ module "hdi_on_aks_vnet" {
   vnet_rg_name       = var.vnet_rg_name
   create_vnet_flag   = var.create_vnet_flag
   create_subnet_flag = var.create_subnet_flag
-  count              = var.vnet_name!="" && var.subnet_name!="" ? 1 : 0
+  count              = length(var.vnet_name)>0 && length(var.subnet_name)>0 ? 1 : 0
   depends_on         = [
     module.resource-group
   ]
@@ -71,14 +71,12 @@ module "hdi_on_aks_vnet" {
 # for all supported pool_node_vm_size, please refer HDInsight on AKS documentation on Azure
 # managed_resource_group_name is
 module "hdi_on_aks_pool" {
-  source               = "./modules/cluster-pool"
-  hdi_on_aks_pool_name = var.hdi_on_aks_pool_name
-  location_name        = var.location_name
-  rg_id                = module.resource-group.resource_group_id
-  tags                 = local.tags
-  depends_on           = [
-    module.resource-group, module.hdi_on_aks_vnet
-  ]
+  source                      = "./modules/cluster-pool"
+  hdi_on_aks_pool_name        = var.hdi_on_aks_pool_name
+  hdi_arm_api_version         = var.hdi_arm_api_version
+  location_name               = var.location_name
+  rg_id                       = module.resource-group.resource_group_id
+  tags                        = local.tags
   pool_node_vm_size           = var.pool_node_vm_size
   pool_version                = var.pool_version
   managed_resource_group_name = var.managed_resource_group_name
@@ -87,6 +85,9 @@ module "hdi_on_aks_pool" {
   la_name                     = var.la_name
   la_retention_in_days        = var.la_retention_in_days
   rg_name                     = module.resource-group.resource_group_name
+  depends_on                  = [
+    module.resource-group, module.hdi_on_aks_vnet
+  ]
 }
 
 module "cluster_init" {
@@ -107,13 +108,12 @@ module "cluster_init" {
   kv_sql_server_secret_name          = var.kv_sql_server_secret_name
   tags                               = local.tags
   depends_on                         = [module.hdi_on_aks_pool]
-
 }
 
 ## manage rules for allowing traffic between an Azure SQL server and a subnet of a virtual network only
 ## if Subnet is not defined and sql server is not used this module will not do anything
 module "sql-vnet" {
-  count         = (var.subnet_name!="" &&  var.sql_server_name!="") ? 1 : 0
+  count         = (length(var.subnet_name)>0 &&  length(var.sql_server_name)>0) ? 1 : 0
   source        = "./modules/sql-vnet"
   sql_server_id = module.cluster_init.sql_server_id
   subnet_id     = module.hdi_on_aks_vnet[0].subnet_id
@@ -125,8 +125,6 @@ module "flink_cluster" {
   cluster_version                     = var.cluster_version
   hdi_arm_api_version                 = var.hdi_arm_api_version
   create_flink_cluster_flag           = var.create_flink_cluster_flag
-  flink_cluster_name                  = var.flink_cluster_name
-  flink_version                       = var.flink_version
   hdi_on_aks_pool_id                  = module.hdi_on_aks_pool.pool_id
   location_name                       = var.location_name
   # flink default storage
@@ -138,6 +136,8 @@ module "flink_cluster" {
   user_managed_principal_id           = module.cluster_init.msi_principal_id
   user_managed_resource_id            = module.cluster_init.msi_resource_id
   # flink worker and head node configuration
+  flink_cluster_name                  = var.flink_cluster_name
+  flink_version                       = var.flink_version
   flink_head_node_count               = var.flink_head_node_count
   flink_head_node_sku                 = var.flink_head_node_sku
   flink_worker_node_count             = var.flink_worker_node_count
@@ -154,11 +154,11 @@ module "flink_cluster" {
   # sql server and hive enabled details, if name is empty that means no sql server is defined
   flink_hive_db                       = var.flink_hive_db
   flink_hive_enabled_flag             = var.flink_hive_enabled_flag
-  sql_server_id                       = var.sql_server_name!="" ? module.cluster_init.sql_server_id : ""
+  sql_server_id                       = length(var.sql_server_name)>0 ? module.cluster_init.sql_server_id : ""
   sql_server_admin_user_name          = var.sql_server_admin_user_name
   sql_server_name                     = module.cluster_init.sql_server_name
   # key vault for SQL server secret
-  kv_id                               = var.key_vault_name !="" ? module.cluster_init.kv_id : ""
+  kv_id                               = length(var.key_vault_name)>0 ? module.cluster_init.kv_id : ""
   kv_sql_server_secret_name           = var.kv_sql_server_secret_name
   # auto scale
   flink_auto_scale_flag               = var.flink_auto_scale_flag
@@ -175,7 +175,7 @@ module "spark_cluster" {
   create_spark_cluster_flag                      = var.create_spark_cluster_flag
   hdi_on_aks_pool_id                             = module.hdi_on_aks_pool.pool_id
   # Key Vault
-  kv_id                                          = var.key_vault_name !="" ? module.cluster_init.kv_id : ""
+  kv_id                                          = length(var.key_vault_name)>0 ? module.cluster_init.kv_id : ""
   kv_sql_server_secret_name                      = var.kv_sql_server_secret_name
   # Log Analytics
   la_workspace_id                                = module.hdi_on_aks_pool.log_analytics_workspace_id
@@ -198,7 +198,7 @@ module "spark_cluster" {
   spark_hive_db                                  = var.spark_hive_db
   spark_hive_enabled_flag                        = var.spark_hive_enabled_flag
   sql_server_admin_user_name                     = var.sql_server_admin_user_name
-  sql_server_id                                  = var.sql_server_name!="" ? module.cluster_init.sql_server_id : ""
+  sql_server_id                                  = length(var.sql_server_name)>0 ? module.cluster_init.sql_server_id : ""
   sql_server_name                                = module.cluster_init.sql_server_name
   # storage account and container
   storage_account_name                           = module.cluster_init.storage_name
@@ -220,7 +220,7 @@ module "trino_cluster" {
   hdi_on_aks_pool_id                  = module.hdi_on_aks_pool.pool_id
   hdi_arm_api_version                 = var.hdi_arm_api_version
   # Key Vault
-  kv_id                               = var.key_vault_name !="" ? module.cluster_init.kv_id : ""
+  kv_id                               = length(var.key_vault_name)>0 ? module.cluster_init.kv_id : ""
   kv_sql_server_secret_name           = var.kv_sql_server_secret_name
   # Log Analytics
   la_workspace_id                     = module.hdi_on_aks_pool.log_analytics_workspace_id
@@ -228,7 +228,7 @@ module "trino_cluster" {
   location_name                       = var.location_name
   # SQL Server
   sql_server_admin_user_name          = var.sql_server_admin_user_name
-  sql_server_id                       = var.sql_server_name!="" ? module.cluster_init.sql_server_id : ""
+  sql_server_id                       = length(var.sql_server_name)>0 ? module.cluster_init.sql_server_id : ""
   sql_server_name                     = module.cluster_init.sql_server_name
   # hive catalog related
   trino_hive_catalog_name             = var.trino_hive_catalog_name
@@ -256,4 +256,25 @@ module "trino_cluster" {
   user_managed_resource_id            = module.cluster_init.msi_resource_id
   tags                                = local.tags
   depends_on                          = [module.cluster_init]
+}
+
+module "flink_job_submission" {
+  source                     = "./modules/flink-job"
+  count                      = var.create_flink_cluster_flag && var.flink_job_action_flag ? 1 : 0
+  env                        = var.env
+  flink_job_action_flag      = var.flink_job_action_flag
+  hdi_arm_api_version        = var.hdi_arm_api_version
+  flink_cluster_id           = module.flink_cluster.flink_cluster_id
+  hdi_on_aks_pool_id         = module.hdi_on_aks_pool.pool_id
+  location_name              = var.location_name
+  # job related information
+  storage_account_name       = module.cluster_init.storage_name
+  flink_jar_container        = var.flink_cluster_default_container
+  flink_job_args             = var.flink_job_args
+  flink_job_entry_class_name = var.flink_job_entry_class_name
+  flink_job_jar_file         = var.flink_job_jar_file
+  flink_job_name             = var.flink_job_name
+  flink_job_action           = var.flink_job_action
+  tags                       = local.tags
+  depends_on                 = [module.flink_cluster, module.cluster_init]
 }

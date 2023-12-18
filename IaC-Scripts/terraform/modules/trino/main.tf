@@ -12,8 +12,8 @@ data "azurerm_client_config" "current" {}
 locals {
   # when it is indicated that use log analytics for Trino Cluster
   # and Log Analytics is created earlier then mark log analytics enabled
-  la_flag         = (var.use_log_analytics_for_trino && var.la_workspace_id!="") ? true : false
-  catalog_profile = (var.trino_hive_enabled_flag && var.sql_server_name!="" && var.trino_hive_catalog_name!="") ? true : false
+  la_flag         = (var.use_log_analytics_for_trino && length(var.la_workspace_id)>0) ? true : false
+  catalog_profile = (var.trino_hive_enabled_flag && length(var.sql_server_name)>0 && length(var.trino_hive_catalog_name)>0) ? true : false
 }
 
 # create trino cluster container
@@ -23,14 +23,6 @@ resource "azurerm_storage_container" "trino_cluster_container" {
   storage_account_name  = var.storage_account_name
   container_access_type = "private"
 }
-
-# assign HDInsight on AKS Cluster Admin role to MSI for auto scale
-#resource "azurerm_role_assignment" "cluster_admin_auto_scale" {
-#  count                = var.trino_auto_scale_flag ? 1 : 0
-#  principal_id         = var.user_managed_principal_id
-#  scope                = ""
-#  role_definition_name = "HDInsight on AKS Cluster Admin"
-#}
 
 # create Hive database only when sql server is defined and hive is enabled
 resource "azurerm_mssql_database" "trino_hive_db" {
@@ -43,7 +35,7 @@ resource "azurerm_mssql_database" "trino_hive_db" {
 
 resource "azapi_resource" "hdi_aks_cluster_trino" {
   count                     = var.create_trino_cluster_flag ? 1 : 0
-  type                      = var.hdi_arm_api_version
+  type                      = "Microsoft.HDInsight/clusterpools/clusters@${var.hdi_arm_api_version}"
   name                      = var.trino_cluster_name
   parent_id                 = var.hdi_on_aks_pool_id
   location                  = var.location_name

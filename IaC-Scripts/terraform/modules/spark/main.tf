@@ -12,8 +12,8 @@ data "azurerm_client_config" "current" {}
 locals {
   # when it is indicated that use log analytics for Spark Cluster
   # and Log Analytics is created earlier then mark log analytics enabled
-  la_flag           = (var.use_log_analytics_for_spark && var.la_workspace_id!="") ? true : false
-  metastore_enabled = (var.spark_hive_enabled_flag && var.sql_server_name!="") ? true : false
+  la_flag           = (var.use_log_analytics_for_spark && length(var.la_workspace_id)>0) ? true : false
+  metastore_enabled = (var.spark_hive_enabled_flag && length(var.sql_server_name)>0) ? true : false
   payload           = var.spark_auto_scale_type=="ScheduleBased" ? local.schedule_based_autoscale_payload : local.load_based_autoscale_payload
 }
 
@@ -36,7 +36,7 @@ resource "azurerm_mssql_database" "spark_hive_db" {
 
 resource "azapi_resource" "hdi_aks_cluster_spark" {
   count                     = var.create_spark_cluster_flag ? 1 : 0
-  type                      = var.hdi_arm_api_version
+  type                      = "Microsoft.HDInsight/clusterpools/clusters@${var.hdi_arm_api_version}"
   name                      = var.spark_cluster_name
   parent_id                 = var.hdi_on_aks_pool_id
   location                  = var.location_name

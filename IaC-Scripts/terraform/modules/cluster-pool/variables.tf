@@ -8,6 +8,11 @@ variable "managed_resource_group_name" {
   description = "HDI on AKS pool managed resource group name"
 }
 
+variable "hdi_arm_api_version" {
+  type        = string
+  description = "Azure HDI on AKS API version"
+}
+
 variable "rg_id" {
   type        = string
   description = "resource group id"
