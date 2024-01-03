@@ -223,7 +223,7 @@ https://learn.microsoft.com/en-us/azure/iot-hub/tutorial-connectivity
 ### Check output file in ADLS gen2 on Azure portal
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/a165cc8e-cfa7-4fa9-92e1-f78715bb5b32)
 
-## Clearup
+## Clean up
 . Flink 1.16 on Azure HDInsight on AKS<br>
 . Azure IOT hub <br>
 . Azure Eventgrid <br>
