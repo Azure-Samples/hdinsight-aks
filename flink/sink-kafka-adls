@@ -1,0 +1,167 @@
+# DStreamAPI SinkKafkaToADLSGen2
+
+This example uses DStreamAPI to create a simple sink that assigns kafka topic click event message to ADLSgen2.
+
+## Prerequisites
+
+• HDInsight Flink 1.16.0 on AKS
+• HDInsight Kafka 3.2.0
+• Use MSI to access ADLSgen2
+• HDInsight Flink on AKS and HDInsight Kafka are in the same Vnet
+• Maven project development on Azure VM in the same Vnet
+
+## Flink FileSystem connector
+
+This filesystem connector provides the same guarantees for both BATCH and STREAMING and is designed to provide exactly-once semantics for STREAMING execution.
+
+Apache Kafka Connector
+Flink provides an Apache Kafka connector for reading data from and writing data to Kafka topics with exactly-once guarantees.
+
+https://nightlies.apache.org/flink/flink-docs-release-1.16/docs/connectors/datastream/kafka/ (Opens in new window or tab)
+
+Testing in IdeaJ and Run on HDInsight Flink 1.16.0 on AKS
+pom.xml on IntelliJ IDEA
+```
+<properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <flink.version>1.16.0</flink.version>
+        <java.version>1.8</java.version>
+        <scala.binary.version>2.12</scala.binary.version>
+        <kafka.version>3.2.0</kafka.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-java</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.flink/flink-streaming-java -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-streaming-java</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.flink/flink-clients -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-clients</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.flink/flink-connector-files -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-files</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-kafka</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+```
+abfsGen2.java
+Note: please replace Kafka bootStrapServers with your own brokers
+
+package contoso.example;
+```
+import org.apache.flink.api.common.eventtime.WatermarkStrategy;
+import org.apache.flink.api.common.serialization.SimpleStringEncoder;
+import org.apache.flink.api.common.serialization.SimpleStringSchema;
+import org.apache.flink.configuration.MemorySize;
+import org.apache.flink.connector.file.sink.FileSink;
+import org.apache.flink.connector.kafka.source.KafkaSource;
+import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
+import org.apache.flink.core.fs.Path;
+import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.sink.filesystem.rollingpolicies.DefaultRollingPolicy;
+
+import java.time.Duration;
+
+public class KafkaSinkToGen2 {
+    public static void main(String[] args) throws Exception {
+        // 1. get stream execution env
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+
+        // 1. read kafka message as stream input
+        String brokers = "10.0.0.38:9092,10.0.0.39:9092,10.0.0.40:9092";
+        KafkaSource<String> source = KafkaSource.<String>builder()
+                .setBootstrapServers(brokers)
+                .setTopics("click_events")
+                .setGroupId("my-group")
+                .setStartingOffsets(OffsetsInitializer.earliest())
+                .setValueOnlyDeserializer(new SimpleStringSchema())
+                .build();
+
+        DataStream<String> stream = env.fromSource(source, WatermarkStrategy.noWatermarks(), "Kafka Source");
+        stream.print();
+
+        // 3. sink to gen2
+        String outputPath  = "abfs://container01@contosoflinkgen2.dfs.core.windows.net/flink/data/click_events";
+        final FileSink<String> sink = FileSink
+                .forRowFormat(new Path(outputPath), new SimpleStringEncoder<String>("UTF-8"))
+                .withRollingPolicy(
+                        DefaultRollingPolicy.builder()
+                                .withRolloverInterval(Duration.ofMinutes(2))
+                                .withInactivityInterval(Duration.ofMinutes(3))
+                                .withMaxPartSize(MemorySize.ofMebiBytes(5))
+                                .build())
+                .build();
+
+        stream.sinkTo(sink);
+
+        // 4. run stream
+        env.execute("Kafka Sink To Gen2");
+    }
+}
+```
+Using Maven to pack a jar onto local and add & submit the job on Flink Dashboard UI
+
+image.png
+
+image.png
+
+check streaming data on ADSLgen2
+
+image.png
+
+image.png
+
+It specifies a rolling policy that rolls the in-progress part file on any of the following 3 conditions:
+
+.withRollingPolicy(
+                        DefaultRollingPolicy.builder()
+                                .withRolloverInterval(Duration.ofMinutes(2))
+                                .withInactivityInterval(Duration.ofMinutes(3))
+                                .withMaxPartSize(MemorySize.ofMebiBytes(5))
+                                .build())
+• It contains at least 2 minutes worth of data
+• It hasn’t received new records for the last 3 minutes
+• The file size has reached 5M (after writing the last record)
