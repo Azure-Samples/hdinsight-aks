@@ -27,7 +27,7 @@ resource "azurerm_storage_container" "spark_cluster_container" {
 
 # create Hive database only when sql server is defined and hive is enabled
 resource "azurerm_mssql_database" "spark_hive_db" {
-  count     = local.metastore_enabled ? 1 : 0
+  count     = (var.create_spark_cluster_flag && local.metastore_enabled) ? 1 : 0
   name      = var.spark_hive_db
   server_id = var.sql_server_id
   collation = "SQL_Latin1_General_CP1_CI_AS"

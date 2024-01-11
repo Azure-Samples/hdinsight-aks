@@ -27,7 +27,7 @@ resource "azurerm_storage_container" "flink_cluster_container" {
 
 # create Hive database only when sql server is defined and hive is enabled
 resource "azurerm_mssql_database" "flink_hive_db" {
-  count     = local.catalog_profile ? 1 : 0
+  count     = (var.create_flink_cluster_flag && local.catalog_profile) ? 1 : 0
   name      = var.flink_hive_db
   server_id = var.sql_server_id
   collation = "SQL_Latin1_General_CP1_CI_AS"
