@@ -1,6 +1,7 @@
 ## Using a combination of Logging agent (Vector), Kafka on Azure HDInsight and Flink on Azure HDInsight on AKS to store logs in Iceberg format can provide a hugely cost effective and powerful logging solution worth looking at the following diagram:
 
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/f0ce02d0-1293-427c-916d-500aa4e3a833)
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/67404350/a8db75ae-0b38-4a5b-8ad7-36414a75cc89)
+
 
 
 Logs are coming from a source to Kafka on Azure HDInsight. Flink reads the data from Kafka and allows you to run queries on the data and then the write the data back to ADLSgen2 in a Iceberg format table suitable for long time storage and querying.
