@@ -1,6 +1,6 @@
 # payload to create schedule based auto scale
 locals {
-  schedule_based_autoscale_payload = jsonencode({
+  schedule_based_autoscale_payload = (var.create_spark_cluster_flag && var.spark_auto_scale_type=="ScheduleBased") ? jsonencode({
     properties = {
       clusterType    = "spark",
       computeProfile = {
@@ -86,5 +86,5 @@ locals {
         }
       } # cluster profile
     }
-  })
+  }) : ""
 }
