@@ -1,9 +1,9 @@
-## Using a combination of Vector.dev (a logging agent), Azure HDInsight Kafka and Azure HDInsight Flink on AKS to store logs in Iceberg format can provide a hugely cost effective and powerful logging solution worth looking at the following diagram:
+## Using a combination of Logging agent (Vector), Kafka on Azure HDInsight and Flink on Azure HDInsight on AKS to store logs in Iceberg format can provide a hugely cost effective and powerful logging solution worth looking at the following diagram:
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/f0ce02d0-1293-427c-916d-500aa4e3a833)
 
 
-Logs coming from a source to Azure HDInsight Kafka. Flink reads the data from Azure HDInsight Kafka and allows you to run queries on the data and then the data back to ADLSgen2 in a Iceberg format table suitable for long time storage and querying.
+Logs are coming from a source to Kafka on Azure HDInsight. Flink reads the data from Kafka and allows you to run queries on the data and then the write the data back to ADLSgen2 in a Iceberg format table suitable for long time storage and querying.
 
 
 ## Prerequisites
@@ -168,14 +168,14 @@ Flink can read the data from the logs topic and save it to ADLSgen2 using a tabl
 Flink is then pulling in the data and storing it for long term storage in Iceberg format on ADLS gen2 with Flink ready to work on your data to spot patterns such as errors or malicious use and send it wherever you need.
 
 Details:<br>
-HDInsight Kafka will hold the newest logs as they come in and Flink can copy that data to ADLS gen2 in a format that is efficient and available to query at any time for any historic queries you might like to run.<br>
+Kafka will hold the newest logs as they come in and Flink can copy that data to ADLS gen2 in a format that is efficient and available to query at any time for any historic queries you might like to run.<br>
 In Flink you can create a new Catalog which facilitates the storage to ADLS gen2 for you.<br>
 Then you can create a table in the catalog and send data to it.<br>
 Heres the full Job for flink to read the data and send it to ADLS gen2
 
 **1. Download iceberg, parquet, Kafka client and flink kafka connector dependencies into webssh pod**
 
-In thi blog, I use SSH on Azure portal to login to webssh pod to submit jar, run flink sql etc
+In thi blog, we are use SSH on Azure portal to login to webssh pod to submit jar, run flink sql etc
 
 #Ref
 https://learn.microsoft.com/en-us/azure/hdinsight-aks/flink/flink-web-ssh-on-portal-to-flink-sql
