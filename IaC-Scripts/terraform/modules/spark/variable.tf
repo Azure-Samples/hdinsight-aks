@@ -35,7 +35,6 @@ variable "spark_head_node_count" {
 variable "spark_worker_node_sku" {
   type        = string
   description = "Spark worker node size"
-  default     = "Standard_D8ds_v5"
 }
 
 variable "spark_worker_node_count" {
