@@ -1,7 +1,7 @@
 # payload to create load based auto scale
 locals {
   # final payload for load based autoscale
-  load_based_autoscale_payload = var.create_spark_cluster_flag ? jsonencode({
+  load_based_autoscale_payload = (var.create_spark_cluster_flag && var.spark_auto_scale_flag) ? jsonencode({
     properties = {
       clusterType    = "spark",
       computeProfile = {
