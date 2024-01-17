@@ -1,7 +1,7 @@
 # ideally whenever you call this module you would require
 # la_name, rg_name and location_name
 data "azurerm_log_analytics_workspace" "hdk_on_aks_la_data" {
-  count               = !var.create_log_analytics_flag ?  1 : 0
+  count               = !var.create_log_analytics_flag && length(var.la_name)>0 ?  1 : 0
   name                = var.la_name
   resource_group_name = var.rg_name
 }

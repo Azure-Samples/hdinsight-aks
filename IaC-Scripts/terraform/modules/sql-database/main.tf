@@ -3,7 +3,7 @@ data "azurerm_client_config" "current" {}
 # HDI on AKS support "Use SQL authentication" only
 
 data "azurerm_mssql_server" "hdi_on_aks_sql_data" {
-  count               = !var.create_sql_server_flag ? 1 : 0
+  count               = !var.create_sql_server_flag && length(var.sql_server_name)>0 ? 1 : 0
   name                = var.sql_server_name
   resource_group_name = var.rg_name
 }
