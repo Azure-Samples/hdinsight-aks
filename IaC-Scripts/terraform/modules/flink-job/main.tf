@@ -8,7 +8,7 @@ terraform {
 
 # It assumes that container is already exist in the given storage account
 resource "azurerm_storage_blob" "flink_job_jar_upload" {
-  count                  = (var.flink_job_action_flag && length(var.flink_job_name)>0) ? 1 : 0
+  count                  = local.job_action_flag ? 1 : 0
   name                   = var.flink_job_jar_file
   storage_account_name   = var.storage_account_name
   storage_container_name = var.flink_jar_container

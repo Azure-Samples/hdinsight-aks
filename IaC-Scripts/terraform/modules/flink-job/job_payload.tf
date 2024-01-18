@@ -1,9 +1,10 @@
 locals {
 
   new_update_job_flag = (var.flink_job_action=="NEW" || var.flink_job_action=="UPDATE")
+  job_action_flag     = (var.flink_job_action_flag && length(var.flink_job_name)>0 && contains(["NEW", "UPDATE"], var.flink_job_action))
 
   # for delete, cancel, and stop action needs only jobType, jobName and action
-  payload = jsonencode({
+  payload = local.job_action_flag ? jsonencode({
     properties = merge(
       {
         jobType = "FlinkJob"
@@ -30,5 +31,5 @@ locals {
         flinkConfiguration = jsondecode(file("${path.cwd}/conf/env/${var.env}/job_conf/flink/flink_job_conf.json"))
       } : {}),
     )// merge ends
-  }) # jsonencode ends
+  }) : ""
 }

@@ -191,9 +191,10 @@ module "spark_cluster" {
   spark_cluster_name                             = var.spark_cluster_name
   spark_head_node_count                          = var.spark_head_node_count
   spark_head_node_sku                            = var.spark_head_node_sku
+  spark_worker_node_count                        = var.spark_worker_node_count
+  spark_worker_node_sku                          = var.spark_worker_node_sku
   spark_secure_shell_node_count                  = var.spark_secure_shell_node_count
   spark_version                                  = var.spark_version
-  spark_worker_node_count                        = var.spark_worker_node_count
   # sql server detail and hive metastore
   spark_hive_db                                  = var.spark_hive_db
   spark_hive_enabled_flag                        = var.spark_hive_enabled_flag

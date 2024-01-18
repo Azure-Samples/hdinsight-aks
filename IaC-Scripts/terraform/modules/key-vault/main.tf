@@ -1,7 +1,7 @@
 data "azurerm_client_config" "current" {}
 
 data "azurerm_key_vault" "hdi_on_aks_kv_data" {
-  count               = !var.create_key_vault_flag ? 1 : 0
+  count               = !var.create_key_vault_flag && length(var.key_vault_name)>0 ? 1 : 0
   name                = var.key_vault_name
   resource_group_name = var.rg_name
 }
