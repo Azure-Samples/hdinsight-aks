@@ -613,10 +613,9 @@ KafkaSource<String> source = KafkaSource.<String>builder()
 bin/flink run -c contoso.example.SuspiciousActivities -j FlinkMysqCDCSinkToKafka-1.0-SNAPSHOT.jar
 ```
 
-**checking job on Flink UI Dashboard** <br>
+**check job on Flink UI Dashboard** <br>
 
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/b644d71f-040f-4d7b-895c-99a38bc0f987)
-
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/7f1ad54b-8d97-43bb-b559-7bc10e51f8f9)
 
 **consume suspicious_activities on Kafka cluster** 
 
@@ -624,12 +623,15 @@ bin/flink run -c contoso.example.SuspiciousActivities -j FlinkMysqCDCSinkToKafka
 /usr/hdp/current/kafka-broker/bin/kafka-console-consumer.sh --bootstrap-server wn0-contos:9092 --topic transaction_mid --from-beginning
 ```
 
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/055018ef-d665-4582-8816-200029659ff9)
+
+
 ``` json
 //lets check "user_id": "1" json data: "user_suspicious_activity": true as  "transaction_amount": 40010 > 30000
 {
   "user_suspicious_activity": true,
   "user_phone_number": "+372 12345678",
-  "window_end_time": 1706709600000,
+  "window_end_time": 1706756400000,
   "user_id": "1",
   "transaction_countries": [
     "Netherland",
@@ -638,7 +640,7 @@ bin/flink run -c contoso.example.SuspiciousActivities -j FlinkMysqCDCSinkToKafka
   "transaction_amount": 40010,
   "user_surname": "Doe",
   "user_middle_name": "Smith",
-  "window_start_time": 1706706000000,
+  "window_start_time": 1706752800000,
   "user_mail_address": "john.doe@gmail.com",
   "transaction_currency": "EUR"
 }
@@ -649,17 +651,17 @@ bin/flink run -c contoso.example.SuspiciousActivities -j FlinkMysqCDCSinkToKafka
 {
   "user_suspicious_activity": true,
   "user_phone_number": "+372 12345694",
-  "window_end_time": 1706709600000,
+  "window_end_time": 1706756400000,
   "user_id": "17",
   "transaction_countries": [
     "Netherland",
     "Poland",
     "Estonia"
   ],
-  "transaction_amount": 40010,
+  "transaction_amount": 34005,
   "user_surname": "Doe",
   "user_middle_name": "Smith",
-  "window_start_time": 1706706000000,
+  "window_start_time": 1706752800000,
   "user_mail_address": "jay.doe@gmail.com",
   "transaction_currency": "EUR"
 }
@@ -670,7 +672,7 @@ bin/flink run -c contoso.example.SuspiciousActivities -j FlinkMysqCDCSinkToKafka
 {
   "user_suspicious_activity": false,
   "user_phone_number": "+372 12345682",
-  "window_end_time": 1706709600000,
+  "window_end_time": 1706756400000,
   "user_id": "5",
   "transaction_countries": [
     "Estonia"
@@ -678,13 +680,15 @@ bin/flink run -c contoso.example.SuspiciousActivities -j FlinkMysqCDCSinkToKafka
   "transaction_amount": 5,
   "user_surname": "Doe",
   "user_middle_name": "Smith",
-  "window_start_time": 1706706000000,
+  "window_start_time": 1706752800000,
   "user_mail_address": "jack.doe@gmail.com",
   "transaction_currency": "EUR"
 }
 ```
 
 **check result on ADLS gen2 on Azure portal**
+
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/845c21c2-2f84-41ae-beef-cf826f5374d6)
 
 **data in MySQL for reference**
 ``` SQL
