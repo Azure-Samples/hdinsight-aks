@@ -715,9 +715,8 @@ mysql> select user_id, sum(amount) from transactions group by user_id;
 20 rows in set (0.24 sec)
 ```
 ## Clean up the resource
-
-• HDInsight Flink 1.16.0 on AKS
-• HDInsight Kafka 3.2.0
-• ADLSgen2
-• MySQL 8.0 on Azure
+• HDInsight Flink 1.16.0 on AKS <br>
+• HDInsight Kafka 3.2.0 <br>
+• ADLSgen2 <br>
+• MySQL 8.0 on Azure <br>
 
