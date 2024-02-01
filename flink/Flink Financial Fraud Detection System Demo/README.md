@@ -614,7 +614,8 @@ bin/flink run -c contoso.example.SuspiciousActivities -j FlinkMysqCDCSinkToKafka
 
 **checking job on Flink UI Dashboard** <br>
 
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/5113a4e1-35cd-4926-b3c4-d1b6f784b2ab)
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/b644d71f-040f-4d7b-895c-99a38bc0f987)
+
 
 **consume suspicious_activities on Kafka cluster** 
 
