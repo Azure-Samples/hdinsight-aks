@@ -43,7 +43,8 @@ Upon detecting any suspicious activities, we will display them on our analytics 
 Additionally, we will alert the user by sending a push notification and an email. 
 Concurrently, we will update the “suspicious_activities” flag in the user_profile to “true” to prevent further transactions.
 
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/83d120b0-c7f9-4b1a-82e8-f0a7e4b74577)
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/51349521-8441-48d2-9cc0-d320dbeb5ff3)
+
 
 Here’s a step-by-step explanation:<br>
 1. Payment User Profile and Transactions: The process starts with user profile and transaction data, which are stored and processed in MySQL database. <br>
@@ -53,10 +54,10 @@ Here’s a step-by-step explanation:<br>
 5. Consumers of destination topic: After we detected suspicious activity for each individual user and published this activity to "suspicious_activities" kafka topic and ADLS gen2, it can be used for analytics service and notification service.
 
 ## Prerequisites
-• HDInsight Flink 1.16.0 on AKS
-• HDInsight Kafka 3.2.0
+• Flink 1.16.0 on HDInsight on AKS
+• Kafka 3.2.0 on HDInsight
 • Use MSI to access ADLSgen2
-• HDInsight Flink on AKS and HDInsight Kafka are in the same Vnet
+• Flink 1.16.0 on HDInsight on AKS and Kafka 3.2.0 on HDInsight are in the same Vnet
 • Maven project development on Azure VM in the same Vnet  
 • MySQL 8.0 on Azure 
 
@@ -150,7 +151,7 @@ mysql> describe transactions;
 ```
 **submit above jar to cluster to run** <br>
 
-on Azure HDInsight Flink on AKS cluster webssh pob
+on Flink 1.16.0  on HDInsight on AKS cluster webssh pob
 ```
 example:
 bin/flink run -c contoso.example.MySqlBinlogSinkToKafka2 -j FlinkMysqCDCSinkToKafka-1.0-SNAPSHOT.jar
@@ -720,8 +721,8 @@ mysql> select user_id, sum(amount) from transactions group by user_id;
 20 rows in set (0.24 sec)
 ```
 ## Clean up the resource
-• HDInsight Flink 1.16.0 on AKS <br>
-• HDInsight Kafka 3.2.0 <br>
+• Flink 1.16.0  on HDInsight on AKS <br>
+• Kafka 3.2.0 on HDInsight <br>
 • ADLSgen2 <br>
 • MySQL 8.0 on Azure <br>
 
