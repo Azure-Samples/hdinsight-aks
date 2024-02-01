@@ -623,6 +623,7 @@ bin/flink run -c contoso.example.SuspiciousActivities -j FlinkMysqCDCSinkToKafka
 ```
 
 ``` json
+//lets check "user_id": "1" json data: "user_suspicious_activity": true as  "transaction_amount": 40010 > 30000
 {
   "user_suspicious_activity": true,
   "user_phone_number": "+372 12345678",
@@ -632,7 +633,7 @@ bin/flink run -c contoso.example.SuspiciousActivities -j FlinkMysqCDCSinkToKafka
     "Netherland",
     "Estonia"
   ],
-  "transaction_amount": 120030,
+  "transaction_amount": 40010,
   "user_surname": "Doe",
   "user_middle_name": "Smith",
   "window_start_time": 1706706000000,
@@ -642,9 +643,7 @@ bin/flink run -c contoso.example.SuspiciousActivities -j FlinkMysqCDCSinkToKafka
 ```
 
 ``` json
-```
-
-``` json
+//lets check "user_id": "17" json data: "user_suspicious_activity": true as  "transaction_amount": 34005 > 30000
 {
   "user_suspicious_activity": true,
   "user_phone_number": "+372 12345694",
@@ -655,7 +654,7 @@ bin/flink run -c contoso.example.SuspiciousActivities -j FlinkMysqCDCSinkToKafka
     "Poland",
     "Estonia"
   ],
-  "transaction_amount": 102015,
+  "transaction_amount": 40010,
   "user_surname": "Doe",
   "user_middle_name": "Smith",
   "window_start_time": 1706706000000,
@@ -665,21 +664,20 @@ bin/flink run -c contoso.example.SuspiciousActivities -j FlinkMysqCDCSinkToKafka
 ```
 
 ``` json
+//lets check "user_id": "5" json data: "user_suspicious_activity": false as  "transaction_amount": 5
 {
-  "user_suspicious_activity": true,
-  "user_phone_number": "+372 12345694",
+  "user_suspicious_activity": false,
+  "user_phone_number": "+372 12345682",
   "window_end_time": 1706709600000,
-  "user_id": "17",
+  "user_id": "5",
   "transaction_countries": [
-    "Netherland",
-    "Poland",
     "Estonia"
   ],
-  "transaction_amount": 102015,
+  "transaction_amount": 5,
   "user_surname": "Doe",
   "user_middle_name": "Smith",
   "window_start_time": 1706706000000,
-  "user_mail_address": "jay.doe@gmail.com",
+  "user_mail_address": "jack.doe@gmail.com",
   "transaction_currency": "EUR"
 }
 ```
@@ -688,42 +686,32 @@ bin/flink run -c contoso.example.SuspiciousActivities -j FlinkMysqCDCSinkToKafka
 
 **data in MySQL for reference**
 ``` SQL
-mysql> select * from transactions order by user_id, amount;
-+---------+------------+----------+----------+------------+---------------------+
-| user_id | amount     | currency | type     | country    | timestamp           |
-+---------+------------+----------+----------+------------+---------------------+
-|       1 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
-|       1 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
-|       1 | 20000.0000 | EUR      | purchase | Netherland | 2024-01-31 06:20:00 |
-|       1 | 20000.0000 | EUR      | purchase | Netherland | 2024-01-31 06:20:00 |
-|       2 |  1000.0000 | EUR      | purchase | Netherland | 2024-01-30 07:32:00 |
-|       2 |  2500.0000 | EUR      | purchase | Poland     | 2024-01-30 07:34:00 |
-|       3 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
-|       3 |  2500.0000 | EUR      | purchase | Poland     | 2024-01-30 07:34:00 |
-|       3 |  4000.0000 | EUR      | purchase | Estonia    | 2024-01-30 07:30:00 |
-|       3 |  6000.0000 | EUR      | purchase | Netherland | 2024-01-30 07:32:00 |
-|       4 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
-|       5 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
-|       6 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
-|       7 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
-|       8 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
-|       9 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
-|      10 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
-|      11 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
-|      12 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
-|      13 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
-|      14 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
-|      15 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
-|      16 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
-|      17 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
-|      17 |  4000.0000 | EUR      | purchase | Estonia    | 2024-01-31 07:31:00 |
-|      17 | 10000.0000 | EUR      | purchase | Poland     | 2024-01-31 07:33:00 |
-|      17 | 20000.0000 | EUR      | purchase | Netherland | 2024-01-31 07:32:00 |
-|      18 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
-|      19 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
-|      20 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
-+---------+------------+----------+----------+------------+---------------------+
-30 rows in set (0.23 sec)
+mysql> select user_id, sum(amount) from transactions group by user_id;
++---------+-------------+
+| user_id | sum(amount) |
++---------+-------------+
+|       1 |  40010.0000 |
+|       2 |   3500.0000 |
+|       3 |  12505.0000 |
+|       4 |      5.0000 |
+|       5 |      5.0000 |
+|       6 |      5.0000 |
+|       7 |      5.0000 |
+|       8 |      5.0000 |
+|       9 |      5.0000 |
+|      10 |      5.0000 |
+|      11 |      5.0000 |
+|      12 |      5.0000 |
+|      13 |      5.0000 |
+|      14 |      5.0000 |
+|      15 |      5.0000 |
+|      16 |      5.0000 |
+|      17 |  34005.0000 |
+|      18 |      5.0000 |
+|      19 |      5.0000 |
+|      20 |      5.0000 |
++---------+-------------+
+20 rows in set (0.24 sec)
 ```
 ## Clean up the resource
 
