@@ -686,6 +686,45 @@ bin/flink run -c contoso.example.SuspiciousActivities -j FlinkMysqCDCSinkToKafka
 
 **check result on ADLS gen2 on Azure portal**
 
+**data in MySQL for reference**
+``` SQL
+mysql> select * from transactions order by user_id, amount;
++---------+------------+----------+----------+------------+---------------------+
+| user_id | amount     | currency | type     | country    | timestamp           |
++---------+------------+----------+----------+------------+---------------------+
+|       1 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
+|       1 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
+|       1 | 20000.0000 | EUR      | purchase | Netherland | 2024-01-31 06:20:00 |
+|       1 | 20000.0000 | EUR      | purchase | Netherland | 2024-01-31 06:20:00 |
+|       2 |  1000.0000 | EUR      | purchase | Netherland | 2024-01-30 07:32:00 |
+|       2 |  2500.0000 | EUR      | purchase | Poland     | 2024-01-30 07:34:00 |
+|       3 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
+|       3 |  2500.0000 | EUR      | purchase | Poland     | 2024-01-30 07:34:00 |
+|       3 |  4000.0000 | EUR      | purchase | Estonia    | 2024-01-30 07:30:00 |
+|       3 |  6000.0000 | EUR      | purchase | Netherland | 2024-01-30 07:32:00 |
+|       4 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
+|       5 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
+|       6 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
+|       7 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
+|       8 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
+|       9 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
+|      10 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
+|      11 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
+|      12 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
+|      13 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
+|      14 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
+|      15 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
+|      16 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
+|      17 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
+|      17 |  4000.0000 | EUR      | purchase | Estonia    | 2024-01-31 07:31:00 |
+|      17 | 10000.0000 | EUR      | purchase | Poland     | 2024-01-31 07:33:00 |
+|      17 | 20000.0000 | EUR      | purchase | Netherland | 2024-01-31 07:32:00 |
+|      18 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
+|      19 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
+|      20 |     5.0000 | EUR      | purchase | Estonia    | 2024-01-31 06:10:00 |
++---------+------------+----------+----------+------------+---------------------+
+30 rows in set (0.23 sec)
+```
 ## Clean up the resource
 
 • HDInsight Flink 1.16.0 on AKS
