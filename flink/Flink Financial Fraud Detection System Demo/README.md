@@ -268,7 +268,7 @@ bin/flink run -c contoso.example.MySqlBinlogSinkToKafka1 -j FlinkMysqCDCSinkToKa
   "ts_ms": 1706699739685,
   "transaction": null
 }
-``` json
+```
 
 **main jar in Maven**
 ``` xml
