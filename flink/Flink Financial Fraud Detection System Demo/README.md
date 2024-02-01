@@ -236,6 +236,7 @@ bin/flink run -c contoso.example.MySqlBinlogSinkToKafka1 -j FlinkMysqCDCSinkToKa
 }
 ```
 ``` json
+//lets assume json in the below describes data inside offset-2
 {
   "before": null,
   "after": {
