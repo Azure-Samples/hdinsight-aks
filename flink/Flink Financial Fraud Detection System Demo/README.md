@@ -10,8 +10,7 @@ Although we refer to it as “real-time”, it actually occurs near real-time wi
 ## What is Apache Flink® in Azure HDInsight on AKS?
 
 Apache Flink clusters in HDInsight on AKS are a fully managed service. <br>
-
-https://learn.microsoft.com/en-us/azure/hdinsight-aks/flink/flink-overview
+See more about [Apache Flink clusters in HDInsight on AKS](https://learn.microsoft.com/en-us/azure/hdinsight-aks/flink/flink-overview)
 
 Apache Flink is an excellent choice to develop and run many different types of applications due to its extensive features set. Flink’s features include support for stream and batch processing, sophisticated state management, event-time processing semantics, and exactly once consistency guarantees for state. Flink doesn't have a single point of failure. Flink has been proven to scale to thousands of cores and terabytes of application state, delivers high throughput and low latency, and powers some of the world’s most demanding stream processing applications.
 
@@ -29,6 +28,8 @@ See more about what is [Debezium](https://github.com/debezium/debezium).
 
 ## What is Flink MySQL CDC Connector
 Flink supports to interpret Debezium JSON and Avro messages as INSERT/UPDATE/DELETE messages into Apache Flink SQL system.
+
+See more about what is [MySQL CDC Connector](https://ververica.github.io/flink-cdc-connectors/master/content/connectors/mysql-cdc.html)
 
 The MySQL CDC connector is a Flink Source connector, which allows for reading snapshot data and incremental data from MySQL database
 with exactly once processing even failures happen. 
