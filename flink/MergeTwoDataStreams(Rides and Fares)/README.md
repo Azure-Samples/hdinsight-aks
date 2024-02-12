@@ -283,7 +283,7 @@ Job has been submitted with JobID 52900ff5980fedbfe0f39241e32206a4
 
 **Check job on Flink Dashboard UI**
 
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/bfec13ba-29d2-4316-9bf3-20a4dc62cc3b)
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/104e2ee7-44ef-4568-acee-2bccc4c5478c)
 
 
 **Check enriched Taxi Ride with Fare on output ADLS gen2 on portal**
