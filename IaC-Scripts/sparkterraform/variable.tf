@@ -1,3 +1,8 @@
+variable "subscription_id" {
+  type        = string
+  description = "Subscription Id"
+}
+
 variable "prefix" {
   type        = string
   default     = ""

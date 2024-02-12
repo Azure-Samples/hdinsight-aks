@@ -15,6 +15,7 @@ provider "azapi" {
 }
 
 provider "azurerm" {
+  subscription_id = var.subscription_id
   features {
     resource_group {
       # keep false if you want to delete resource group managed by terraform, this will delete any resources

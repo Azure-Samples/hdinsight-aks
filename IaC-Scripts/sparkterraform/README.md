@@ -3,6 +3,7 @@
 These terraform scripts will let you manage your HDInsight on AKS infrastructure using code for the Apache Spark cluster. 
 The following functionality is supported by this module:
 
+- Create Resource Group to hold all require resources
 - Create Cluster Pool
 - Create VNet and SubNet
 - Create User-assigned managed identity
@@ -10,7 +11,11 @@ The following functionality is supported by this module:
 - Create Default Spark Storage Container
 - Create Spark Cluster
 
+You can supply your subscription Id from [spark.tfvars](./conf/spark.tfvars) file or from CLI. 
+
 If you would like to use advance feature functionalities like Hive Catalog, Log Analytics, etc. please refer this [code](../terraform) to enhance this module.
+
+:information_source: - Terraform supports a number of different methods for [authenticating to Azure](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs). You can make necessary changes based on your organization policy
 
 # Running Example
 
