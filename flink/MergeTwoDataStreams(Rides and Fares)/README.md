@@ -1,10 +1,8 @@
 This blog refers https://github.com/apache/flink-training/blob/master/README.md
 
-**This example uses DStreamAPI to create a simple sink that assigns kafka topic click event message to ADLSgen2.**
-
 ## Purpose of this test
 
-
+The goal of this blog is to join together the TaxiRide and TaxiFare records for each ride.
 
 ## Set up testing environment
 
@@ -13,6 +11,8 @@ This blog refers https://github.com/apache/flink-training/blob/master/README.md
 • Maven project development on Azure VM in the same Vnet <br>
 
 ## Use the taxi Data Streams
+
+These exercises use data [generators](https://github.com/apache/flink-training/tree/master/common/src/main/java/org/apache/flink/training/exercises/common/sources) that produce simulated event streams. The data is inspired by the [New York City Taxi & Limousine Commission's](https://www.nyc.gov/site/tlc/index.page) public [data set](https://uofi.app.box.com/v/NYCtaxidata) about taxi rides in New York City.
 
 **Schema of taxi ride events** <br>
 
