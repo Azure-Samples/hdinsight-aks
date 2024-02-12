@@ -274,7 +274,7 @@ public class RidesAndFaresSolution {
 }
 
 ```
-**submit the jar in maven to cluster to run**
+**Submit the jar in maven to cluster to run**
 
 ```
 bin/flink run -c contoso.example.solution.RidesAndFaresSolution -j MergeTwoDataStreamsDemo-1.0-SNAPSHOT.jar
