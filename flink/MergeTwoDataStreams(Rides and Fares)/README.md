@@ -50,7 +50,7 @@ tolls          : Float     // tolls for this ride
 totalFare      : Float     // total fare collected
 ```
 
-**Mered Ride and Fare events** <br>
+**Merged Ride and Fare events** <br>
 
 [RideAndFare.java](https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/MergeTwoDataStreams(Rides%20and%20Fares)/src/main/java/contoso/example/datatypes/RideAndFare.java)
 
@@ -65,10 +65,10 @@ Format: <br>
 The task is to cleanse a stream of TaxiRide events by removing events that start or end outside of New York City.
 The GeoUtils utility class provides a static method isInNYC(float lon, float lat) to check if a location is within the NYC area.
 
-Input Data <br>
+**Input Data** <br>
 It is based on a stream of TaxiRide events, as described above in Using the Taxi ride Data Streams.
 
-Code in [GeoUtils.java](https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/MergeTwoDataStreams(Rides%20and%20Fares)/src/main/java/contoso/example/utils/GeoUtils.java) <br>
+[GeoUtils.java](https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/MergeTwoDataStreams(Rides%20and%20Fares)/src/main/java/contoso/example/utils/GeoUtils.java) <br>
 
 ``` java
     /**
