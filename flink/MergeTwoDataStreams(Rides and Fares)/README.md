@@ -6,7 +6,7 @@ The goal of this blog is to merge two DataStreams in Apache Flink using Flink Da
 
 ## Set up testing environment
 
-• Flink 1.16.0 on HDInsight on AKS <br>
+• Flink 1.17.0 on HDInsight on AKS <br>
 • Use MSI to access ADLSgen2  <br>
 • Maven project development on Azure VM in the same Vnet <br>
 
@@ -278,20 +278,28 @@ public class RidesAndFaresSolution {
 
 ```
 bin/flink run -c contoso.example.solution.RidesAndFaresSolution -j MergeTwoDataStreamsDemo-1.0-SNAPSHOT.jar
-Job has been submitted with JobID 6f47ba92c7aaebe1548498245067e082desAndFaresSolu
+Job has been submitted with JobID 52900ff5980fedbfe0f39241e32206a4
 ```
 
 **Check job on Flink Dashboard UI**
 
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/22fabd0e-926f-424b-b2ad-24faa7db0a47)
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/bfec13ba-29d2-4316-9bf3-20a4dc62cc3b)
+
 
 **Check enriched Taxi Ride with Fare on output ADLS gen2 on portal**
 
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/0fea85cc-7cd1-4c79-81b7-d7cc232d9c16)
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/912b7b43-14ea-400a-9dbb-5291f6b03ab8)
 
+output example<br>
+```
+<2,START,2020-01-01T12:00:40Z,-73.85604,40.77413,-73.80203,40.84287,3,2013000108,2013000108 / 2,2013000108,2013000108,2020-01-01T12:00:40Z,CARD,14.0,0.0,48.0>
+<3,START,2020-01-01T12:01:00Z,-73.86453,40.763325,-73.84797,40.7844,3,2013000134,2013000134 / 3,2013000134,2013000134,2020-01-01T12:01:00Z,CASH,12.0,0.0,41.0>
+<4,START,2020-01-01T12:01:20Z,-73.86093,40.767902,-73.781784,40.868633,3,2013000062,2013000062 / 4,2013000062,2013000062,2020-01-01T12:01:20Z,CARD,13.0,0.0,44.0>
+<1,START,2020-01-01T12:00:20Z,-73.76764,40.88664,-73.843834,40.78967,3,2013000185,2013000185 / 1,2013000185,2013000185,2020-01-01T12:00:20Z,CASH,33.0,0.0,118.0>
+```
 
 ## Clean up resouces
 
-• Flink 1.16.0 on HDInsight on AKS <br>
+• Flink 1.17.0 on HDInsight on AKS <br>
 • Use MSI to access ADLSgen2  <br>
 • Maven project development on Azure VM in the same Vnet <br>
