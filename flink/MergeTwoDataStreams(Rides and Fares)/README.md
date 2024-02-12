@@ -2,8 +2,6 @@ This blog refers https://github.com/apache/flink-training/blob/master/README.md
 
 **This example uses DStreamAPI to create a simple sink that assigns kafka topic click event message to ADLSgen2.**
 
-[[_TOC_]]
-
 ## Purpose of this test
 
 ## Set up testing environment
@@ -12,9 +10,7 @@ This blog refers https://github.com/apache/flink-training/blob/master/README.md
 
 **Schema of taxi ride events** <br>
 Our taxi data set contains information about individual taxi rides in New York City.
-
 Each ride is represented by two events: a trip start, and a trip end.
-
 Each event consists of ten fields:
 
 ```
@@ -31,7 +27,6 @@ passengerCnt   : Short     // number of passengers on the ride
 ```
 
 **Schema of taxi fare events** <br>
-
 There is also a related data set containing fare data about those same rides, with the following fields:
 ```
 rideId         : Long      // a unique id for each ride
