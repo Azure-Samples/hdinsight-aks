@@ -52,7 +52,7 @@ totalFare      : Float     // total fare collected
 
 **Mered Ride and Fare events** <br>
 
-[TaxiFare.java](https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/MergeTwoDataStreams(Rides%20and%20Fares)/src/main/java/contoso/example/datatypes/RideAndFare.java)
+[RideAndFare.java](https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/MergeTwoDataStreams(Rides%20and%20Fares)/src/main/java/contoso/example/datatypes/RideAndFare.java)
 
 Format: <br>
 ```
@@ -100,9 +100,9 @@ The result should be a DataStream<RideAndFare>, with one record for each distinc
 **Input Data**<br>
 
 Cleansed TaxiRide START event <br>
-[Taxi Ride Event Generator](https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/MergeTwoDataStreams(Rides%20and%20Fares)/src/main/java/contoso/example/source/TaxiRideGenerator.java)
+[TaxiRideGenerator.java](https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/MergeTwoDataStreams(Rides%20and%20Fares)/src/main/java/contoso/example/source/TaxiRideGenerator.java)
 
-Format<br>
+TaxiRide Event Data Example<br>
 ```
 1,START,2020-01-01T12:00:20Z,-73.76764,40.88664,-73.843834,40.78967,3,2013000185,2013000185
 2,START,2020-01-01T12:00:40Z,-73.85604,40.77413,-73.80203,40.84287,3,2013000108,2013000108
@@ -112,9 +112,9 @@ Format<br>
 ```
 
 TaxiFare event<br>
-[Taxi Fare Event Generator](https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/MergeTwoDataStreams(Rides%20and%20Fares)/src/main/java/contoso/example/source/TaxiFareGenerator.java)
+[TaxiFareGenerator.java](https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/MergeTwoDataStreams(Rides%20and%20Fares)/src/main/java/contoso/example/source/TaxiFareGenerator.java)
 
-Format<br>
+TaxiFare Event Data Example<br>
 ```
 1,2013000185,2013000185,2020-01-01T12:00:20Z,CASH,33.0,0.0,118.0
 2,2013000108,2013000108,2020-01-01T12:00:40Z,CARD,14.0,0.0,48.0
@@ -124,9 +124,9 @@ Format<br>
 ```
 
 **Output stream by using [new RideAndFare(ride, fare)]** <br>
-[Ride and Fare](https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/MergeTwoDataStreams(Rides%20and%20Fares)/src/main/java/contoso/example/datatypes/RideAndFare.java)
+[RideAndFare.java](https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/MergeTwoDataStreams(Rides%20and%20Fares)/src/main/java/contoso/example/datatypes/RideAndFare.java)
 
-Format<br>
+Enriched TaxiRide with Fare Output example<br>
 ```
 <1,START,2020-01-01T12:00:20Z,-73.76764,40.88664,-73.843834,40.78967,3,2013000185,2013000185 / 1,2013000185,2013000185,2020-01-01T12:00:20Z,CASH,33.0,0.0,118.0>
 <2,START,2020-01-01T12:00:40Z,-73.85604,40.77413,-73.80203,40.84287,3,2013000108,2013000108 / 2,2013000108,2013000108,2020-01-01T12:00:40Z,CARD,14.0,0.0,48.0>
@@ -136,7 +136,7 @@ Format<br>
 ```
 
 **Enrichment code** <br>
-[enrich TaxiRides with fare information]( https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/MergeTwoDataStreams(Rides%20and%20Fares)/src/main/java/contoso/example/solution/RidesAndFaresSolution.java)
+[RideAndFareSolution.java]( https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/MergeTwoDataStreams(Rides%20and%20Fares)/src/main/java/contoso/example/solution/RidesAndFaresSolution.java)
 
 ``` java
 public class RidesAndFaresSolution {
