@@ -2,7 +2,7 @@ This blog refers https://github.com/apache/flink-training/blob/master/README.md
 
 ## Purpose of this test
 
-The goal of this blog is to join together the TaxiRide and TaxiFare records for each ride.
+The goal of this blog is to merge two DataStreams in Apache Flink using Flink DataStream API to join together the TaxiRide and TaxiFare records for each ride.
 
 ## Set up testing environment
 
