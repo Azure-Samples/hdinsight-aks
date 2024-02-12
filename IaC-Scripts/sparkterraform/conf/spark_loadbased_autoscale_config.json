@@ -1,0 +1,47 @@
+[
+  {
+    "actionType": "scaleup",
+    "comparisonRule": {
+      "threshold": 80,
+      "operator": "greaterThanOrEqual"
+    },
+    "evaluationCount": 1,
+    "scalingMetric": "allocatedCoresPercentage"
+  },
+  {
+    "actionType": "scaleup",
+    "comparisonRule": {
+      "threshold": 10,
+      "operator": "lessThan"
+    },
+    "evaluationCount": 2,
+    "scalingMetric": "availableCoresPercentage"
+  },
+  {
+    "actionType": "scaleup",
+    "comparisonRule": {
+      "threshold": 85,
+      "operator": "greaterThanOrEqual"
+    },
+    "evaluationCount": 3,
+    "scalingMetric": "allocatedMemoryPercentage"
+  },
+  {
+    "actionType": "scaleup",
+    "comparisonRule": {
+      "threshold": 95,
+      "operator": "lessThan"
+    },
+    "evaluationCount": 4,
+    "scalingMetric": "availableMemoryPercentage"
+  },
+  {
+    "actionType": "scaledown",
+    "comparisonRule": {
+      "threshold": 80,
+      "operator": "greaterThan"
+    },
+    "evaluationCount": 1,
+    "scalingMetric": "availableCoresPercentage"
+  }
+]
