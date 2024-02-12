@@ -16,7 +16,7 @@ This blog refers https://github.com/apache/flink-training/blob/master/README.md
 
 **Schema of taxi ride events** <br>
 
-[TaxiRide.java](https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/MergeTwoDataStreams(Rides%20and%20Fares)/src/main/java/contoso/example/datatypes/TaxiRide.java))
+[TaxiRide.java](https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/MergeTwoDataStreams(Rides%20and%20Fares)/src/main/java/contoso/example/datatypes/TaxiRide.java)
 
 Our taxi data set contains information about individual taxi rides in New York City.
 Each ride is represented by two events: a trip start, and a trip end.
@@ -55,13 +55,13 @@ totalFare      : Float     // total fare collected
 [TaxiFare.java](https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/MergeTwoDataStreams(Rides%20and%20Fares)/src/main/java/contoso/example/datatypes/RideAndFare.java)
 
 Format: <br>
-````
+```
 "<" + ride.toString() + " / " + fare.toString() + ">"
 ```
 
-## Testing tasks
+## Testing steps
 
-### 1. Filtering a Stream (Ride Cleansing) <br>
+### Filtering a Stream (Ride Cleansing) <br>
 The task is to cleanse a stream of TaxiRide events by removing events that start or end outside of New York City.
 The GeoUtils utility class provides a static method isInNYC(float lon, float lat) to check if a location is within the NYC area.
 
@@ -85,15 +85,15 @@ Code in [GeoUtils.java](https://github.com/Baiys1234/hdinsight-aks/blob/main/fli
     }
 ```
 
-### 2. Stateful Enrichment (Rides and Fares)
+### Stateful Enrichment (Rides and Fares)
 
 Join together the TaxiRide and TaxiFare records for each ride.
 
 For each distinct rideId, there are exactly three events:
 
-• a TaxiRide START event
-• a TaxiRide END event
-• a TaxiFare event (whose timestamp happens to match the start time)
+• a TaxiRide START event <br>
+• a TaxiRide END event<br>
+• a TaxiFare event (whose timestamp happens to match the start time)<br>
 
 The result should be a DataStream<RideAndFare>, with one record for each distinct rideId. Each tuple should pair the TaxiRide START event for some rideId with its matching TaxiFare.
 
@@ -135,7 +135,7 @@ Format<br>
 <5,START,2020-01-01T12:01:40Z,-73.85884,40.77057,-73.75468,40.903137,3,2013000087,2013000087 / 5,2013000087,2013000087,2020-01-01T12:01:40Z,CASH,14.0,0.0,46.0>
 ```
 
-
+**Enrichment code** <br>
 [enrich TaxiRides with fare information]( https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/MergeTwoDataStreams(Rides%20and%20Fares)/src/main/java/contoso/example/solution/RidesAndFaresSolution.java)
 
 ``` java
@@ -274,10 +274,24 @@ public class RidesAndFaresSolution {
 }
 
 ```
+**submit the jar in maven to cluster to run**
 
+```
+bin/flink run -c contoso.example.solution.RidesAndFaresSolution -j MergeTwoDataStreamsDemo-1.0-SNAPSHOT.jar
+Job has been submitted with JobID 6f47ba92c7aaebe1548498245067e082desAndFaresSolu
+```
 
-**1. Filtering a Stream (Ride Cleansing)**
-**1. Filtering a Stream (Ride Cleansing)**
+**Check job on Flink Dashboard UI**
+
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/22fabd0e-926f-424b-b2ad-24faa7db0a47)
+
+**Check enriched Taxi Ride with Fare on output ADLS gen2 on portal**
+
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/0fea85cc-7cd1-4c79-81b7-d7cc232d9c16)
+
 
 ## Clean up resouces
 
+• Flink 1.16.0 on HDInsight on AKS <br>
+• Use MSI to access ADLSgen2  <br>
+• Maven project development on Azure VM in the same Vnet <br>
