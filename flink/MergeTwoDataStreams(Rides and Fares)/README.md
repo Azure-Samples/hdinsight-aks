@@ -12,7 +12,7 @@ The goal of this blog is to merge two DataStreams in Apache Flink using Flink Da
 
 ## Use the taxi Data Streams
 
-These exercises use data [generators](https://github.com/apache/flink-training/tree/master/common/src/main/java/org/apache/flink/training/exercises/common/sources) that produce simulated event streams. The data is inspired by the [New York City Taxi & Limousine Commission's](https://www.nyc.gov/site/tlc/index.page) public [data set](https://uofi.app.box.com/v/NYCtaxidata) about taxi rides in New York City.
+This blog uses data [generators](https://github.com/apache/flink-training/tree/master/common/src/main/java/org/apache/flink/training/exercises/common/sources) that produce simulated event streams. The data is inspired by the [New York City Taxi & Limousine Commission's](https://www.nyc.gov/site/tlc/index.page) public [data set](https://uofi.app.box.com/v/NYCtaxidata) about taxi rides in New York City.
 
 **Schema of taxi ride events** <br>
 
