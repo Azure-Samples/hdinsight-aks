@@ -1,6 +1,4 @@
-This blog refers https://github.com/apache/flink-training/blob/master/README.md
-
-## Purpose of this test
+# Taxi Rides and Taxi Fare joining streams with Apache Flink
 
 The goal of this blog is to merge two DataStreams in Apache Flink using Flink DataStream API to join together the TaxiRide and TaxiFare records for each ride.
 
@@ -303,3 +301,8 @@ output example<br>
 • Flink 1.17.0 on HDInsight on AKS <br>
 • Use MSI to access ADLSgen2  <br>
 • Maven project development on Azure VM in the same Vnet <br>
+
+
+## References
+
+This blog refers https://github.com/apache/flink-training/blob/master/README.md
