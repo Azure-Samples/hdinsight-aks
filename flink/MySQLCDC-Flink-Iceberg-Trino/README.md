@@ -1,4 +1,4 @@
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/37de3769-2c14-4982-963f-10d2e4462e18)# Real-Time Streaming of CDC Data from MySql to Apache Iceberg using Flink and Querying Iceberg Data with Trino
+# Real-Time Streaming of CDC Data from MySql to Apache Iceberg using Flink and Querying Iceberg Data with Trino
 
 This sample demonstrates Real-Time streaming of CDC data from MySql to Apache Iceberg using Flink SQL Client for faster data analytics and machine learning workloads.
 
