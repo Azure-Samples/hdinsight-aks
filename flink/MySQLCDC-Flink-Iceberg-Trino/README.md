@@ -187,8 +187,10 @@ CREATE TABLE customers_iceberg with ('format-version'='2') LIKE `default_catalog
 CREATE TABLE orders_iceberg with ('format-version'='2') LIKE `default_catalog`.`default_database`.`orders_source` (EXCLUDING OPTIONS);
 ```
 ![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/8fb8f8ef-6c66-4e95-9708-75cea2fa2076)
+
 **Note:**
 Creating table with ('format-version'='2') is necessary, otherwise we will face the following error message when inserting data to iceberg tables:
+
 ```
 024-02-12 09:22:40.141 [] IcebergFilesCommitter -> Sink: IcebergSink iceberg_catalog.default.customers_iceberg (1/1)#15 WARN  flink apache.flink.runtime.taskmanager.Task 1091 IcebergFilesCommitter -> Sink: IcebergSink iceberg_catalog.default.customers_iceberg (1/1)#15 (4f3216c39a864538cdc2ec966591ccb3_e883208d19e3c34f8aaf2a3168a63337_0_15) switched from INITIALIZING to FAILED with failure cause: java.lang.IllegalArgumentException: Cannot write delete files in a v1 table
 ```
