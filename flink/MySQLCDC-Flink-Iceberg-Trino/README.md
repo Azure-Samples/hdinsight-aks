@@ -195,7 +195,7 @@ Creating table with ('format-version'='2') is necessary, otherwise we will face 
 024-02-12 09:22:40.141 [] IcebergFilesCommitter -> Sink: IcebergSink iceberg_catalog.default.customers_iceberg (1/1)#15 WARN  flink apache.flink.runtime.taskmanager.Task 1091 IcebergFilesCommitter -> Sink: IcebergSink iceberg_catalog.default.customers_iceberg (1/1)#15 (4f3216c39a864538cdc2ec966591ccb3_e883208d19e3c34f8aaf2a3168a63337_0_15) switched from INITIALIZING to FAILED with failure cause: java.lang.IllegalArgumentException: Cannot write delete files in a v1 table
 ```
 
-Here we dont need to specify the schema as we are using the **CREATE TABLE LIKE** to create a table with the same schema as source tables.
+Here we do not need to specify the schema as we are using the **CREATE TABLE LIKE** to create a table with the same schema as source tables.
 
 ## Initiating Streaming Pipeline for MySQL to Iceberg Sync with Flink
 Now we are going to start the streaming pipeline to sync the streaming data changes from MySql to Iceberg.
