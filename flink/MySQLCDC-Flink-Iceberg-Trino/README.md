@@ -4,7 +4,8 @@ This sample demonstrates Real-Time streaming of CDC data from MySql to Apache Ic
 
 It will provide a comprehensive example of setting up a real-time streaming pipeline for CDC data synchronization. The integration of Flink, MySql CDC connectors, Iceberg, Azure Gen2 Storage, Hive Metastore, and Trino showcases the capabilities of modern data tools in handling dynamic data scenarios.
 
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/891576a8-e569-4558-b802-3d114529ef38)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/3cab0e1c-4258-4dd3-975f-ab679d496bb1)
+
 
 ## What is Apache Iceberg ?
 
@@ -80,7 +81,7 @@ The MySQL CDC connector allows for reading snapshot data and incremental data fr
 **Note:**
 Please kindly also downloaded the following dependencies used for adding Iceberg Catalog, which will be used later on in the same Flink SQL client:
 ```
-wget https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-flink-runtime-1.16/1.3.0/iceberg-flink-runtime-1.16-1.3.0.jar -P $FLINK_HOME/lib
+wget https://repo.maven.apache.org/maven2/org/apache/iceberg/iceberg-flink-runtime-1.17/1.3.1/iceberg-flink-runtime-1.17-1.3.1.jar -P $FLINK_HOME/lib
 wget https://repo1.maven.org/maven2/org/apache/parquet/parquet-column/1.12.2/parquet-column-1.12.2.jar -P $FLINK_HOME/lib
 ```
 
@@ -140,7 +141,7 @@ We will now generate a Flink table for Iceberg, employing Hive Metastore as the 
 
 Please note that we should have downloaded the following dependencies used for adding Iceberg Catalog in previous section:
 ```
-wget https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-flink-runtime-1.16/1.3.0/iceberg-flink-runtime-1.16-1.3.0.jar -P $FLINK_HOME/lib
+wget https://repo.maven.apache.org/maven2/org/apache/iceberg/iceberg-flink-runtime-1.17/1.3.1/iceberg-flink-runtime-1.17-1.3.1.jar -P $FLINK_HOME/lib
 wget https://repo1.maven.org/maven2/org/apache/parquet/parquet-column/1.12.2/parquet-column-1.12.2.jar -P $FLINK_HOME/lib
 ```
 
@@ -165,7 +166,7 @@ In the same FLink SQL Client, we can create Iceberg catalog and Iceberg tables m
 
 2. Add dependencies to server classpah in current Flink SQL client
 ```
-ADD JAR '/opt/flink-webssh/lib/iceberg-flink-runtime-1.16-1.3.0.jar';
+ADD JAR '/opt/flink-webssh/lib/iceberg-flink-runtime-1.17-1.3.1.jar';
 ADD JAR '/opt/flink-webssh/lib/parquet-column-1.12.2.jar';
 ```
 
@@ -221,9 +222,10 @@ select * from `default_catalog`.`default_database`.`orders_source` ;
 ![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/57de6e3d-640d-406e-8fd1-76f998a32b49)
 
 Now these jobs are created and you can see the execution plan in Apache flink dashboard.
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/16a2de21-e3e3-4da7-9c45-3f613ab39a15)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/3fa82587-6c46-4456-ac0b-71551f0f1f75)
 
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/5e1d4639-f2d0-4641-b81b-c9884c38194c)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/0bef42dd-a53a-4e9d-a2b3-9db03e125d0f)
+
 
 Now lets try to join **orders_source** and **customers_source** to create a table **customer_orders** to store the enriched the data.
 ```
@@ -253,8 +255,7 @@ join `default_catalog`.`default_database`.`customers_source` c on o.purchaser = 
 ```
 ![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/1772ae3b-4b08-44b2-8ace-44813620a88a)
 
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/19ce4e19-c17f-4dd8-89cb-6a1ba1b7bf04)
-
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/f89d61a6-57ca-4c8c-bedb-3ae9f22c34a2)
 
 ## Verification in Azure Gen2 Storage
 Now we can see the tables that we creates and the data is stored in Azure Gen2 Storage.
