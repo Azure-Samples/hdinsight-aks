@@ -1,7 +1,7 @@
 ## Flink Complex Event Processing to calculate Max Daily Temperature
 
 The goal of this blog is to parse the [Quality Controlled Local Climatological Data (QCLCD)](https://www.ncdc.noaa.gov/cdo-web/datasets), 
-calculates the **maximum daily temperature** and print Warning if high-temp(>= 38) occurs twice within a span of two days of the stream and  by using Flink on HDInsight on AKS and writes the results back into an Azure Data Explorer 
+calculates the **maximum daily temperature** and print Warning if high-temp(>= 38) occurs twice within a span of two days of the stream and  by using Flink Complex Event Processing(CEP) Lib on HDInsight on AKS and writes the results back into an Azure Data Explorer 
 and Azure managed PostgreSQL database(postgres.database.azure.com)
 
 ## Set up testing environment
