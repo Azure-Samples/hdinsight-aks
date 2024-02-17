@@ -33,9 +33,7 @@ FlinkCEP dependency to the pom.xml
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/039be564-a07f-414c-b3b4-fe1c764500f9)
 
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/164bca92-dfe3-4cdf-a1ef-f29768342c35)
-
-
+Create WeatherTable(Max Temporature Table) and Warning Table:<br>
 ``` SQL
 postgres=> CREATE TABLE WeatherTable(
 station TEXT,
@@ -66,7 +64,8 @@ postgres=> \d WeatherTableWarning
  message | text |           |          | 
 ```
 
-**ADX:**
+### Sink 2: Azure Data Explorer(Kusto) on Azure portal
+
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/8d3f2eb9-7ebf-4d3a-ac8d-0ef80a848045)
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/acf077b3-7e44-4a0c-bf31-9374d7819a00)
