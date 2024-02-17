@@ -31,15 +31,35 @@ FlinkCEP dependency to the pom.xml
 
 ### Input Source
 
-[Quality Controlled Local Climatological Data (QCLCD)](https://www.ncdc.noaa.gov/cdo-web/datasets)
-https://www.ncdc.noaa.gov/cdo-web/datasets
+[Quality Controlled Local Climatological Data (QCLCD)](https://www.ncdc.noaa.gov/cdo-web/datasets) <br>
+https://www.ncdc.noaa.gov/cdo-web/datasets <br>
+https://www.ncei.noaa.gov/cdo-web/datatools/lcd <br>
 
 Local Climatological Data is a monthly summary consisting of: 1) Summary sheet containing daily extremes and averages of temperature , departures from normal, average dew point and wet bulb temperatures, degree days, significant weather, precipitation, snowfall, snow depth, station and sea level pressure, and average and extreme wind speeds; 2) Hourly observations of most of these same weather elements plus sky conditions and visibility; 3) Hourly coded remarks; and 4) Hourly Precipitation table. The LCD is provided for approximately 1000 U.S. stations since 2005.
 
+This blog refers above Local Climatological Data to generate a streaming weather data with column below:
+
+example:
+```
+station,date,temperature,skyCondition,stationPressure,windSpeed
+72306613713,2023-02-28T00:55:00,67,SCT:04 50,29.38,15
+72306613713,2023-02-28T01:55:00,65,FEW:02 44,29.38,10
+72306613713,2023-02-28T02:55:00,62,CLR:00,29.39,8
+72306613713,2023-02-28T03:55:00,61,CLR:00,29.4,6
+72306613713,2023-02-28T04:55:00,59,FEW:02 60,29.43,6
+72306613713,2023-02-28T05:55:00,57,CLR:00,29.46,7
+```
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/b5e5cc6b-9e55-4fb4-89f6-e2a2735b0033)
 
-In this blog, I 
-
+Note:
+```
+station  -- WBAN Identifier: The unique identifier for this station
+date  -- Weather Generate Data incluing timestamp
+temperature   -- Dry Bulb Temperature:This is the temperature that we commonly refer to as the “air temperature”
+skyCondition 
+stationPressure
+windSpeed
+```
 
 ### Sink 1: Azure Database for PostgreSQL flexible server on Azure portal
 
