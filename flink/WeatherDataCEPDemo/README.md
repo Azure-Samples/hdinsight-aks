@@ -37,9 +37,10 @@ https://www.ncei.noaa.gov/cdo-web/datatools/lcd <br>
 
 Local Climatological Data is a monthly summary consisting of: 1) Summary sheet containing daily extremes and averages of temperature , departures from normal, average dew point and wet bulb temperatures, degree days, significant weather, precipitation, snowfall, snow depth, station and sea level pressure, and average and extreme wind speeds; 2) Hourly observations of most of these same weather elements plus sky conditions and visibility; 3) Hourly coded remarks; and 4) Hourly Precipitation table. The LCD is provided for approximately 1000 U.S. stations since 2005.
 
-This blog refers above Local Climatological Data to generate a streaming weather data with column below:
+This blog refers above Local Climatological Data to generate a streaming weather data with column below:<br>
+[LocalWeatherGenerator.java] (https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/WeatherDataCEPDemo/src/mian/java/contoso/example/CEP/generator/LocalWeatherGenerator.java)
 
-example:
+example:<br>
 ```
 station,date,temperature,skyCondition,stationPressure,windSpeed
 72306613713,2023-02-28T00:55:00,67,SCT:04 50,29.38,15
@@ -56,9 +57,9 @@ Note:
 station  -- WBAN Identifier: The unique identifier for this station
 date  -- Weather Generate Data incluing timestamp
 temperature   -- Dry Bulb Temperature:This is the temperature that we commonly refer to as the “air temperature”
-skyCondition 
-stationPressure
-windSpeed
+skyCondition  -- This describes the condition of the sky at the time of observation. SCT:04 50 means there were scattered clouds at 5000 feet, FEW:02 44 means there were few clouds at 4400 feet, and CLR:00 means the sky was clear
+stationPressure --  The atmospheric pressure at the station at the time of observation, likely measured in inches of mercury (inHg).
+windSpeed -- the wind speed at the time of observation, likely measured in knots
 ```
 
 ### Sink 1: Azure Database for PostgreSQL flexible server on Azure portal
@@ -111,38 +112,117 @@ postgres=> \d WeatherTableWarning
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/695c9306-5959-4bc0-8925-72b44eb5d04c)
 
 
-## Testing steps
+## Main code: <br>
+### Take the Maximum Temperature per day <br>
+[WeatherDSExample.java](https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/WeatherDataCEPDemo/src/mian/java/contoso/example/CEP/source/WeatherDSExample.java)
 
+``` java
+        // use LocalWeatherGenerator to generator local weather data
+        DataStream<LocalWeatherData> weatherDataStream = env.addSource(new LocalWeatherGenerator());
+
+        // assign the Measurement Timestamp:
+        DataStream<LocalWeatherData> localWeatherDataDataStream = weatherDataStream
+                .assignTimestampsAndWatermarks(new AscendingTimestampExtractor<LocalWeatherData>() {
+                    @Override
+                    public long extractAscendingTimestamp(LocalWeatherData localWeatherData) {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                        Date measurementTime;
+                        try {
+                            measurementTime = dateFormat.parse(localWeatherData.getDate());
+                        } catch (ParseException e) {
+                            throw new RuntimeException("Unable to parse date " + localWeatherData.getDate(), e);
+                        }
+                        return measurementTime.getTime();
+                    }
+                });
+
+        // First build a KeyedStream over the Data with LocalWeather:
+        KeyedStream<LocalWeatherData, String> localWeatherDataByStation = localWeatherDataDataStream
+                // Filter for Non-Null Temperature Values, because we might have missing data:
+                .filter(new FilterFunction<LocalWeatherData>() {
+                    @Override
+                    public boolean filter(LocalWeatherData localWeatherData) throws Exception {
+                        return localWeatherData.getTemperature() != null;
+                    }
+                })
+                // Now create the keyed stream by the Station WBAN identifier:
+                .keyBy(new KeySelector<LocalWeatherData, String>() {
+                    @Override
+                    public String getKey(LocalWeatherData localWeatherData) throws Exception {
+                        return localWeatherData.getStation();
+                    }
+                });
+
+        // Now take the Maximum Temperature per day from the KeyedStream:
+        DataStream<LocalWeatherData> maxTemperaturePerDay =
+                localWeatherDataByStation
+                        // Use non-overlapping tumbling window with 1 day length:
+                        .timeWindow(Time.days(1))
+                        // And use the maximum temperature:
+                        .maxBy("temperature");
 ```
-wget https://cicigen2.blob.core.windows.net/jar/CEPWeatherDemo-1.0-SNAPSHOT.jar
+### Warning if high-temp(>= 38) occurs twice within a span of two days<br>
+[WeatherDataCEPExample.java] (https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/WeatherDataCEPDemo/src/mian/java/contoso/example/CEP/source/WeatherDataCEPExample.java)
+
+A pattern named "high-temp" is defined. This pattern matches LocalWeatherData events where the temperature is greater than or equal to 38.0 degrees Fahrenheit. The pattern must occur twice within a span of two days.
+
+``` java
+        // Now take the Maximum Temperature per day from the KeyedStream:
+        DataStream<LocalWeatherData> maxTemperaturePerDay =
+                localWeatherDataByStation
+                        // Use non-overlapping tumbling window with 1 day length:
+                        .timeWindow(Time.days(1))
+                        // And use the maximum temperature:
+                        .maxBy("temperature");
+        // Define the pattern
+        Pattern<LocalWeatherData, ?> pattern = Pattern.<LocalWeatherData>begin("high-temp")
+                .where(new SimpleCondition<LocalWeatherData>() {
+                    @Override
+                    public boolean filter(LocalWeatherData value) throws Exception {
+                        return value.getTemperature() >= 38.0f;
+                    }
+                })
+                .times(2)
+                .within(Time.days(2));
+
+        // Apply the pattern to the data stream
+        PatternStream<LocalWeatherData> patternStream = CEP.pattern(maxTemperaturePerDay, pattern);
+
+        // Define a select function to handle the matched patterns
+        DataStream<String> warnings = patternStream.select(
+                new PatternSelectFunction<LocalWeatherData, String>() {
+                    @Override
+                    public String select(Map<String, List<LocalWeatherData>> pattern) throws Exception {
+                        List<LocalWeatherData> highTempEvents = pattern.get("high-temp");
+                        return "Warning: " + "WBAN:" + highTempEvents.get(0).getStation() + ":Temperatures exceeded 38 degrees on:" + highTempEvents.get(0).getDate() + " and " + highTempEvents.get(1).getDate() + ".";
+                    }
+                }
+        );
+```
+
+## Submit the jar in maven to cluster to run <br>
+
+**Take the Maximum Temperature per day** <br>
+```
 bin/flink run -c contoso.example.CEP.source.WeatherDSExample -j CEPWeatherDemo-1.0-SNAPSHOT.jar
-bin/flink run -c contoso.example.CEP.source.WeatherDataCEPExample -j CEPWeatherDemo-1.0-SNAPSHOT.jar![image]
 ```
 
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/12f7f3e9-0860-4fa2-a76d-8d308073deeb)
+
+**Warning if high-temp occurs twice within a span of two days** <br>
 ```
-data@sshnode-0 [ ~ ]$ bin/flink run -c contoso.example.CEP.source.WeatherDSExample -j CEPWeatherDemo-1.0-SNAPSHOT.jar
-WARNING: An illegal reflective access operation has occurred
-WARNING: Illegal reflective access by org.apache.flink.api.java.ClosureCleaner (file:/opt/flink-webssh/lib/flink-dist-1.17.0-1.1.8.jar) to field java.lang.String.value
-WARNING: Please consider reporting this to the maintainers of org.apache.flink.api.java.ClosureCleaner
-WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
-WARNING: All illegal access operations will be denied in a future release
-Job has been submitted with JobID 1cc452c21bc23766197dec599435bd42![image]
+bin/flink run -c contoso.example.CEP.source.WeatherDataCEPExample -j CEPWeatherDemo-1.0-SNAPSHOT.jar
 ```
 
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/45372fe4-cf4c-4c09-86cf-25242add6081)
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/ff6c44c2-e3ee-4224-9fd7-8d409b628feb)
 
+## Check job on Flink Dashboard UI
 
-```
-data@sshnode-0 [ ~ ]$ bin/flink run -c contoso.example.CEP.source.WeatherDataCEPExample -j CEPWeatherDemo-1.0-SNAPSHOT.jar
-WARNING: An illegal reflective access operation has occurred
-WARNING: Illegal reflective access by org.apache.flink.api.java.ClosureCleaner (file:/opt/flink-webssh/lib/flink-dist-1.17.0-1.1.8.jar) to field java.lang.String.value
-WARNING: Please consider reporting this to the maintainers of org.apache.flink.api.java.ClosureCleaner
-WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
-WARNING: All illegal access operations will be denied in a future release
-Job has been submitted with JobID 3d5a9732c52e0ab989365d3d54af458d![image]
-```
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/16b1c64a-2daf-48f5-9aab-406a26ce709d)
 
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/7f58a8a7-a356-4a73-8db4-d6729a20f8a8)
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/0deefa37-00ac-4cfa-bbc4-249735559eec)
+
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/28548a25-adf5-490c-9558-b4fbc8046f56)
 
 **Result: <br>**
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/4e987892-e29d-4e04-9cf2-08c2db614e28)
@@ -152,11 +232,15 @@ Job has been submitted with JobID 3d5a9732c52e0ab989365d3d54af458d![image]
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/b6ae7dd2-52cd-4bca-9648-0fe690ee822a)
 
 ## ADX
+WeatherTable:Maximum Temperature per day <br>
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/d4a78de0-1dd4-4e1a-948b-1524464a71b0)
 
 
 ## Postgres
+WeatherTable:Maximum Temperature per day <br>
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/04c9ae5f-89c0-4437-a9cc-ef2f0cc89356)
+
+Warning when high-temp occurs twice within a span of two days <br>
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/5d876203-949e-4daa-9c36-6e784843b72d)
 
 ## Clean up the Resource
