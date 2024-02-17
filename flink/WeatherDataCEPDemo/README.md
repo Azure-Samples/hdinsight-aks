@@ -29,6 +29,18 @@ FlinkCEP dependency to the pom.xml
 
 ## Testing steps
 
+### Input Source
+
+[Quality Controlled Local Climatological Data (QCLCD)](https://www.ncdc.noaa.gov/cdo-web/datasets)
+https://www.ncdc.noaa.gov/cdo-web/datasets
+
+Local Climatological Data is a monthly summary consisting of: 1) Summary sheet containing daily extremes and averages of temperature , departures from normal, average dew point and wet bulb temperatures, degree days, significant weather, precipitation, snowfall, snow depth, station and sea level pressure, and average and extreme wind speeds; 2) Hourly observations of most of these same weather elements plus sky conditions and visibility; 3) Hourly coded remarks; and 4) Hourly Precipitation table. The LCD is provided for approximately 1000 U.S. stations since 2005.
+
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/b5e5cc6b-9e55-4fb4-89f6-e2a2735b0033)
+
+In this blog, I 
+
+
 ### Sink 1: Azure Database for PostgreSQL flexible server on Azure portal
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/039be564-a07f-414c-b3b4-fe1c764500f9)
@@ -64,15 +76,22 @@ postgres=> \d WeatherTableWarning
  message | text |           |          | 
 ```
 
-### Sink 2: Azure Data Explorer(Kusto) on Azure portal
+### Sink 2: Azure Data Explorer(ADX) on Azure portal
 
+**ADX over view on Azure portal** <br>
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/8d3f2eb9-7ebf-4d3a-ac8d-0ef80a848045)
 
+**Create Database**  <br>
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/acf077b3-7e44-4a0c-bf31-9374d7819a00)
 
+**Register Severice principle and Grant Admin user role in ADX**  <br>
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/0e5417cc-94a6-4421-a3dd-01dfad15d336)
 
+**Create WeatherTable(Max Temp) and Warning table**  <br>
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/695c9306-5959-4bc0-8925-72b44eb5d04c)
+
+
+## Testing steps
 
 ```
 wget https://cicigen2.blob.core.windows.net/jar/CEPWeatherDemo-1.0-SNAPSHOT.jar
