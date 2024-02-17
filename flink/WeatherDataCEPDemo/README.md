@@ -62,7 +62,7 @@ stationPressure --  The atmospheric pressure at the station at the time of obser
 windSpeed -- the wind speed at the time of observation, likely measured in knots
 ```
 
-### Sink 1: Azure Database for PostgreSQL flexible server on Azure portal
+### Sink Destination 1: Azure Database for PostgreSQL flexible server on Azure portal
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/039be564-a07f-414c-b3b4-fe1c764500f9)
 
@@ -97,7 +97,7 @@ postgres=> \d WeatherTableWarning
  message | text |           |          | 
 ```
 
-### Sink 2: Azure Data Explorer(ADX) on Azure portal
+### Sink Destination 2: Azure Data Explorer(ADX) on Azure portal
 
 **ADX over view on Azure portal** <br>
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/8d3f2eb9-7ebf-4d3a-ac8d-0ef80a848045)
@@ -197,6 +197,81 @@ A pattern named "high-temp" is defined. This pattern matches LocalWeatherData ev
                         return "Warning: " + "WBAN:" + highTempEvents.get(0).getStation() + ":Temperatures exceeded 38 degrees on:" + highTempEvents.get(0).getDate() + " and " + highTempEvents.get(1).getDate() + ".";
                     }
                 }
+        );
+```
+
+**Sink to ADX** <br>
+
+Refer# <br>
+https://github.com/Azure/flink-connector-kusto <br>
+
+The Flink kusto connector allows the user to authenticate with AAD using an AAD application,or managed identity based auth.
+This blog uses AAD Application Authentication. <br>
+
+``` java
+  // Configure Azure Kusto connection options
+        String appId = "<client_id>";
+        String appKey = "<appkey>";
+        String tenantId = "<tenant_id>";
+        String clusterUrl = "https://<adxname>.<region>.kusto.windows.net";
+        String database = "DB1";
+        String tableName = "WeatherTable";
+
+        // Define KustoConnectionOptions
+        KustoConnectionOptions kustoConnectionOptions = KustoConnectionOptions.builder()
+                .withAppId(appId)
+                .withAppKey(appKey)
+                .withTenantId(tenantId)
+                .withClusterUrl(clusterUrl).build();
+
+        // Define KustoWriteOptions
+        KustoWriteOptions kustoWriteOptions = KustoWriteOptions.builder()
+                .withDatabase(database)
+                .withTable(tableName)
+                .withDeliveryGuarantee(DeliveryGuarantee.AT_LEAST_ONCE)
+                .build();
+
+        // Sink data to Azure Kusto
+        KustoWriteSink.builder().setWriteOptions(kustoWriteOptions)
+                .setConnectionOptions(kustoConnectionOptions).build(maxTemperaturePerDay,1);
+
+```
+
+**Sink To Postgres** <br>
+``` java
+maxTemperaturePerDay.addSink(
+                JdbcSink.sink(
+                        "INSERT INTO WeatherTable (station, date, temperature, skyCondition, stationPressure, windSpeed) VALUES (?, ?, ?, ?, ?, ?)",
+                        (PreparedStatement statement, LocalWeatherData weatherData) -> {
+                            statement.setString(1, weatherData.getStation());
+                            // Convert the date string to a Timestamp
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                            Date parsedDate = null;
+                            try {
+                                parsedDate = dateFormat.parse(weatherData.getDate());
+                            } catch (ParseException e) {
+                                throw new RuntimeException(e);
+                            }
+                            java.sql.Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+
+                            statement.setTimestamp(2, timestamp);
+                            statement.setString(3, weatherData.getTemperature().toString());
+                            statement.setString(4, weatherData.getSkyCondition());
+                            statement.setString(5, weatherData.getStationPressure().toString());
+                            statement.setString(6, weatherData.getWindSpeed().toString());
+                        },
+                        new JdbcExecutionOptions.Builder()
+                                .withBatchSize(1000)
+                                .withBatchIntervalMs(200)
+                                .withMaxRetries(5)
+                                .build(),
+                        new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
+                                .withUrl("jdbc:postgresql://contosopsqlserver.postgres.database.azure.com:5432/postgres")
+                                .withDriverName("org.postgresql.Driver")
+                                .withUsername("<dbusername>")
+                                .withPassword("<password>")
+                                .build()
+                )
         );
 ```
 
