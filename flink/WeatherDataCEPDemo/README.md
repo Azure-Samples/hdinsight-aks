@@ -7,7 +7,7 @@ and Azure managed PostgreSQL database(postgres.database.azure.com)
 ## Set up testing environment
 
 • Flink 1.17.0 on HDInsight on AKS <br>
-• Azure Data Explorer
-• Azure managed PostgreSQL: 16.0
+• Azure Data Explorer  <br>
+• Azure managed PostgreSQL: 16.0  <br>
 • Maven project development on Azure VM in the same Vnet <br>
 
