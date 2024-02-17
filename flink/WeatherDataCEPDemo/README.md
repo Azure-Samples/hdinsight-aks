@@ -11,3 +11,110 @@ and Azure managed PostgreSQL database(postgres.database.azure.com)
 • Azure managed PostgreSQL: 16.0  <br>
 • Maven project development on Azure VM in the same Vnet <br>
 
+Postgres
+
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/164bca92-dfe3-4cdf-a1ef-f29768342c35)
+
+``` SQL
+postgres=> CREATE TABLE WeatherTable(
+station TEXT,
+date timestamp,
+temperature TEXT,
+skyCondition TEXT,
+stationPressure TEXT,
+windSpeed TEXT);
+CREATE TABLE
+postgres=> \d WeatherTable;
+                          Table "public.weathertable"
+     Column      |            Type             | Collation | Nullable | Default 
+-----------------+-----------------------------+-----------+----------+---------
+ station         | text                        |           |          | 
+ date            | timestamp without time zone |           |          | 
+ temperature     | text                        |           |          | 
+ skycondition    | text                        |           |          | 
+ stationpressure | text                        |           |          |
+ windSpeed       | text                        |           |          | 
+
+postgres=> CREATE TABLE WeatherTableWarning (
+  message TEXT)
+postgres-> ;
+CREATE TABLE
+postgres=> \d WeatherTableWarning
+       Table "public.weathertablewarning"
+ Column  | Type | Collation | Nullable | Default 
+---------+------+-----------+----------+---------
+ message | text |           |          | 
+```
+
+**ADX:**
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/8d3f2eb9-7ebf-4d3a-ac8d-0ef80a848045)
+
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/acf077b3-7e44-4a0c-bf31-9374d7819a00)
+
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/0e5417cc-94a6-4421-a3dd-01dfad15d336)
+
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/695c9306-5959-4bc0-8925-72b44eb5d04c)
+
+```
+wget https://cicigen2.blob.core.windows.net/jar/CEPWeatherDemo-1.0-SNAPSHOT.jar
+bin/flink run -c contoso.example.CEP.source.WeatherDSExample -j CEPWeatherDemo-1.0-SNAPSHOT.jar
+bin/flink run -c contoso.example.CEP.source.WeatherDataCEPExample -j CEPWeatherDemo-1.0-SNAPSHOT.jar![image]
+```
+
+```
+data@sshnode-0 [ ~ ]$ bin/flink run -c contoso.example.CEP.source.WeatherDSExample -j CEPWeatherDemo-1.0-SNAPSHOT.jar
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by org.apache.flink.api.java.ClosureCleaner (file:/opt/flink-webssh/lib/flink-dist-1.17.0-1.1.8.jar) to field java.lang.String.value
+WARNING: Please consider reporting this to the maintainers of org.apache.flink.api.java.ClosureCleaner
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+Job has been submitted with JobID 1cc452c21bc23766197dec599435bd42![image]
+```
+
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/45372fe4-cf4c-4c09-86cf-25242add6081)
+
+
+```
+data@sshnode-0 [ ~ ]$ bin/flink run -c contoso.example.CEP.source.WeatherDataCEPExample -j CEPWeatherDemo-1.0-SNAPSHOT.jar
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by org.apache.flink.api.java.ClosureCleaner (file:/opt/flink-webssh/lib/flink-dist-1.17.0-1.1.8.jar) to field java.lang.String.value
+WARNING: Please consider reporting this to the maintainers of org.apache.flink.api.java.ClosureCleaner
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+Job has been submitted with JobID 3d5a9732c52e0ab989365d3d54af458d![image]
+```
+
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/7f58a8a7-a356-4a73-8db4-d6729a20f8a8)
+
+**Result: <br>**
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/aa238362-3c55-4ca9-ba3f-5e30ae7c5d7d)
+
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/4e987892-e29d-4e04-9cf2-08c2db614e28)
+
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/8df71fe3-5fd2-4700-83bb-778f548ccff7)
+
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/b6ae7dd2-52cd-4bca-9648-0fe690ee822a)
+
+## ADX
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/d4a78de0-1dd4-4e1a-948b-1524464a71b0)
+
+
+## Postgres
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/04c9ae5f-89c0-4437-a9cc-ef2f0cc89356)
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/5d876203-949e-4daa-9c36-6e784843b72d)
+
+## Clean up the Resource
+
+• Flink 1.17.0 on HDInsight on AKS <br>
+• Azure Data Explorer  <br>
+• Azure managed PostgreSQL: 16.0  <br>
+• Maven project development on Azure VM in the same Vnet <br>
+
+
+
+
+
+
+
+
+
