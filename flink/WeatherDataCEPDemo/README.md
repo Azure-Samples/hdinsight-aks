@@ -330,14 +330,14 @@ maxTemperaturePerDay.addSink(
 
 ## Submit the jar in maven to cluster to run <br>
 
-**Take the Maximum Temperature per day** <br>
+### Take the Maximum Temperature per day <br>
 ```
 bin/flink run -c contoso.example.CEP.source.WeatherDSExample -j CEPWeatherDemo-1.0-SNAPSHOT.jar
 ```
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/12f7f3e9-0860-4fa2-a76d-8d308073deeb)
 
-**Warning if high-temp occurs twice within a span of two days** <br>
+### Warning if high-temp occurs twice within a span of two days <br>
 ```
 bin/flink run -c contoso.example.CEP.source.WeatherDataCEPExample -j CEPWeatherDemo-1.0-SNAPSHOT.jar
 ```
@@ -352,19 +352,14 @@ bin/flink run -c contoso.example.CEP.source.WeatherDataCEPExample -j CEPWeatherD
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/28548a25-adf5-490c-9558-b4fbc8046f56)
 
-**Result: <br>**
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/4e987892-e29d-4e04-9cf2-08c2db614e28)
 
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/8df71fe3-5fd2-4700-83bb-778f548ccff7)
-
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/b6ae7dd2-52cd-4bca-9648-0fe690ee822a)
-
-## ADX
+## Check OUTPUT
+### ADX
 WeatherTable:Maximum Temperature per day <br>
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/d4a78de0-1dd4-4e1a-948b-1524464a71b0)
 
 
-## Postgres
+### Postgres
 WeatherTable:Maximum Temperature per day <br>
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/04c9ae5f-89c0-4437-a9cc-ef2f0cc89356)
 
