@@ -87,8 +87,6 @@ Job has been submitted with JobID 3d5a9732c52e0ab989365d3d54af458d![image]
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/7f58a8a7-a356-4a73-8db4-d6729a20f8a8)
 
 **Result: <br>**
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/aa238362-3c55-4ca9-ba3f-5e30ae7c5d7d)
-
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/4e987892-e29d-4e04-9cf2-08c2db614e28)
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/8df71fe3-5fd2-4700-83bb-778f548ccff7)
