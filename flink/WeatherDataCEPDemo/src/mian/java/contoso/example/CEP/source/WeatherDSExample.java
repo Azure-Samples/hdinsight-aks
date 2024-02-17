@@ -124,7 +124,7 @@ public class WeatherDSExample {
                                 .withMaxRetries(5)
                                 .build(),
                         new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
-                                .withUrl("jdbc:postgresql://contosopsqlserver.postgres.database.azure.com:5432/postgres")
+                                .withUrl("jdbc:postgresql://<postgresservername>.postgres.database.azure.com:5432/<dbname>")
                                 .withDriverName("org.postgresql.Driver")
                                 .withUsername("<dbusername>")
                                 .withPassword("<password>")
