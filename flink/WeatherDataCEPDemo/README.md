@@ -162,7 +162,7 @@ postgres=> \d WeatherTableWarning
                         .maxBy("temperature");
 ```
 ### Warning if high-temp(>= 38) occurs twice within a span of two days<br>
-[WeatherDataCEPExample.java] (https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/WeatherDataCEPDemo/src/mian/java/contoso/example/CEP/source/WeatherDataCEPExample.java)
+[WeatherDataCEPExample.java](https://github.com/Baiys1234/hdinsight-aks/blob/main/flink/WeatherDataCEPDemo/src/mian/java/contoso/example/CEP/source/WeatherDataCEPExample.java)
 
 A pattern named "high-temp" is defined. This pattern matches LocalWeatherData events where the temperature is greater than or equal to 38.0 degrees Fahrenheit. The pattern must occur twice within a span of two days.
 
