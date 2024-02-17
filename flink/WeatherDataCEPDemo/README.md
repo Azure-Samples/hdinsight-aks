@@ -11,9 +11,30 @@ and Azure managed PostgreSQL database(postgres.database.azure.com)
 • Azure managed PostgreSQL: 16.0  <br>
 • Maven project development on Azure VM in the same Vnet <br>
 
-Postgres
+## FlinkCEP - Complex event processing
+
+https://nightlies.apache.org/flink/flink-docs-release-1.17/docs/libs/cep/
+
+FlinkCEP is the Complex Event Processing (CEP) library implemented on top of Flink. It allows you to detect event patterns in an endless stream of events, giving you the opportunity to get hold of what’s important in your data.
+
+FlinkCEP dependency to the pom.xml 
+``` xml
+<dependency>
+    <groupId>org.apache.flink</groupId>
+    <artifactId>flink-cep</artifactId>
+    <version>1.17.0</version>
+</dependency>
+```
+## FlinkCEP - Complex event processing
+
+## Testing steps
+
+### Sink 1: Azure Database for PostgreSQL flexible server on Azure portal
+
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/039be564-a07f-414c-b3b4-fe1c764500f9)
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/164bca92-dfe3-4cdf-a1ef-f29768342c35)
+
 
 ``` SQL
 postgres=> CREATE TABLE WeatherTable(
@@ -36,8 +57,7 @@ postgres=> \d WeatherTable;
  windSpeed       | text                        |           |          | 
 
 postgres=> CREATE TABLE WeatherTableWarning (
-  message TEXT)
-postgres-> ;
+  message TEXT);
 CREATE TABLE
 postgres=> \d WeatherTableWarning
        Table "public.weathertablewarning"
@@ -107,6 +127,11 @@ Job has been submitted with JobID 3d5a9732c52e0ab989365d3d54af458d![image]
 • Azure Data Explorer  <br>
 • Azure managed PostgreSQL: 16.0  <br>
 • Maven project development on Azure VM in the same Vnet <br>
+
+## References
+This blog refers [https://github.com/apache/flink-training/blob/master/README.md](https://github.com/KarstenSchnitter/FlinkExperiments)
+
+
 
 
 
