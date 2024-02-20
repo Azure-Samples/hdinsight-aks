@@ -4,7 +4,8 @@ This sample demonstrates Real-Time streaming of CDC data from MySql to Apache Ic
 
 It will provide a comprehensive example of setting up a real-time streaming pipeline for CDC data synchronization. The integration of Flink, MySql CDC connectors, Iceberg, Azure Gen2 Storage, Hive Metastore, and Trino showcases the capabilities of modern data tools in handling dynamic data scenarios.
 
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/891576a8-e569-4558-b802-3d114529ef38)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/ba8385fe-458b-410b-9de2-e696f2815477)
+
 
 ## What is Apache Iceberg ?
 
@@ -64,7 +65,8 @@ Please change the following MySQL configurations which are necessary for the com
 - Set binlog_row_image=FULL
 - Set require_secure_transport=ON
 
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/88109ac3-39da-4e63-9080-7bf890fe8627)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/79e4010b-72a2-4c9c-898e-bcc04cbc9095)
+
 
 ## Setting up Flink CDC Connectors for MySQL: Creating Tables for Change Data Capture (CDC)
 We are going to use mysql-cdc connector to capture the changes from mysql.
@@ -80,7 +82,7 @@ The MySQL CDC connector allows for reading snapshot data and incremental data fr
 **Note:**
 Please kindly also downloaded the following dependencies used for adding Iceberg Catalog, which will be used later on in the same Flink SQL client:
 ```
-wget https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-flink-runtime-1.16/1.3.0/iceberg-flink-runtime-1.16-1.3.0.jar -P $FLINK_HOME/lib
+wget https://repo.maven.apache.org/maven2/org/apache/iceberg/iceberg-flink-runtime-1.17/1.3.1/iceberg-flink-runtime-1.17-1.3.1.jar -P $FLINK_HOME/lib
 wget https://repo1.maven.org/maven2/org/apache/parquet/parquet-column/1.12.2/parquet-column-1.12.2.jar -P $FLINK_HOME/lib
 ```
 
@@ -106,7 +108,8 @@ wget https://repo1.maven.org/maven2/org/apache/parquet/parquet-column/1.12.2/par
 	 'table-name' = 'customers'
 	 );
    ```
-   ![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/e3de72c6-00d5-4db9-a4d2-dba4b68e589a)
+   ![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/1f7216ac-8ba1-49a4-8308-075a1781592a)
+
 
    ```
    CREATE TABLE orders_source (
@@ -127,20 +130,20 @@ wget https://repo1.maven.org/maven2/org/apache/parquet/parquet-column/1.12.2/par
    );
 
    ```
-   ![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/cf31baca-7f8f-4efe-a79a-3686b316bfea)
+   ![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/14899225-8c4e-4385-a938-0dd0cbbf0606)
 
    Then we can check the Flink mysql CDC tables contents on Flink SQL:
    ```
    select * from customers_source;
    ```
-   ![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/779418fe-d45a-4eb8-810f-4623d9d8be72)
+   ![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/f1d49cab-8753-474e-bb28-e3994eb3da9f)
 
 ## Creating Flink Table for Iceberg with Hive Metastore and Azure Gen2 Storage
 We will now generate a Flink table for Iceberg, employing Hive Metastore as the catalog and Azure Gen2 Storage as the storage layer.
 
 Please note that we should have downloaded the following dependencies used for adding Iceberg Catalog in previous section:
 ```
-wget https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-flink-runtime-1.16/1.3.0/iceberg-flink-runtime-1.16-1.3.0.jar -P $FLINK_HOME/lib
+wget https://repo.maven.apache.org/maven2/org/apache/iceberg/iceberg-flink-runtime-1.17/1.3.1/iceberg-flink-runtime-1.17-1.3.1.jar -P $FLINK_HOME/lib
 wget https://repo1.maven.org/maven2/org/apache/parquet/parquet-column/1.12.2/parquet-column-1.12.2.jar -P $FLINK_HOME/lib
 ```
 
@@ -157,15 +160,14 @@ In the same FLink SQL Client, we can create Iceberg catalog and Iceberg tables m
    
    USE CATALOG iceberg_catalog;
    ```
- 
 
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/3ee72cf7-0bc4-4d10-ae2c-1a997754d1f1)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/56c8fa98-5267-49cd-8bfb-36ff41137530)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/cba1dd82-793d-45ac-a24a-e648f4c88f4c)
 
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/7d46d001-81cf-4d38-8bbc-88b0f82d13a6)
 
 2. Add dependencies to server classpah in current Flink SQL client
 ```
-ADD JAR '/opt/flink-webssh/lib/iceberg-flink-runtime-1.16-1.3.0.jar';
+ADD JAR '/opt/flink-webssh/lib/iceberg-flink-runtime-1.17-1.3.1.jar';
 ADD JAR '/opt/flink-webssh/lib/parquet-column-1.12.2.jar';
 ```
 
@@ -174,19 +176,20 @@ ADD JAR '/opt/flink-webssh/lib/parquet-column-1.12.2.jar';
 create database iceberg_cdc;
 use iceberg_cdc;
 ```
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/9b242109-62a0-4a98-8631-6749b072f358)
 
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/7e4c9bba-4947-4196-9b93-a12438cf30a3)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/4ae4f93b-de9f-43a2-86ac-b63c9bc4c997)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/226d2f60-c851-4730-b3c5-ca9eb15602fc)
 
 4. Now lets create the iceberg tables for the **customers** and **orders** as **customers_iceberg** and **orders_iceberg**:
 ```
 CREATE TABLE customers_iceberg with ('format-version'='2') LIKE `default_catalog`.`default_database`.`customers_source` (EXCLUDING OPTIONS);
 ```
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/bb99ea61-b99c-4c63-9c24-b5dfed984c78)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/a322a743-84a8-4785-b1b0-d8f1aefe74bf)
+
 ```
 CREATE TABLE orders_iceberg with ('format-version'='2') LIKE `default_catalog`.`default_database`.`orders_source` (EXCLUDING OPTIONS);
 ```
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/8fb8f8ef-6c66-4e95-9708-75cea2fa2076)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/a784ba03-1dbb-4053-a75c-b93dc10c9555)
 
 **Note:**
 Creating table with ('format-version'='2') is necessary, otherwise we will face the following error message when inserting data to iceberg tables:
@@ -204,26 +207,25 @@ First we need to set the **checkpointing interval** in current Flink SQL client:
 ```
 set 'execution.checkpointing.interval'='3000' ;
 ```
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/6f92b82d-1a34-4877-9129-15fb13105dd0)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/46def2cd-a26a-4ac7-9ef5-ff0c888ca1aa)
 
 we are going to use INSERT INTO statement to UPSERT the streaming changes.
 ```
 insert into customers_iceberg /*+ OPTIONS('upsert-enabled'='true','format-version'='2') */
 select * from `default_catalog`.`default_database`.`customers_source` ;
 ```
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/8b0a973c-8cae-4e30-8b88-eab167480869)
-
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/fb311409-0f8b-43d7-a7bc-352f9dbc4b8a)
 
 ```
 insert into orders_iceberg /*+ OPTIONS('upsert-enabled'='true','format-version'='2') */
 select * from `default_catalog`.`default_database`.`orders_source` ;
 ```
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/57de6e3d-640d-406e-8fd1-76f998a32b49)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/35df8abf-8392-44e9-b77e-35d45d35d509)
 
 Now these jobs are created and you can see the execution plan in Apache flink dashboard.
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/16a2de21-e3e3-4da7-9c45-3f613ab39a15)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/8e05e949-4cc6-4903-aebe-7cf25ae31ea7)
 
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/5e1d4639-f2d0-4641-b81b-c9884c38194c)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/495299ee-65ed-4b67-b2e3-a22cf9efc5ed)
 
 Now lets try to join **orders_source** and **customers_source** to create a table **customer_orders** to store the enriched the data.
 ```
@@ -238,7 +240,7 @@ PRIMARY KEY(`order_number`,order_date) NOT ENFORCED
 PARTITIONED by (order_date)
 with ('format-version'='2');
 ```
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/500a442c-2b26-4557-b690-6f1499ce19be)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/a14dc6b6-261d-4e99-8ad3-c9f0a177cdc3)
 
 Here are are partitioning the table based on order_date and order_number
 
@@ -251,21 +253,18 @@ concat(c.first_name,' ',c.last_name) as purchaser, o.quantity, o.product_id
 from `default_catalog`.`default_database`.`orders_source` o 
 join `default_catalog`.`default_database`.`customers_source` c on o.purchaser = c.id ;
 ```
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/1772ae3b-4b08-44b2-8ace-44813620a88a)
-
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/19ce4e19-c17f-4dd8-89cb-6a1ba1b7bf04)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/2fab019e-0067-4890-896a-680ba7cea7d3)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/fe08dad8-8faa-4f40-be16-092cd0b31f1d)
 
 
 ## Verification in Azure Gen2 Storage
 Now we can see the tables that we creates and the data is stored in Azure Gen2 Storage.
 
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/dc6bf782-c0e0-4471-b3ca-f9132f962b40)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/bb14aae4-9d5a-4541-bd1c-04e174196b47)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/aafeb080-0fa7-4e98-9261-732d61ef17a8)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/bdaf2776-7da2-4527-99fe-a5c84ffda97d)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/541b86c2-3e0b-467d-9bb0-9dccf38089b9)
 
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/6d6410d1-b253-435a-8773-cca24b8c9657)
-
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/89fc98bc-9581-44ca-a684-080b1b13f778)
-
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/513d9443-28fb-4a6c-b5f1-c6306392c699)
 
 ## Querying Iceberg Data with Trino and Performing Inserts/Updates in MySQL
 In this section, we will try to query these data using trino and try to insert and update the record in MySql
@@ -274,32 +273,31 @@ Firstly, please kindly follow the below document to congigure Iceberg catalog on
 https://learn.microsoft.com/en-us/azure/hdinsight-aks/trino/trino-add-iceberg-catalog
 
 Then we can see Iceberg tables in Trino (Here we use [Trino CLI](https://learn.microsoft.com/en-us/azure/hdinsight-aks/trino/trino-ui-command-line-interface) on local machine):
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/9b02f65f-1111-4bfc-9fac-76b95f66c8fd)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/8e709214-296d-4cff-a45c-56622f2bbe00)
 
 Now lets query orders_icerberg table
 ```
 select * from ice.iceberg_cdc.orders_iceberg;
 
 ```
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/eaffafa1-04eb-40d3-bcda-6357005a52b6)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/0786dd6b-85c7-4602-998a-dc252823541e)
 
 Now lets insert records in customers and orders table in MySql.
 ```
 insert into customers (first_name,last_name,email) values ('pranav','sadagopan','ps@email.com') ;
 ```
-
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/cb8328d3-4709-4fd7-9732-789c11e0d445)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/e62f1bdd-a90b-4eb7-b7f0-fa78537d773f)
 
 ```
 insert into orders (order_date,purchaser,quantity,product_id ) values ('2023-12-21', 1005, 10, 106) ;
 insert into orders (order_date,purchaser,quantity,product_id ) values ('2023-12-21', 1005, 10, 106) ;
 ```
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/c524543f-0b53-475b-9afa-6f64825da934)
 
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/be227b98-b7da-416b-a19e-5ac120ab8220)
 
 Now lets check the iceberg tables to see the inserted data.
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/f1cb4234-3ad5-4adc-b2a1-4de25ad398ee)
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/bb2f6fa7-dcc5-4f97-9412-96d5e7718c48)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/f4af460b-0e1e-4928-941f-8a4303e4cbf5)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/fdf03f4a-c3b5-4797-b192-1a11d9f7b59a)
 
 Great, It captured the change and It inserted the new records in Iceberg tables.
 
@@ -310,31 +308,36 @@ mysql> update orders set quantity = 100 where purchaser = 1005 ;
 ```
 
 Now lets check the iceberg tables to see the updated data.
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/c4dd9dd2-89ab-4a48-a503-865d2f70a03f)
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/562a56b5-882c-4977-ad78-d88213ed0bb1)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/00cec826-5b27-4f2a-b1dc-db1c1e086bb2)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/82339b7b-36fd-4396-9056-31575fe2d6d9)
+
 
 Great, It captured the change and It updates records in Iceberg tables.
 Now lets see the enriched **customers_orders** table.
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/a6e97c4d-5cef-46cf-bf8b-5b26391487a7)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/86a3f3e8-577d-4800-8461-f003ff7db13b)
+
 
 ## Exploring Metadata Queries
 ### History :
 ```
 use ice.iceberg_cdc;
 ```
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/056c5278-1249-4891-9aab-7c407470953c)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/6c9685ef-4f7e-4f06-9ec9-5f62e3343fa5)
+
 
 ```
 select * from "customer_orders$history";
 ```
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/1fbf7a77-24bd-4f0d-a3cc-916d210dc7c9)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/583c621f-bb85-4566-acf2-ec67b32a4fcc)
+
 
 ### Snapshot:
 ```
 select * from "customer_orders$snapshots";
 
 ```
-![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/1f0e8f5c-1a46-4925-b5b1-1aa23102397b)
+![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/74bab7d3-b2da-4f30-8839-1a6d3b67a538)
+
 
 
 ## Conclusion
