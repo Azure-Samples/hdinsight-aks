@@ -85,17 +85,6 @@ Note: you can do more complex transormation using Flink SQL API or Datastream AP
 bin/sql-client.sh -j kafka-clients-3.2.0.jar -j flink-connector-kafka-1.17.0.jar
 ```
 
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/9df584e1-f962-40c1-8641-082b6e9ecd5c)
-
-Output: <br>
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/21d868cc-0662-46cc-9864-3f48b42a0b02)
-
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/ed5a1126-6f8f-411b-a343-adb5864abb6d)
-
-Output: <br>
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/f2952258-6e48-4261-84de-eecc0584bb0f)
-
-
 Example: <br>
 Get eventhub connection string in Azure portal <br>
 ``` SQL
