@@ -8,7 +8,7 @@ Below is the architecture:<br>
 Here’s a summary for the workflow: <br>
 **Microsoft Dataverse:** This is the starting point of the workflow. It’s connected to a “Sales/contacts table” which feeds into the workflow.<br>
 **Azure Eventhub:** store layer.<br>
-**Flink:** The data from the “Dataverse: contacts Topic” is processed in Flink SQL and then sent to "Dataverse: myleads Topic (Cold Calling).”<br>
+**Flink:** The data from the "Dataverse: contacts Topic" is processed in Flink SQL and then sent to "Dataverse: myleads Topic (Cold Calling).”<br>
 **LangChain:** An LangChain agent uses LangChain and Proxycurl for scraping LinkedIn Profile data. The process of extracting LinkedIn profiles and summaries is depicted, leading to "Azure Event Hub Dataverse: myleads Topic (Ice-Breaker generation)."
 **OpenAI:** The data flows into OpenAI for further processing.<br>
 **Power BI:** Power BI is involved in calling an APP and generating calling list reports.<br>
@@ -87,8 +87,9 @@ bin/sql-client.sh -j kafka-clients-3.2.0.jar -j flink-connector-kafka-1.17.0.jar
 ```
 
 Example: <br>
-Get eventhub connection string in Azure portal <br>
 ``` SQL
+-- Get eventhub connection string in Azure portal
+
 CREATE TABLE dataverse_contacts (
     `First Name` STRING,
     `Last Name` STRING,
@@ -108,6 +109,7 @@ CREATE TABLE dataverse_contacts (
     'properties.security.protocol' = 'SASL_SSL',
     'properties.sasl.jaas.config' = 'org.apache.kafka.common.security.plain.PlainLoginModule required username="$ConnectionString" password="Endpoint=sb://<eventhubnamespace>.servicebus.windows.net/;SharedAccessKeyName=<policy>;SharedAccessKey=<key>";'
 );
+
 
 select * from dataverse_contacts;
 
@@ -357,14 +359,11 @@ def on_event(partition_context, event):
     # Extract the required information.
     first_name = data.get('First Name')
     last_name = data.get('Last Name')
+    information = data.get('information'）
     email = data.get('Email')
     company_name = data.get('Company Name')
     salution = data.get('Salutation')   
     gendar = data.get('Gendar')
-
-    # Replace the 'information' variable.
-    information = f"{first_name} {last_name}"
-    # information = f"{full_name} {last_name} {company_name}"
 
     message = (
         "Search for information: "
@@ -428,7 +427,7 @@ def on_event(partition_context, event):
     # Create a producer client
     producer = EventHubProducerClient.from_connection_string(conn_str=CONNECTION_STR2,eventhub_name=EVENTHUB_NAME_MYCALLS)
 
-    # Prepare your data
+    # Create Data1 dic
     data1 = {
         "event_time": time.time(),
         "first_name": first_name,
@@ -440,7 +439,7 @@ def on_event(partition_context, event):
         "ice_breaker": result
     }
 
-    # Convert the data to a JSON string
+    # Convert the data1 dic to a JSON string
     json_data = json.dumps(data1)
 
     # Create a batch
@@ -502,8 +501,13 @@ if __name__ == '__main__':
 
 ## Cleanup Resource
 
+. Apache Flink 1.17.0 Cluster on HDInsight on AKS <br>
+. Azure Eventhub <br>
+. Microsoft Dataverse and Dynamics 365 Sales <br>
+. Azure Windows VM <br>
+
 ## Reference
-https://github.com/ora0600/genai-with-confluent/blob/main/README.md
+This blog refers https://github.com/ora0600/genai-with-confluent/blob/main/README.md
 
 
 
