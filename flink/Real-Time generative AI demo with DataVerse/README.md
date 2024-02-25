@@ -16,7 +16,8 @@ Here’s a summary for the workflow: <br>
 ## Prerequisites
 . Apache Flink 1.17.0 Cluster on HDInsight on AKS <br>
 . Azure Eventhub <br>
-. Microsoft Dataverse and Dynamics 365 Sales
+. Microsoft Dataverse and Dynamics 365 Sales <br>
+. Azure Windows VM <br>
 
 ## Dynamics 365 and Dataverse
 
@@ -149,6 +150,15 @@ select * from dataverse_myleads;
 
 ### LangChain agent to use LangChain and Proxycurl for scraping LinkedIn Profile data leverageing OpenAI to to do Ice-Breaker generation
 
+**The Prompt is the task description for Chatgpt, we formulated the following content:**
+```
+given the Linkedin information {linkedin_information} about a person from I want you to create:
+a short summary
+two interesting facts about them
+A topic that may interest them
+2 creative Ice breakers to open a conversation with them
+```
+
 Develop Python in Jypyter Notebook on Azure Windows Virtual Machine created in Azure portal <br>
 
 Main package installed using pip:<br>
@@ -226,12 +236,12 @@ os.environ["EVENT_HUB_NAME_MYLEADS"] = 'dataverse_myleads'
 os.environ["EVENT_HUB_NAME_MYCALLS"] = 'dataverse_mycalls'
 ```
 
-// Function: Get linkedin profile url based on lead info <br>
+// Function: Searche for Linkedin Profile Page <br>
 ``` Python
 import os
 import requests
 
-def scrape_linkedin_profile(linkedin_profile_url: str):
+def scrape_Linkedin_profile(linkedin_profile_url: str):
     """
     scrape information from LinkedIn profiles,
     Manually scrape the information from the LinkedIn profile
@@ -258,7 +268,7 @@ def scrape_linkedin_profile(linkedin_profile_url: str):
     return data
 ```
 
-// Function: to get linkedIn profule url  <br>
+// Function: to get LinkedIn Profile url  <br>
 ``` python
 from langchain_community.utilities import SerpAPIWrapper
 
@@ -320,7 +330,7 @@ from azure.eventhub import EventHubConsumerClient
 from azure.eventhub import EventHubProducerClient, EventData
 from azure.eventhub.exceptions import EventHubError
 
-# langchain
+# LangChain
 from tools import CustomSerpAPIWrapper
 from linkedin_lookup_agent import lookup as linkedin_lookup_agent
 from langchain.prompts import PromptTemplate
@@ -489,6 +499,11 @@ if __name__ == '__main__':
 ### Check dataverse_mycalls topic with ice-breaker generated information facts in Azure Eventhub
 
 ![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/f4717e64-347c-48fe-ba8f-dce80820fb85)
+
+## Cleanup Resource
+
+## Reference
+https://github.com/ora0600/genai-with-confluent/blob/main/README.md
 
 
 
