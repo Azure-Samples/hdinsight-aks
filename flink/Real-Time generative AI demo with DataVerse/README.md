@@ -9,7 +9,7 @@ Here’s a summary for the workflow: <br>
 **Microsoft Dataverse:** This is the starting point of the workflow. It’s connected to a “Sales/contacts table” which feeds into the workflow.<br>
 **Azure Eventhub:** store layer.<br>
 **Flink:** The data from the "Dataverse: contacts Topic" is processed in Flink SQL and then sent to "Dataverse: myleads Topic (Cold Calling).”<br>
-**LangChain:** An LangChain agent uses LangChain and Proxycurl for scraping LinkedIn Profile data. The process of extracting LinkedIn profiles and summaries is depicted, leading to "Azure Event Hub Dataverse: myleads Topic (Ice-Breaker generation)."
+**LangChain:** An LangChain agent uses LangChain and Proxycurl for scraping LinkedIn Profile data. The process of extracting LinkedIn profiles and summaries is depicted, leading to "Azure Event Hub Dataverse: myleads Topic (Ice-Breaker generation)." <br>
 **OpenAI:** The data flows into OpenAI for further processing.<br>
 **Power BI:** Power BI is involved in calling an APP and generating calling list reports.<br>
 
@@ -154,11 +154,11 @@ select * from dataverse_myleads;
 
 **The Prompt is the task description for Chatgpt, we formulated the following content:**
 ```
-given the Linkedin information {linkedin_information} about a person from I want you to create:
-a short summary
-two interesting facts about them
-A topic that may interest them
-2 creative Ice breakers to open a conversation with them
+// given the Linkedin information {linkedin_information} about a person from I want you to create:
+. a short summary
+. two interesting facts about them
+. A topic that may interest them
+. 2 creative Ice breakers to open a conversation with them
 ```
 
 Develop Python in Jypyter Notebook on Azure Windows Virtual Machine created in Azure portal <br>
