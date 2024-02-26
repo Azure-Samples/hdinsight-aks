@@ -64,7 +64,8 @@ In [PowerApp](https://make.preview.powerapps.com/), Creating a workflow in Micro
 
 Do some changes on contact table <br>
 
-![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/8f54ae20-0e67-4e69-b617-745efdb01206)
+![image](https://github.com/Baiys1234/hdinsight-aks/assets/35547706/8d228744-2be9-4cc3-8257-4f80592689fb)
+
 
 ### Check dataverse_contacts topic in Azure Eventhub
 
