@@ -154,11 +154,11 @@ select * from dataverse_myleads;
 
 **The Prompt is the task description for Chatgpt, we formulated the following content:**
 ```
-// given the Linkedin information {linkedin_information} about a person from I want you to create:
-. a short summary
-. two interesting facts about them
-. A topic that may interest them
-. 2 creative Ice breakers to open a conversation with them
+//given the Linkedin information {linkedin_information} about a person from I want you to create:
+        1. a short summary
+        2. two interesting facts about them
+        3. A topic that may interest them
+        4. 2 creative Ice breakers to open a conversation with them 
 ```
 
 Develop Python in Jypyter Notebook on Azure Windows Virtual Machine created in Azure portal <br>
