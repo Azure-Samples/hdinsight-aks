@@ -5,10 +5,8 @@ This Flink job demo provides an example about how to split main stream to 2 side
 **Azure HDInsight Flink 1.17 on AKS**
 https://learn.microsoft.com/en-us/azure/hdinsight-aks/flink/flink-create-cluster-portal
 
+## **Main code: SideOutputsSample.java**
 Here’s a breakdown of what each part does!
-
-**Main code: SideOutputsSample.java**
-
 1. **Setting up the execution environment**: The StreamExecutionEnvironment.getExecutionEnvironment() method is used to set up the execution environment for the Flink job.
 
 2. **Creating a data stream**: The getData(env) is used to create a data stream from inputs.
@@ -23,7 +21,7 @@ Here’s a breakdown of what each part does!
 
 7. **Adding the sink function to the 2 side stream**: The sinkTo  method is used to add the sink function to the processed stream. Each processed element will be written to a file in Azure Data Lake Storage Gen2.
 
-8. **Generating Random Tuples of <Long, Long>** getData(StreamExecutionEnvironment env) is used to generate Random Tuples of <Long, Long>.
+8. **Generating Random Tuples of <Long, Long>**: getData(StreamExecutionEnvironment env) is used to generate Random Tuples of <Long, Long>.
 
 9. **Executing the job**: Finally, the env.execute() method is used to execute the Flink job. This will start reading messages from generated random tuples, emit the date to 2 side outputs using Process function, and sink them to Azure Data Lake Storage Gen2.
 
@@ -45,5 +43,6 @@ Donot forget to clean up the Flink clsuter we created above.
 
 ## Reference documents
 Flink Side Outputs: https://nightlies.apache.org/flink/flink-docs-release-1.17/docs/dev/datastream/side_output/
+File Sink: https://nightlies.apache.org/flink/flink-docs-release-1.13/docs/connectors/datastream/file_sink/
 
 
