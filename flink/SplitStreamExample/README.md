@@ -1,12 +1,15 @@
 # Using Side Outputs to produce additional side output result streams from the main stream
 
-This Flink job demo provides an example about how to split main stream to 2 side output result streams which writes to ADLS gen2.
-## Requirements
-**Azure HDInsight Flink 1.17 on AKS**
-https://learn.microsoft.com/en-us/azure/hdinsight-aks/flink/flink-create-cluster-portal
+This Flink job demo provides an example about how to *split* main stream to 2 side output result streams which writes to ADLS gen2.
 
-## **Main code: SideOutputsSample.java**
+## Requirements
+
+**Flink 1.17 on Azure HDInsight on AKS** - https://learn.microsoft.com/en-us/azure/hdinsight-aks/flink/flink-create-cluster-portal
+
+Writing the **SideOutputsSample.java**
+
 Here’s a breakdown of what each part does!
+
 1. **Setting up the execution environment**: The StreamExecutionEnvironment.getExecutionEnvironment() method is used to set up the execution environment for the Flink job.
 
 2. **Creating a data stream**: The getData(env) is used to create a data stream from inputs.
@@ -27,7 +30,7 @@ Here’s a breakdown of what each part does!
 
 ## Running
 
-**Submit the jar into Azure HDInsight Flink 1.17 on AKS through Flink UI and check job running details on Flink UI**
+**Submit the jar into Flink 1.17 Azure HDInsight  on AKS through Flink UI or Azure portal and check job running details on Flink UI**
 
 ![image](https://github.com/Guodong-Wang-prog/hdinsight-aks/assets/60081730/bad5d355-d495-48dd-ba01-9a4778fd9059)
 
