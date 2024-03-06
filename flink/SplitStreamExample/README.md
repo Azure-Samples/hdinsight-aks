@@ -41,11 +41,9 @@ Here’s a breakdown of what each part does!
 
 
 ## Clean up
-Donot forget to clean up the resources we created above.
+Donot forget to clean up the Flink clsuter we created above.
 
 ## Reference documents
 Flink Side Outputs: https://nightlies.apache.org/flink/flink-docs-release-1.17/docs/dev/datastream/side_output/
-
-Donot forget to clean up the resources we created above.
 
 
