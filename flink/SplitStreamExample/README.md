@@ -43,6 +43,6 @@ Donot forget to clean up the Flink clsuter we created above.
 
 ## Reference documents
 Flink Side Outputs: https://nightlies.apache.org/flink/flink-docs-release-1.17/docs/dev/datastream/side_output/
-File Sink: https://nightlies.apache.org/flink/flink-docs-release-1.13/docs/connectors/datastream/file_sink/
+File Sink: https://nightlies.apache.org/flink/flink-docs-release-1.17/docs/connectors/datastream/filesystem/
 
 
