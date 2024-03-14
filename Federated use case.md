@@ -105,3 +105,24 @@ call system.sync_partition_metadata('"hive-catalog".nycdata', '"hive-catalog".ny
 	,service_zone
 	FROM "hive-catalog".nycdata.zones;
 
+### Federation in Trino
+
+* Join the table in two catalog "hive-catalog" and "pg" and
+
+	 select
+		z.zone,
+		avg(fare_amount) as avg_fare,
+		sum(passenger_count) as total_passengers
+	from
+		"hive-catalog".nycdata.yellow_trip y
+	Inner join pg.nycdata.zones  z
+		on
+		y.PULocationID= cast(z.locationid as bigint)
+	Group by
+		z.zone
+		having
+		sum(passenger_count) > 100000
+	Order by total_passengers asc;
+
+![image](https://github.com/Azure-Samples/hdinsight-aks/assets/109063956/ea01953d-8526-454b-accd-9cf02eb38212)
+
