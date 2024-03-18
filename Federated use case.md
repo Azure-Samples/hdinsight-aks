@@ -1,51 +1,118 @@
-# Analyzing NYC Trip data using Trino in HDInsight on AKS
+# Analyzing NYC Trip data - Trino with HDInsight on AKS
 
-This demo showcases how you can use federated capability of Trino in HDInsight on AKS to analyze NYC Trip data
+This demo showcases how you can use federated capability of Trino with HDInsight on AKS to analyze NYC Trip data.
 
 ## Pre-requisites
 
 * Trino cluster with HDInsight on AKS
-* ADLS Gen2 storage and user-assigned managed identity (MSI)
-* Azure Postgres or Azure SQL Database
+* ADLS Gen2 storage
+* User-assigned managed identity (MSI)
+* Azure Database for PostgresSQL
 
 ## Scenario
 
 For this scenario, we are going to cover the following path:
-1. Take data from NYC Trip offical site, for this demostration, we will download one month data from [NYC site](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page)
-2. Land the data ADLS Gen2 and expose it as Hive table in Trino.
-3. Prepare zone data and land in Azure postgres or SQL Databse
-4. Run Trino query on two data source hive and SQL databse
+1. Take NYC taxi data from offical source, for this demostration, we will download one month data from [here](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page).
+2. Land the data in ADLS Gen 2 and expose it as Hive table in Trino.
+3. Prepare zone data and land in Azure Database for PostgresSQL.
+4. Run Trino query on two data sources ADLS Gen2 and Azure Database for PostgresSQL.
 
 ## Demo steps
 
-### Step 1: Create a Trino cluster with HDInsight on AKS with hive catalog
+### Step 1: Create a Trino cluster with HDInsight on AKS with hive catalog enabled
  
-* Create a [Trino cluster with HDInsight on AKS](/azure/hdinsight/kafka/apache-kafka-get-started).
-For this demo purpose, 
-Hive catalog name is "hive-catalog"
-Cluster name - testcluster
+* Follow the steps to create a [Trino cluster with HDInsight on AKS](/azure/hdinsight-aks/trino/trino-create-cluster).
 
-* Add Azure postgres sql database as catalog in the ewnly created cluster
+  For this demo purpose, we have create a cluster
+  Cluster name - `testcluster`
+  Hive catalog name - `hive-catalog`
 
-  [Configure a catalog](https://learn.microsoft.com/en-us/azure/hdinsight-aks/trino/trino-add-catalogs)
-  [Refer connector properties for Postgres SQL](https://learn.microsoft.com/en-us/azure/hdinsight-aks/trino/trino-connectors)
 
-For connection URL, get this from Azure Postgres SQL Databse from Azure portal
+* Create [Azure Database for PostgresSQL server](/azure/postgresql/flexible-server/quickstart-create-server-portal#create-an-azure-database-for-postgresql-server) and a database in the server.
 
-For this demo purpose,
-Catalog name:  "pg"
+  For this demo purpose, we have created
+  Server - `constospostgres`
+  Database - `tutorialdb`
+
+  ![image](https://github.com/Azure-Samples/hdinsight-aks/assets/109063956/0ccd1c5d-5f9b-4b47-8651-97a9afa3f53c)
+
+
+* Configure the postgres database as catalog in the Trino cluster.
+  * [Configure a catalog](https://learn.microsoft.com/en-us/azure/hdinsight-aks/trino/trino-add-catalogs)
+  * [Refer connector properties for Postgres SQL](/azure/hdinsight-aks/trino/trino-connectors)
+
+  For connection URL, get this from Azure PostgresSQL Database from Azure portal.
+
+  For this demo purpose, we have used the following catalog name.
+  Catalog name - `pg`
+
+  Sample json for adding Azure Database for PostgresSQL as catalog in Trino.
+  ```json
+	"properties": {
+        "clusterType": "Trino",
+       
+            "secretsProfile": {
+                "keyVaultResourceId": "/subscriptions/d66b1168-d835-4066-8c45-7d2ed713c082/resourceGroups/AJSandbox/providers/Microsoft.KeyVault/vaults/ajhilokeyvault",
+                "secrets": [
+                    {
+                        "referenceName": "demokeyvaultsecret",
+                        "type": "Secret",
+                        "keyVaultObjectName": "demokeyvaultsecret"
+                    }
+                ]
+            },
+            "serviceConfigsProfiles": [
+                {
+                    "serviceName": "trino",
+                    "configs": [
+                   
+                        {
+                            "component": "catalogs",
+                            "files": [
+                                {
+                                    "fileName": "hive-catalog.properties",
+                                    "values": {
+                                        "connector.name": "hive",
+                                        "hive.allow-drop-table": "true",
+                                        "hive.metastore": "hdi"
+                                    }
+                                },
+                                {
+                                    "fileName": "pg.properties",
+                                    "values": {
+                                        "connection-password": "${SECRET_REF:demokeyvaultsecret}",
+                                        "connection-url": "jdbc:postgresql://constospostgres.postgres.database.azure.com:5432/tutorialdb?sslmode=require",
+                                        "connection-user": "<admin-user-name>",
+                                        "connector.name": "postgresql"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            
+        }
+     
+	 ```
 
 ### Step 2: Prepare the data in ADLS Gen2
-* Download the NYC data for any month. For this demo, we have downloaded October 2022 data as parquet file
 
-* Create ADLS Gen2 storage "sampleteststorage" with container as "nycdata"
-   * Create directory as "year=2022"/"month=10' in container "nycdata"
-   * Copy/Upload the downloaded trip data to the new created directory in sampleteststorage
-   * Provide "Sotrage Blob Owner" permission to the MSI assocaited to with Trino cluster to the "sampleteststorageaccount"
+* Download the NYC data for any month. For this demo, we have downloaded October 2022 data as parquet file.
 
-### Step 3: Create schema and table in hive catalog pointing to the data in ADLS Gen2
+* Create ADLS Gen2 storage `sampleteststorage` with container as `nycdata`.
+   * Create directory as `tripdata/year=2022/month=10` in container `nycdata`.
+   * Copy/Upload the downloaded trip data to the newly created directory in the `sampleteststorage`.
+   * Provide "Storage Blob Data Owner" permission to the MSI assocaited with your Trino cluster in the storage `sampleteststorageaccount`.
+ 
+     ![image](https://github.com/Azure-Samples/hdinsight-aks/assets/109063956/b397b799-055a-4d85-bff3-3743824ce04b)
 
-* Use [Webssh/Trino CLI or DBeaver](https://learn.microsoft.com/en-us/azure/hdinsight-aks/trino/trino-ui-web-ssh) to connect to Trino cluster and run the following queries
+
+### Step 3: Create schema and table in hive catalog pointing to the data in ADLS Gen2 (sampleteststorage)
+
+* Use [Webssh/Trino CLI or DBeaver](https://learn.microsoft.com/en-us/azure/hdinsight-aks/trino/trino-ui-web-ssh) to connect to Trino cluster and run the following queries:
+  
+  ```sql 
 
   CREATE SCHEMA "hive-catalog".nycdata;
 
@@ -71,31 +138,37 @@ Catalog name:  "pg"
 	,airport_fee double
 	,year varchar
 	,month varchar
-) WITH (external_location = 'abfss://nycdata@sampleteststorage.dfs.core.windows.net/tripdata', partitioned_by = ARRAY['year', 'month'], format = 'parquet');
+	) WITH (external_location = 'abfss://nycdata@sampleteststorage.dfs.core.windows.net/tripdata', partitioned_by = ARRAY['year', 'month'], format = 'parquet');
+	```
 
--- As we have create a partition hence, need to sync the parititon to metastore
-call system.sync_partition_metadata('"hive-catalog".nycdata', '"hive-catalog".nycdata.yellow_trip', 'ADD', false);
+	Since we have created a partition hence, need to sync the parititon to the hive metastore. Run the following command.
 
-### Prepare Zone data and copy to Azure postgres database
+	```call system.sync_partition_metadata('"hive-catalog".nycdata', '"hive-catalog".nycdata.yellow_trip', 'ADD', false);```
 
-*  Download the NYC data for any month. For this demo, we have downloaded October 2022 data as parquet file
-*  ![image](https://github.com/Azure-Samples/hdinsight-aks/assets/109063956/26896aa8-f554-4c51-99a1-f01d4687a387)
+### Step 4: Prepare Zone data and copy to Azure postgres database
 
-*  Delete the first column from the downloaded csv file as it denotes column header
+* Download the zone data from [here](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page) and delete the first column from the downloaded csv file as it denotes column header.
 
-*  Create directory as "zone" in container "nycdata" in stroage account "sampleteststorage" 
-  	* Copy/Upload the downloaded zone data to the "zone" directory
+   ![image](https://github.com/Azure-Samples/hdinsight-aks/assets/109063956/26896aa8-f554-4c51-99a1-f01d4687a387)
 
-*  Create table metadata in "hive-catalog" and copy the data in postgres database
+* Create a directory as `zone` in container `nycdata` in the storage account `sampleteststorage`.
+	* Copy/Upload the downloaded zone data to the `zone` directory.
+   
+	![image](https://github.com/Azure-Samples/hdinsight-aks/assets/109063956/1da037a8-3b94-43be-8de9-55a04c574b49) 
 
-  	CREATE TABLE "hive-catalog".nycdata.zones (
+*  Create a reference table in "hive-catalog" and copy the data in postgres database.
+
+  	```sql
+
+   	CREATE TABLE "hive-catalog".nycdata.zones (
 	 LocationID varchar
 	,borough varchar
 	,Zone varchar
 	,service_zone varchar
 	) WITH (external_location = 'abfss://nycdata@sampleteststorage.dfs.core.windows.net/zone/', format = 'csv');
 
-	-- Copy the data to Postgres databse
+	-- Copy the data to Postgres database
+
 	CREATE SCHEMA pg.nycdata;
 	CREATE TABLE pg.nycdata.zones 
 	AS SELECT 
@@ -104,25 +177,31 @@ call system.sync_partition_metadata('"hive-catalog".nycdata', '"hive-catalog".ny
 	,Zone
 	,service_zone
 	FROM "hive-catalog".nycdata.zones;
+	```
+   
+### Step 5: Federation in Trino with HDInsight on AKS
 
-### Federation in Trino
+* Join the tables in two catalog "hive-catalog" and "pg" to analyze the data
 
-* Join the table in two catalog "hive-catalog" and "pg" and
+  Sample federated query: The following query gives avg fare amount and corresponding passengers count based on zones.
 
-	 select
+	``` sql
+	SELECT
 		z.zone,
 		avg(fare_amount) as avg_fare,
 		sum(passenger_count) as total_passengers
-	from
+	FROM
 		"hive-catalog".nycdata.yellow_trip y
-	Inner join pg.nycdata.zones  z
+	INNER JOIN pg.nycdata.zones  z
 		on
 		y.PULocationID= cast(z.locationid as bigint)
-	Group by
+	GROUP BY
 		z.zone
-		having
+	HAVING
 		sum(passenger_count) > 100000
-	Order by total_passengers asc;
+	ORDER BY
+ 		total_passengers asc;
+ 	```
 
-![image](https://github.com/Azure-Samples/hdinsight-aks/assets/109063956/ea01953d-8526-454b-accd-9cf02eb38212)
+  	![image](https://github.com/Azure-Samples/hdinsight-aks/assets/109063956/ea01953d-8526-454b-accd-9cf02eb38212)
 
