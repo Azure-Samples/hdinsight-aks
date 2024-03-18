@@ -1,6 +1,6 @@
-# Analyzing NYC Trip data - Trino with HDInsight on AKS
+# Analyzing NYC Taxi Trip data - Trino with HDInsight on AKS
 
-This demo showcases how you can use federated capability of Trino with HDInsight on AKS to analyze NYC Trip data.
+This demo showcases how you can use federated capability of Trino with HDInsight on AKS to analyze NYC Taxi Trip data.
 
 ## Pre-requisites
 
@@ -12,41 +12,40 @@ This demo showcases how you can use federated capability of Trino with HDInsight
 ## Scenario
 
 For this scenario, we are going to cover the following path:
-1. Take NYC taxi data from offical source, for this demostration, we will download one month data from [here](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page).
-2. Land the data in ADLS Gen 2 and expose it as Hive table in Trino.
+1. Take NYC taxi data from the offical source.
+2. Land the data in ADLS Gen 2 and expose it as a Hive table in Trino.
 3. Prepare zone data and land in Azure Database for PostgresSQL.
-4. Run Trino query on two data sources ADLS Gen2 and Azure Database for PostgresSQL.
+4. Run a federated query on two data sources ADLS Gen2 and Azure Database for PostgresSQL.
 
 ## Demo steps
 
 ### Step 1: Create a Trino cluster with HDInsight on AKS with hive catalog enabled
  
-* Follow the steps to create a [Trino cluster with HDInsight on AKS](/azure/hdinsight-aks/trino/trino-create-cluster).
-
-  For this demo purpose, we have create a cluster
-  Cluster name - `testcluster`
-  Hive catalog name - `hive-catalog`
-
+* Create a [Trino cluster with HDInsight on AKS](/azure/hdinsight-aks/trino/trino-create-cluster).
+  For this demo purpose, we have created the following cluster:
+    * Cluster name - `testcluster`
+    * Hive catalog name - `hive-catalog`
 
 * Create [Azure Database for PostgresSQL server](/azure/postgresql/flexible-server/quickstart-create-server-portal#create-an-azure-database-for-postgresql-server) and a database in the server.
-
-  For this demo purpose, we have created
-  Server - `constospostgres`
-  Database - `tutorialdb`
+  For this demo purpose, we have created the following database:
+    * Server - `constospostgres`
+    * Database - `tutorialdb`
 
   ![image](https://github.com/Azure-Samples/hdinsight-aks/assets/109063956/0ccd1c5d-5f9b-4b47-8651-97a9afa3f53c)
 
-
 * Configure the postgres database as catalog in the Trino cluster.
+  Refer the following documentation:
+
   * [Configure a catalog](https://learn.microsoft.com/en-us/azure/hdinsight-aks/trino/trino-add-catalogs)
-  * [Refer connector properties for Postgres SQL](/azure/hdinsight-aks/trino/trino-connectors)
+  * [Connector properties for Postgres SQL](/azure/hdinsight-aks/trino/trino-connectors)
 
-  For connection URL, get this from Azure PostgresSQL Database from Azure portal.
+  For connection URL, get it from the Azure portal.
 
-  For this demo purpose, we have used the following catalog name.
-  Catalog name - `pg`
+  For this demo purpose, we have used the following catalog name:
+  * Catalog name - `pg`
 
-  Sample json for adding Azure Database for PostgresSQL as catalog in Trino.
+  Sample ARM template snippet for adding Azure Database for PostgresSQL as catalog in Trino. Refer the properties under `serviceConfigsProfiles`.
+
   ```json
 	"properties": {
         "clusterType": "Trino",
@@ -98,7 +97,7 @@ For this scenario, we are going to cover the following path:
 
 ### Step 2: Prepare the data in ADLS Gen2
 
-* Download the NYC data for any month. For this demo, we have downloaded October 2022 data as parquet file.
+* Download the NYC yellow taxi trip data for any month from [here](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page). For this demo, we have downloaded October 2022 data as parquet file.
 
 * Create ADLS Gen2 storage `sampleteststorage` with container as `nycdata`.
    * Create directory as `tripdata/year=2022/month=10` in container `nycdata`.
@@ -107,10 +106,9 @@ For this scenario, we are going to cover the following path:
  
      ![image](https://github.com/Azure-Samples/hdinsight-aks/assets/109063956/b397b799-055a-4d85-bff3-3743824ce04b)
 
+### Step 3: Create schema and table in hive catalog pointing to the data stored in ADLS Gen2 (sampleteststorage)
 
-### Step 3: Create schema and table in hive catalog pointing to the data in ADLS Gen2 (sampleteststorage)
-
-* Use [Webssh/Trino CLI or DBeaver](https://learn.microsoft.com/en-us/azure/hdinsight-aks/trino/trino-ui-web-ssh) to connect to Trino cluster and run the following queries:
+* Use [Webssh/Trino CLI or DBeaver](/azure/hdinsight-aks/trino/trino-ui-web-ssh) to connect to your Trino cluster and run the following queries:
   
   ```sql 
 
@@ -145,18 +143,19 @@ For this scenario, we are going to cover the following path:
 
 	```call system.sync_partition_metadata('"hive-catalog".nycdata', '"hive-catalog".nycdata.yellow_trip', 'ADD', false);```
 
-### Step 4: Prepare Zone data and copy to Azure postgres database
+### Step 4: Prepare Zone data and copy to the Azure Database for PostgresSQL
 
 * Download the zone data from [here](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page) and delete the first column from the downloaded csv file as it denotes column header.
 
    ![image](https://github.com/Azure-Samples/hdinsight-aks/assets/109063956/26896aa8-f554-4c51-99a1-f01d4687a387)
 
-* Create a directory as `zone` in container `nycdata` in the storage account `sampleteststorage`.
-	* Copy/Upload the downloaded zone data to the `zone` directory.
-   
-	![image](https://github.com/Azure-Samples/hdinsight-aks/assets/109063956/1da037a8-3b94-43be-8de9-55a04c574b49) 
+* Create a directory as `zone` in the container `nycdata` in the storage account `sampleteststorage`.
+  
+    * Copy/Upload the downloaded csv data to the `zone` directory.
 
-*  Create a reference table in "hive-catalog" and copy the data in postgres database.
+      ![image](https://github.com/Azure-Samples/hdinsight-aks/assets/109063956/1da037a8-3b94-43be-8de9-55a04c574b49) 
+
+*  Create a reference table in "hive-catalog" and copy the data to postgres database table.
 
   	```sql
 
@@ -181,7 +180,7 @@ For this scenario, we are going to cover the following path:
    
 ### Step 5: Federation in Trino with HDInsight on AKS
 
-* Join the tables in two catalog "hive-catalog" and "pg" to analyze the data
+* Join the tables in two catalog "hive-catalog" and "pg" to experience the federated capaibility of Trino.
 
   Sample federated query: The following query gives avg fare amount and corresponding passengers count based on zones.
 
