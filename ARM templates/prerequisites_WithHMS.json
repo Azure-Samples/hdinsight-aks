@@ -9,7 +9,7 @@
             }
         },
          "location": {
-            "defaultValue": "East US 2",
+           //"defaultValue": "East US 2",
             "allowedValues": [
                 "West US 2",
                 "West US 3",
