@@ -2,8 +2,8 @@
 
 ## Pre requisites
 * Azure HDInsight on AKS Spark cluster. Learn how to create a cluster click [here](https://learn.microsoft.com/en-us/azure/hdinsight-aks/quickstart-create-cluster).
-
-* Upload the sample dataset in the ADLS Gen2, primary storage account in a container. Learn how to upload data in the container [here](https://learn.microsoft.com/en-us/azure/data-factory/load-azure-data-lake-storage-gen2.)
+* Download the sample data from [here](./random_forest_sample_data.csv).
+* Upload the sample dataset in the ADLS Gen2, primary storage account in a container. Learn how to upload data in the container [here](https://learn.microsoft.com/en-us/azure/data-factory/load-azure-data-lake-storage-gen2.).
 * Navigate to the cluster overview page and open a python notebook in Jupyter.
 
 ## Enter the following code in the Jupyter notebook:
