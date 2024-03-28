@@ -7,10 +7,10 @@ Delta Lake is an open-source storage layer that brings ACID transactions and sch
 Azure HDInsight is a fully managed cloud service that allows you to run Apache Spark clusters on Azure. You can use HDInsight on AKS to create a Spark cluster with Delta Lake enabled and run your Delta Lake workloads on it. In this document, we will show you how to do that in a few simple steps.
 
 
-Prerequisites
-* 	An Azure subscription. If you don't have one, you can create a free account undefined.
-* 	An Azure Storage account. This will be used to store your data and configuration files. You can create one using the Azure portal, Azure CLI, or PowerShell. For more details, see undefined.
-* 	An Apache Spark 3.3 cluster in Azure HDInsight on AKS
+## Prerequisites
+* 	An Azure subscription. If you don't have one, you can create a [free account](https://azure.microsoft.com/en-in/free/).
+* 	An Azure Data Lake Store Gen2 account. This will be used to store your data and configuration files. Click [here](https://learn.microsoft.com/en-us/azure/storage/blobs/create-data-lake-storage-account) for more details.
+* 	An Apache Spark 3.3 cluster in Azure HDInsight on AKS. For more details, click [here](https://learn.microsoft.com/en-us/azure/hdinsight-aks/quickstart-create-cluster).
 
 
 ## Step 1: Create a Spark cluster on Azure HDInsight on AKS
