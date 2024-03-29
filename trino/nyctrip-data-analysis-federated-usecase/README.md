@@ -12,7 +12,7 @@ This demo showcases how you can use federated capability of Trino with HDInsight
 ## Scenario
 
 For this scenario, we are going to cover the following path:
-1. Take NYC taxi data from the offical source.
+1. Take NYC taxi data from the official source.
 2. Land the data in ADLS Gen 2 and expose it as a Hive table in Trino.
 3. Prepare zone data and land in Azure Database for PostgresSQL.
 4. Run a federated query on two data sources ADLS Gen2 and Azure Database for PostgresSQL.
