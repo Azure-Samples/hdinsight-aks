@@ -6,7 +6,7 @@
   <groupId>com.microsoft.example</groupId>
   <artifactId>kafka-oauth-producer-consumer</artifactId>
   <packaging>jar</packaging>
-  <version>3.6.0-1.2.0.0</version>
+  <version>3.6.0-1.2.0-SNAPSHOT</version>
   <name>kafka-oauth-producer-consumer</name>
   <url>http://maven.apache.org</url>
   <properties>
