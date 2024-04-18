@@ -9,7 +9,7 @@
             }
         },
         "clusterPoolVersion": {
-            "defaultValue": "1.0",
+            "defaultValue": "1.1",
             "type": "String",
             "metadata": {
                 "description": "HDInsight on AKS cluster pool version to be created."
@@ -38,7 +38,8 @@
                 "Central India",
                 "UK South",
                 "Korea Central",
-                "West Europe"
+                "West Europe",
+                "East Asia"
             ],
             "type": "String",
             "metadata": {
@@ -58,7 +59,7 @@
             }
         },
         "hdinsightOnAksClusterVersion": {
-            "defaultValue": "1.0.6",
+            "defaultValue": "1.1.0",
             "type": "String",
             "metadata": {
                 "description": "The HDInsight on AKS cluster version to be created."

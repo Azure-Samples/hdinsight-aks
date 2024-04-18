@@ -1,0 +1,37 @@
+[
+  {
+    "days": [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday"
+    ],
+    "startTime": "09:00",
+    "endTime": "10:00",
+    "count": 3
+  },
+  {
+    "days": [
+      "Thursday",
+      "Friday",
+      "Saturday"
+    ],
+    "startTime": "15:00",
+    "endTime": "16:00",
+    "count": 5
+  },
+  {
+    "days": [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday"
+    ],
+    "startTime": "18:00",
+    "endTime": "22:00",
+    "count": 10
+  }
+]
