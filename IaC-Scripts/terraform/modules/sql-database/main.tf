@@ -10,10 +10,12 @@ data "azurerm_mssql_server" "hdi_on_aks_sql_data" {
 
 resource "random_password" "password" {
   count       = var.create_sql_server_flag ? 1 : 0
-  length      = 10
+  length      = 12
   special     = true
-  min_upper   = 1
+  min_upper   = 3
+  min_lower   = 3
   min_special = 3
+  min_numeric = 3
 }
 
 # SQL Database Server is created with Authentication method as Use SQL authentication

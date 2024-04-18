@@ -137,6 +137,7 @@ module "flink_cluster" {
   user_managed_resource_id            = module.cluster_init.msi_resource_id
   # flink worker and head node configuration
   flink_cluster_name                  = var.flink_cluster_name
+  flink_enable_private_cluster        = var.flink_enable_private_cluster
   flink_version                       = var.flink_version
   flink_head_node_count               = var.flink_head_node_count
   flink_head_node_sku                 = var.flink_head_node_sku
