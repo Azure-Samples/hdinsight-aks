@@ -119,6 +119,6 @@ variable "create_storage_flag" {
 
 variable "cluster_version" {
   type        = string
-  default     = "1.0.6"
+  default     = "1.1.1"
   description = "Cluster version"
 }
