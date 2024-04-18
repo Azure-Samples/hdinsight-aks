@@ -87,7 +87,7 @@ variable "create_subnet_flag" {
 variable "pool_version" {
   type        = string
   description = "The version of the Azure HDInsight on AKS cluster pool to create."
-  default     = "1.0"
+  default     = "1.1"
 }
 
 variable "pool_node_vm_size" {
