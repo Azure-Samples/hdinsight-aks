@@ -12,7 +12,7 @@ resource "azurerm_virtual_network" "hdi_vnet" {
   name                = var.vnet_name
   location            = var.location_name
   resource_group_name = azurerm_resource_group.pool_resource_group.name
-  address_space       = ["10.0.0.0/16"]
+  address_space       = ["10.0.0.0/22"]
   tags                = local.tags
   depends_on          = [azurerm_resource_group.pool_resource_group]
 }
@@ -22,7 +22,7 @@ resource "azurerm_subnet" "hdi_default_subnet_default" {
   name                 = var.subnet_name
   resource_group_name  = azurerm_resource_group.pool_resource_group.name
   virtual_network_name = var.vnet_name
-  address_prefixes     = ["10.0.0.0/24"]
+  address_prefixes     = ["10.0.0.0/22"]
   service_endpoints    = ["Microsoft.Storage"]
   depends_on           = [azurerm_virtual_network.hdi_vnet]
 }

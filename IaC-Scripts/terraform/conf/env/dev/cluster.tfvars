@@ -6,7 +6,7 @@
 user_assigned_identity_name        = "terraformtest"
 create_user_assigned_identity_flag = true
 # Storage related variable values
-storage_name                       = "tfonakssteststorage"
+storage_name                       = "tfonakssteststoragedemo"
 # create storage account or use existing one with given storage_name name
 create_storage_flag                = true
 # key vault name

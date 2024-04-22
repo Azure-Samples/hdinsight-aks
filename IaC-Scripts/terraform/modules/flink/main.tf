@@ -68,6 +68,9 @@ resource "azapi_resource" "hdi_aks_cluster_flink" {
           msiClientId   = var.user_managed_client_id
           msiObjectId   = var.user_managed_principal_id
         },
+        clusterAccessProfile = {
+           enableInternalIngress = var.flink_enable_private_cluster
+        },
         authorizationProfile = {
           userIds = [data.azurerm_client_config.current.object_id]
         },
@@ -98,6 +101,9 @@ resource "azapi_resource" "hdi_aks_cluster_flink" {
           }
         } : null,
         flinkProfile = merge(
+          {
+            "deploymentMode": "Session"
+          },
           {
             jobManager = {
               cpu    = tonumber(var.job_manager_conf["cpu"])

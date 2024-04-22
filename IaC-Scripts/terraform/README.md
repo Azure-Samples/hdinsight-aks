@@ -111,6 +111,7 @@ It manages rules for allowing traffic between an Azure SQL server and a subnet o
 It [creates an Apache Flink cluster](https://learn.microsoft.com/en-us/azure/hdinsight-aks/flink/flink-create-cluster-portal#create-an-apache-flink-cluster) in a [cluster pool](#cluster-pool). It is dependent on [cluster-init](#cluster-init). 
 
 The current terraform module supports following features for the HDInsight on AKS Apache Flink cluster.
+- Use Private ingress (_flink_enable_private_cluster_) 
 - [Schedule Based Auto Scale](./terraform/conf/env/dev/cluster_conf/flink/flink_schedulebased_auto_scale_config.json)
 - Hive Catalog
 - Log Analytics
@@ -137,6 +138,7 @@ The current terraform module supports following features for the HDInsight on AK
 It [creates an Apache Trino cluster](https://learn.microsoft.com/en-us/azure/hdinsight-aks/trino/trino-create-cluster) in a [cluster pool](#cluster-pool). It is dependent on [cluster-init](#cluster-init). 
 
 The current terraform module supports following features for the HDInsight on AKS Apache Flink cluster.
+- Use Private ingress (_flink_enable_private_cluster_) 
 - [Schedule Based Auto Scale](conf/env/dev/cluster_conf/trino/trino_schedulebased_auto_scale_config.json)
 - Hive Catalog
 - Log Analytics

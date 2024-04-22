@@ -2,7 +2,7 @@
 prefix                      = "terraform"
 suffix                      = "hdionaks"
 # HDI on AKS Pool resource group, this is where pool and cluster will be created
-rg_name                     = "demotest"
+rg_name                     = "demotest2"
 # indicates whether you want to use existing resource group for cluster, storage, managed identity or create a new one
 create_rg_for_pool_flag     = true
 # Location/Region where you would like to create all your resources
@@ -22,7 +22,7 @@ managed_resource_group_name = "hdi-prim-test"
 # VNet and Subnet related variables (no prefix and suffix)
 vnet_name                   = "hilovnet"
 # if VNet should be created it will be created in rg_name (prefix_rg_name_suffix)
-vnet_rg_name                = "terraform_demotest_hdionaks"
+vnet_rg_name                = "terraform_demotest2_hdionaks"
 subnet_name                 = "default"
 # if vnet_name or subnet_name is empty these will not have any impact
 # we need create_vnet_flag to check if the given vnet_name is exist or need to create a new one

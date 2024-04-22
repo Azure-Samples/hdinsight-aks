@@ -1,12 +1,13 @@
 # cluster name is not prefixed and suffixed
 create_flink_cluster_flag       = true
-flink_version                   = "1.16.0"
+flink_version                   = "1.17.0"
 flink_cluster_name              = "demoflink"
 flink_head_node_count           = 2
 flink_head_node_sku             = "Standard_D8ds_v5"
 flink_worker_node_count         = 3
 flink_worker_node_sku           = "Standard_D8ds_v5"
 flink_cluster_default_container = "flinkcluster"
+flink_enable_private_cluster    = false
 flink_secure_shell_node_count   = 1
 # Flink configuration
 job_manager_conf                = {

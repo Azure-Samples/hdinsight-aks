@@ -1,12 +1,13 @@
 # cluster name is not prefixed and suffixed
 create_trino_cluster_flag           = true
-trino_version                       = "0.410.0"
+trino_version                       = "0.426.0"
 trino_cluster_name                  = "demotrino"
 trino_head_node_count               = 2
 trino_head_node_sku                 = "Standard_D8ds_v5"
 trino_worker_node_count             = 3
 trino_worker_node_sku               = "Standard_D8ds_v5"
 trino_cluster_default_container     = "trinocluster"
+trino_enable_private_cluster        = false
 trino_secure_shell_node_count       = 1
 # if hive is enabled, please ensure you supply sql_server_name part if cluster.tfvars
 # The trino would require sql server and trino_hive_catalog_name if we would like to use Hive Catalog

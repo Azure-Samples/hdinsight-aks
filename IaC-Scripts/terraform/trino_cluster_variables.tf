@@ -81,3 +81,8 @@ variable "trino_hive_db" {
   type        = string
   description = "Trino Hive Database name in case of trino_hive_enabled is enabled"
 }
+
+variable "trino_enable_private_cluster" {
+  type = bool
+  description = "enable private cluster or not"
+}

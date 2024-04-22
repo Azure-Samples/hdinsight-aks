@@ -91,3 +91,8 @@ variable "flink_hive_db" {
   type        = string
   description = "Flink Hive Database name in case of flink_hive_enabled is enabled"
 }
+
+variable "flink_enable_private_cluster" {
+  type = bool
+  description = "enable private cluster for flink or not"
+}

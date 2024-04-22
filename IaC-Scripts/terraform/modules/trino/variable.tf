@@ -162,3 +162,8 @@ variable "sql_server_admin_user_name" {
   type        = string
   description = "SQL server admin user name"
 }
+
+variable "trino_enable_private_cluster" {
+  type = bool
+  description = "enable private cluster or not"
+}
