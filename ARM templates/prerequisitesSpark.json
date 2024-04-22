@@ -8,7 +8,25 @@
             "metadata": {
                 "description": "Provide a prefix for your resource, your resources will be named as [prefix + random string]."
             }
-        }   
+        },
+         "location": {
+            //"defaultValue": "East US 2",
+            "allowedValues": [
+                "West US 2",
+                "West US 3",
+                "East US",
+                "East US 2",
+                "Central India",
+                "UK South",
+                "Korea Central",
+                "West Europe",
+                "East Asia"
+            ],
+            "type": "String",
+            "metadata": {
+                "description": "Location where your resources will be deployed."
+            }
+        }
     },
     "variables": {
         "storageName": "[concat(parameters('resourcePrefix'), 'store')]",
@@ -20,7 +38,7 @@
         {
             "apiVersion": "2018-11-30",
             "name": "[variables('msiName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
             "properties": {}
             
@@ -29,7 +47,7 @@
         {
             "name": "[variables('storageName')]",
             "type": "Microsoft.Storage/storageAccounts",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "apiVersion": "2019-04-01",
             "sku": {
                 "name": "Standard_RAGRS",
