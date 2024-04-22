@@ -1,5 +1,5 @@
 # create job or not
-flink_job_action_flag      = true
+flink_job_action_flag      = false
 flink_job_name             = "testjob"
 # the jar file should be present on root of the terraform directory
 flink_job_jar_file         = "batch-1.0.jar"

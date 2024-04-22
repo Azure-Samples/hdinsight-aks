@@ -67,6 +67,9 @@ resource "azapi_resource" "hdi_aks_cluster_trino" {
           msiClientId   = var.user_managed_client_id
           msiObjectId   = var.user_managed_principal_id
         },
+        clusterAccessProfile = {
+          enableInternalIngress = var.trino_enable_private_cluster
+        }
         authorizationProfile = {
           userIds = [data.azurerm_client_config.current.object_id]
         },
@@ -87,13 +90,28 @@ resource "azapi_resource" "hdi_aks_cluster_trino" {
             serviceName = "trino",
             configs     = [
               {
+                component = "common",
+                files     = [
+                  {
+                    fileName = "config.properties",
+                    values   = {
+                      "hive.metastore.hdi.metastoreDbConnectionURL"            = "jdbc:sqlserver://${var.sql_server_name}.database.windows.net;database=${azurerm_mssql_database.trino_hive_db[0].name};encrypt=true;trustServerCertificate=true;create=false;loginTimeout=30",
+                      "hive.metastore.hdi.metastoreDbConnectionUserName"       = var.sql_server_admin_user_name,
+                      "hive.metastore.hdi.metastoreDbConnectionPasswordSecret" = var.kv_sql_server_secret_name,
+                      "hive.metastore.hdi.metastoreWarehouseDir"               = "abfs://${azurerm_storage_container.trino_cluster_container[0].name}@${var.storage_account_primary_dfs_host}/hive/warehouse"
+                    }
+                  }
+                ]
+              },
+              {
                 component = "catalogs",
                 files     = [
                   {
-                    fileName = var.trino_hive_catalog_name,
+                    fileName = "${var.trino_hive_catalog_name}.properties"
                     values   = {
                       "connector.name"        = "hive",
-                      "hive.allow-drop-table" = "true"
+                      "hive.allow-drop-table" = "true",
+                      "hive.metastore"        = "hdi"
                     }
                   }
                 ]
@@ -115,19 +133,7 @@ resource "azapi_resource" "hdi_aks_cluster_trino" {
             defaultCount = var.trino_worker_node_count
           }
         } : null,
-        trinoProfile = local.catalog_profile ? {
-          catalogOptions = {
-            hive = [
-              {
-                catalogName                         = var.trino_hive_catalog_name,
-                metastoreDbConnectionURL            = "jdbc:sqlserver://${var.sql_server_name}.database.windows.net;database=${azurerm_mssql_database.trino_hive_db[0].name};encrypt=true;trustServerCertificate=true;create=false;loginTimeout=30",
-                metastoreDbConnectionUserName       = var.sql_server_admin_user_name,
-                metastoreDbConnectionPasswordSecret = var.kv_sql_server_secret_name,
-                metastoreWarehouseDir               = "abfs://${azurerm_storage_container.trino_cluster_container[0].name}@${var.storage_account_primary_dfs_host}/hive/warehouse"
-              }
-            ]
-          }
-        } : null,
+        trinoProfile        = {},
         logAnalyticsProfile = {
           enabled         = local.la_flag,
           applicationLogs = {

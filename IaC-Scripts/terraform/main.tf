@@ -234,6 +234,7 @@ module "trino_cluster" {
   sql_server_name                     = module.cluster_init.sql_server_name
   # hive catalog related
   trino_hive_catalog_name             = var.trino_hive_catalog_name
+  trino_enable_private_cluster        = var.trino_enable_private_cluster
   trino_hive_db                       = var.trino_hive_db
   trino_hive_enabled_flag             = var.trino_hive_enabled_flag
   # storage account and container

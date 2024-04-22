@@ -1,6 +1,6 @@
 # cluster name is not prefixed and suffixed
 create_flink_cluster_flag       = true
-flink_version                   = "1.16.0"
+flink_version                   = "1.17.0"
 flink_cluster_name              = "demoflink"
 flink_head_node_count           = 2
 flink_head_node_sku             = "Standard_D8ds_v5"
