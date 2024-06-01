@@ -23,7 +23,7 @@ If you prefer to install and use the CLI locally, this quickstart requires Azure
 The first step is to define the environment variables. Environment variables are commonly used in Linux to centralize configuration data to improve consistency and maintainability of the system. Create the following environment variables to specify the names of resources that you create later in this tutorial:
 
 ```bash
-export clustername="TrinoSample"
+export clustername="FlinkSample"
 export clusterpoolname="AKSClusterPoolSample"
 export REGION=eastus
 export RecourceGroup="HDIonAKSCLI"
@@ -31,7 +31,8 @@ export MSIOID="2f64df01-29a7-4a68-bb35-595084ac2fff"
 export MSIClientID="d3497790-0d09-4fe5-987e-d9b08ae5d275"
 export MSI="/subscriptions/0b130652-e15b-417e-885a-050c9a3024a2/resourceGroups/Hilotest/providers/Microsoft.ManagedIdentity/userAssignedIdentities/guodongwangMSI"
 export clusterversion=1.1.1
-export ossversion=0.426.0
+export ossversion=1.17.0
+export flinkstorage="abfs://flinktest@guodongwangstore.dfs.core.windows.net"
 ```
 
 ## Log in to Azure using the CLI
@@ -130,10 +131,16 @@ az hdinsight-on-aks cluster create \
     --assigned-identity-client-id $MSIClientID \
     --authorization-user-id d7f2e9c3-81c9-4af6-9695-c2962a1d6bd6 \
     --assigned-identity-id $MSI \
-    --cluster-type Trino  \
+    --cluster-type Flink  \
     --cluster-version $clusterversion \
     --oss-version $ossversion \
-    --nodes ["{'Count':'5','Type':'Worker','VMSize':'Standard_D8d_v5'}"]
+    --nodes ["{'Count':'3','Type':'Worker','VMSize':'Standard_D8d_v5'}"]
+    --flink-storage-uri $flinkstorage \
+    --job-manager-cpu 1 \
+    --job-manager-memory 2000 \
+    --task-manager-cpu 6 \
+    --task-manager-memory 49016
+
 ```
 
 It takes a few minutes to create the Flink cluster. The following example output shows the create operation was successful.
