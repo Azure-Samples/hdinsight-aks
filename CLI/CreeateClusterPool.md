@@ -55,8 +55,24 @@ Results:
 
 ## Create the HDInsight on AKS Cluster Pool
 
-To create a HDInsight on AKS Cluster Pool in this resource group, use the `az hdinsight-on-aks clusterpool create` command. 
-
+To create a HDInsight on AKS Cluster Pool in this resource group, use the `az hdinsight-on-aks clusterpool create` command:
+```bash
+az hdinsight-on-aks clusterpool create --cluster-pool-name
+                                       --resource-group
+                                       [--api-server-authorized-ip-ranges]
+                                       [--cluster-pool-version]
+                                       [--enable-log-analytics {0, 1, f, false, n, no, t, true, y, yes}]
+                                       [--la-workspace-id]
+                                       [--location]
+                                       [--managed-rg-name]
+                                       [--no-wait {0, 1, f, false, n, no, t, true, y, yes}]
+                                       [--outbound-type {loadBalancer, userDefinedRouting}]
+                                       [--private-server-enabled {0, 1, f, false, n, no, t, true, y, yes}]
+                                       [--subnet-id]
+                                       [--tags]
+                                       [--workernode-size]
+```
+Here is an actual example:
 ```bash
 az hdinsight-on-aks clusterpool create -g $RecourceGroup -n $AKSClusterPoolName -l $REGION --workernode-size $nodetype --version $clusterversion
 ```
