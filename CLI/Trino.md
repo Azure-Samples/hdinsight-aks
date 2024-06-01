@@ -207,5 +207,5 @@ Results:
 
 ## Next Steps
 
-* [az hdinsight-on-aks cluster create]([https://learn.microsoft.com/en-us/cli/azure/hdinsight-on-aks/clusterpool?view=azure-cli-latest](https://learn.microsoft.com/en-us/cli/azure/hdinsight-on-aks/cluster?view=azure-cli-latest#az-hdinsight-on-aks-cluster-create))
+* [az hdinsight-on-aks cluster create](https://learn.microsoft.com/en-us/cli/azure/hdinsight-on-aks/cluster?view=azure-cli-latest#az-hdinsight-on-aks-cluster-create)
 * [Create a Trino cluster in the Azure portal](https://learn.microsoft.com/en-us/azure/hdinsight-aks/trino/trino-create-cluster)
