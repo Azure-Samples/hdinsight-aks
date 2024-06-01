@@ -4,6 +4,9 @@
 
 This quickstart shows you how to use the Azure CLI to deploy a HDInsight on AKS Cluster Pool in Azure. The Azure CLI is used to create and manage Azure resources via either the command line or scripts.
 
+## Prerequisites
+Ensure that you have completed the [subscription prerequisites](https://learn.microsoft.com/en-us/azure/hdinsight-aks/prerequisites-subscription) and [resource prerequisites](https://learn.microsoft.com/en-us/azure/hdinsight-aks/prerequisites-resources) before creating a cluster pool.
+
 ## Launch Azure Cloud Shell
 
 The Azure Cloud Shell is a free interactive shell that you can use to run the steps in this article. It has common Azure tools preinstalled and configured to use with your account. 
