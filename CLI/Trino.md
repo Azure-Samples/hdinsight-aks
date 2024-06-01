@@ -2,7 +2,7 @@
 
 # Quickstart: Create a Trino Cluster with the Azure CLI on Azure
 
-This quickstart shows you how to use the Azure CLI to deploy a Trino in HDInsight on AKS Pool. The Azure CLI is used to create and manage Azure resources via either the command line or scripts.
+This quickstart shows you how to use the Azure CLI to deploy a Trino cluster in HDInsight on AKS Pool. The Azure CLI is used to create and manage Azure resources via either the command line or scripts.
 
 ## Prerequisites
 Complete the prerequisites in the following sections:
