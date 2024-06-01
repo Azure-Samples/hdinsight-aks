@@ -153,17 +153,25 @@ Results:
     "clusterVersion": "1.1.1",
     "components": [
       {
-        "name": "Trino",
-        "version": "426"
+        "name": "Yarn",
+        "version": "3.3.4"
       },
       {
-        "name": "Hive metastore",
+        "name": "Spark",
+        "version": "3.3.1"
+      },
+      {
+        "name": "Hive Metastore",
         "version": "3.1.2"
+      },
+      {
+        "name": "Zookeeper",
+        "version": "3.8.3"
       }
     ],
     "connectivityProfile": {
       "web": {
-        "fqdn": "TrinoSample.AKSClusterPoolSample.0b130652e15b417e885a050c9a3024a2.eastus.hdinsightaks.net"
+        "fqdn": "SparkSample.AKSClusterPoolSample.0b130652e15b417e885a050c9a3024a2.eastus.hdinsightaks.net"
       }
     },
     "identityProfile": {
@@ -171,35 +179,38 @@ Results:
       "msiObjectId": "2f64df01-29a7-4a68-bb35-595084ac2fff",
       "msiResourceId": "/subscriptions/0b130652-e15b-417e-885a-050c9a3024a2/resourceGroups/Hilotest/providers/Microsoft.ManagedIdentity/userAssignedIdentities/guodongwangMSI"
     },
-    "ossVersion": "0.426.0"
+    "ossVersion": "3.3.1",
+    "sparkProfile": {
+      "defaultStorageUrl": "abfs://sparksampletest@guodongwangstore.dfs.core.windows.net"
+    }
   },
-  "clusterType": "Trino",
+  "clusterType": "Spark",
   "computeProfile": {
     "nodes": [
       {
-        "count": 2,
+        "count": 3,
         "type": "Head",
         "vmSize": "Standard_D8d_v5"
       },
       {
-        "count": 5,
+        "count": 3,
         "type": "Worker",
         "vmSize": "Standard_D8d_v5"
       }
     ]
   },
-  "deploymentId": "0e60b005614641eaa259ce26ed187eb8",
-  "id": "/subscriptions/0b130652-e15b-417e-885a-050c9a3024a2/resourceGroups/HDIonAKSCLI/providers/Microsoft.HDInsight/clusterpools/AKSClusterPoolSample/clusters/TrinoSample",
+  "deploymentId": "8506bbb376f34f8b856b413313c1415d",
+  "id": "/subscriptions/0b130652-e15b-417e-885a-050c9a3024a2/resourceGroups/HDIonAKSCLI/providers/Microsoft.HDInsight/clusterpools/AKSClusterPoolSample/clusters/SparkSample",
   "location": "eastus",
-  "name": "TrinoSample",
+  "name": "SparkSample",
   "provisioningState": "Succeeded",
   "resourceGroup": "HDIonAKSCLI",
   "status": "Running",
   "systemData": {
-    "createdAt": "2024-06-01T13:39:29.3951754Z",
+    "createdAt": "2024-06-01T15:17:35.0027098Z",
     "createdBy": "guodongwang@microsoft.com",
     "createdByType": "User",
-    "lastModifiedAt": "2024-06-01T13:39:29.3951754Z",
+    "lastModifiedAt": "2024-06-01T15:17:35.0027098Z",
     "lastModifiedBy": "guodongwang@microsoft.com",
     "lastModifiedByType": "User"
   },
