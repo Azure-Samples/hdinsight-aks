@@ -148,68 +148,7 @@ It takes a few minutes to create the Flink cluster. The following example output
 Results:
 <!-- expected_similarity=0.3 -->
 ```json
-{
-  "clusterProfile": {
-    "authorizationProfile": {
-      "userIds": [
-        "d7f2e9c3-81c9-4af6-9695-c2962a1d6bd6"
-      ]
-    },
-    "clusterVersion": "1.1.1",
-    "components": [
-      {
-        "name": "Trino",
-        "version": "426"
-      },
-      {
-        "name": "Hive metastore",
-        "version": "3.1.2"
-      }
-    ],
-    "connectivityProfile": {
-      "web": {
-        "fqdn": "TrinoSample.AKSClusterPoolSample.0b130652e15b417e885a050c9a3024a2.eastus.hdinsightaks.net"
-      }
-    },
-    "identityProfile": {
-      "msiClientId": "d3497790-0d09-4fe5-987e-d9b08ae5d275",
-      "msiObjectId": "2f64df01-29a7-4a68-bb35-595084ac2fff",
-      "msiResourceId": "/subscriptions/0b130652-e15b-417e-885a-050c9a3024a2/resourceGroups/Hilotest/providers/Microsoft.ManagedIdentity/userAssignedIdentities/guodongwangMSI"
-    },
-    "ossVersion": "0.426.0"
-  },
-  "clusterType": "Trino",
-  "computeProfile": {
-    "nodes": [
-      {
-        "count": 2,
-        "type": "Head",
-        "vmSize": "Standard_D8d_v5"
-      },
-      {
-        "count": 5,
-        "type": "Worker",
-        "vmSize": "Standard_D8d_v5"
-      }
-    ]
-  },
-  "deploymentId": "0e60b005614641eaa259ce26ed187eb8",
-  "id": "/subscriptions/0b130652-e15b-417e-885a-050c9a3024a2/resourceGroups/HDIonAKSCLI/providers/Microsoft.HDInsight/clusterpools/AKSClusterPoolSample/clusters/TrinoSample",
-  "location": "eastus",
-  "name": "TrinoSample",
-  "provisioningState": "Succeeded",
-  "resourceGroup": "HDIonAKSCLI",
-  "status": "Running",
-  "systemData": {
-    "createdAt": "2024-06-01T13:39:29.3951754Z",
-    "createdBy": "guodongwang@microsoft.com",
-    "createdByType": "User",
-    "lastModifiedAt": "2024-06-01T13:39:29.3951754Z",
-    "lastModifiedBy": "guodongwang@microsoft.com",
-    "lastModifiedByType": "User"
-  },
-  "type": "microsoft.hdinsight/clusterpools/clusters"
-}
+
 ```
 
 ## Next Steps
