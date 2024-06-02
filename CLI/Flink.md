@@ -39,7 +39,7 @@ export flinkstorage="abfs://flinktest@guodongwangstore.dfs.core.windows.net"
 
 In order to run commands in Azure using the CLI, you need to log in first. Log in using the `az login` command.
 
-## Create Trino cluster in the HDInsight on AKS Cluster Pool
+## Create Flink cluster in the HDInsight on AKS Cluster Pool
 
 To create a Flink cluster, use the `az hdinsight-on-aks cluster create` command:
 ```bash
