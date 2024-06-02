@@ -148,7 +148,81 @@ It takes a few minutes to create the Flink cluster. The following example output
 Results:
 <!-- expected_similarity=0.3 -->
 ```json
-
+{
+  "clusterProfile": {
+    "authorizationProfile": {
+      "userIds": [
+        "d7f2e9c3-81c9-4af6-9695-c2962a1d6bd6"
+      ]
+    },
+    "clusterVersion": "1.1.1",
+    "components": [
+      {
+        "name": "Flink",
+        "version": "1.17.0"
+      },
+      {
+        "name": "Hive Metastore",
+        "version": "3.1.2"
+      }
+    ],
+    "connectivityProfile": {
+      "web": {
+        "fqdn": "FlinkSample.AKSClusterPoolSample.0b130652e15b417e885a050c9a3024a2.eastus.hdinsightaks.net"
+      }
+    },
+    "flinkProfile": {
+      "jobManager": {
+        "cpu": 1.0,
+        "memory": 4096
+      },
+      "storage": {
+        "storageUri": "abfs://flinksample@guodongwangstore.dfs.core.windows.net"
+      },
+      "taskManager": {
+        "cpu": 1.0,
+        "memory": 4096
+      }
+    },
+    "identityProfile": {
+      "msiClientId": "d3497790-0d09-4fe5-987e-d9b08ae5d275",
+      "msiObjectId": "2f64df01-29a7-4a68-bb35-595084ac2fff",
+      "msiResourceId": "/subscriptions/0b130652-e15b-417e-885a-050c9a3024a2/resourceGroups/Hilotest/providers/Microsoft.ManagedIdentity/userAssignedIdentities/guodongwangMSI"
+    },
+    "ossVersion": "1.17.0"
+  },
+  "clusterType": "Flink",
+  "computeProfile": {
+    "nodes": [
+      {
+        "count": 2,
+        "type": "Head",
+        "vmSize": "Standard_E8d_v5"
+      },
+      {
+        "count": 3,
+        "type": "Worker",
+        "vmSize": "Standard_E8d_v5"
+      }
+    ]
+  },
+  "deploymentId": "f7d77bdf5d9f4ff29b53bb28ad5eece5",
+  "id": "/subscriptions/0b130652-e15b-417e-885a-050c9a3024a2/resourceGroups/HDIonAKSCLI/providers/Microsoft.HDInsight/clusterpools/AKSClusterPoolSample/clusters/FlinkSample",
+  "location": "eastus",
+  "name": "FlinkSample",
+  "provisioningState": "Succeeded",
+  "resourceGroup": "HDIonAKSCLI",
+  "status": "Running",
+  "systemData": {
+    "createdAt": "2024-06-02T13:17:38.2529862Z",
+    "createdBy": "guodongwang@microsoft.com",
+    "createdByType": "User",
+    "lastModifiedAt": "2024-06-02T13:17:38.2529862Z",
+    "lastModifiedBy": "guodongwang@microsoft.com",
+    "lastModifiedByType": "User"
+  },
+  "type": "microsoft.hdinsight/clusterpools/clusters"
+}
 ```
 
 ## Next Steps
