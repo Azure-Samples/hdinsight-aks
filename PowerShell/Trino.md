@@ -1,6 +1,6 @@
 
 
-# Quickstart: Create a Trino Cluster with the Azure CLI on Azure
+# Quickstart: Create a Trino Cluster with the Powershell
 
 This quickstart shows you how to use the PowerShell to deploy a Trino cluster in HDInsight on AKS Pool.
 
