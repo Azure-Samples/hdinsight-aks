@@ -1,6 +1,6 @@
 
 
-# Quickstart: Create a Trino Cluster with the Azure CLI on Azure
+# Quickstart: Create a Spark Cluster with the PowerShell
 
 This quickstart shows you how to use the PowerShell to deploy a Spark cluster in HDInsight on AKS Pool.
 
@@ -16,7 +16,7 @@ The Azure Cloud Shell is a free interactive shell that you can use to run the st
 
 To open the Cloud Shell, just select **Try it** from the upper right corner of a code block. Select **Copy** to copy the blocks of code, paste it into the Cloud Shell, and press enter to run it.
 
-## Create Trino cluster in the HDInsight on AKS Cluster Pool
+## Create Spark cluster in the HDInsight on AKS Cluster Pool
 
 To create a Spark cluster, use the `New-AzHdInsightOnAksCluster` command:
 ```PowerShell
