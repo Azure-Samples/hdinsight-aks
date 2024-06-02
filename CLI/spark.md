@@ -39,7 +39,7 @@ export flinkstorage="abfs://sparksampletest@guodongwangstore.dfs.core.windows.ne
 
 In order to run commands in Azure using the CLI, you need to log in first. Log in using the `az login` command.
 
-## Create Trino cluster in the HDInsight on AKS Cluster Pool
+## Create Spark cluster in the HDInsight on AKS Cluster Pool
 
 To create a Spark cluster, use the `az hdinsight-on-aks cluster create` command:
 ```bash
