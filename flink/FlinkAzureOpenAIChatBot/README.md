@@ -96,7 +96,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class test2 {
+public class FlinkAzureOpenAI {
     public static void main(String[] args) throws Exception {
         // create Apache Flink execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment().setParallelism(1);
