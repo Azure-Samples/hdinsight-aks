@@ -120,9 +120,9 @@ public class test2 {
             OpenAIClient client = null;
             try {
                 // OpenAI API endpoint for text completion
-                String azureOpenaiKey = "0762e377c9b54819a267a142adcbcfcb";
-                String endpoint = "https://hanaoai-sc.openai.azure.com/";
-                String deploymentOrModelId = "gpt40409";
+                String azureOpenaiKey = System.getenv("AZURE_OPENAI_API_KEY");;
+                String endpoint = System.getenv("AZURE_OPENAI_ENDPOINT");;
+                String deploymentOrModelId = "gpt-35-turbo";
 
                 client = new OpenAIClientBuilder()
                         .endpoint(endpoint)
