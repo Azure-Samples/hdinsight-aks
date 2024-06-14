@@ -1,6 +1,8 @@
 **Below blog integrates Apache Flink 1.17.0 on HDInsight on AKS with OpenAI to create an intelligent chatbot that can answer questions about U.S. Presidents. The chatbot’s responses are processed in real-time using Flink, allowing it to provide immediate feedback.**
 
-OpenAI’s GPT-4 model is capable of understanding and generating human-like text, making it a powerful tool for building intelligent chatbots.
+OpenAI’s GPT-4 model is capable of understanding and generating human-like text, making it a powerful tool for building intelligent chatbots. <br>
+
+However, you also needed a way to process the chatbot’s responses in real-time. This is where Apache Flink comes in. Flink is a powerful stream processing framework that can handle large volumes of data in real-time, making it an excellent choice for your needs.  <br>
 
 ## Prerequisites
 • Flink 1.17.0 on HDInsight on AKS <br>
@@ -21,10 +23,10 @@ OpenAI’s GPT-4 model is capable of understanding and generating human-like tex
 
 **Retrieve key and endpoint** <br>
 To successfully make a call against Azure OpenAI, you need an endpoint and a key.
-```
-Variable name	 Value
-ENDPOINT     	 This value can be found in the Keys & Endpoint section when examining your resource from the Azure portal. An example endpoint is: https://docs-test-001.openai.azure.com/. 
-API-KEY	       This value can be found in the Keys & Endpoint section when examining your resource from the Azure portal. You can use either KEY1 or KEY2.
+``` SQL
+Variable name	  Value
+ENDPOINT        This value can be found in the Keys & Endpoint section when examining your resource from the Azure portal. An example endpoint is: https://docs-test-001.openai.azure.com/. 
+API-KEY	        This value can be found in the Keys & Endpoint section when examining your resource from the Azure portal. You can use either KEY1 or KEY2.
 ```
 
 Go to your resource in the Azure portal. The Keys & Endpoint section can be found in the Resource Management section. Copy your endpoint and access key as you'll need both for authenticating your API calls. You can use either KEY1 or KEY2. Always having two keys allows you to securely rotate and regenerate keys without causing a service disruption.
@@ -35,7 +37,7 @@ Go to your resource in the Azure portal. The Keys & Endpoint section can be foun
 ## Maven Depedencies
 
 ``` xml
- <properties>
+    <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <flink.version>1.17.0</flink.version>
