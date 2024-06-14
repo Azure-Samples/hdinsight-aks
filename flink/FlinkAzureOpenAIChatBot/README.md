@@ -1,4 +1,4 @@
-**Below blog code integrates Apache Flink 1.17.0 on HDInsight on AKS with OpenAI to create an intelligent chatbot that can answer questions about U.S. Presidents. The chatbot’s responses are processed in real-time using Flink, allowing it to provide immediate feedback.**
+**Below blog integrates Apache Flink 1.17.0 on HDInsight on AKS with OpenAI to create an intelligent chatbot that can answer questions about U.S. Presidents. The chatbot’s responses are processed in real-time using Flink, allowing it to provide immediate feedback.**
 
 OpenAI’s GPT-4 model is capable of understanding and generating human-like text, making it a powerful tool for building intelligent chatbots.
 
