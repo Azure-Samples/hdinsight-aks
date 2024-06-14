@@ -124,7 +124,7 @@ public class test2 {
                 // OpenAI API endpoint for text completion
                 String azureOpenaiKey = System.getenv("AZURE_OPENAI_API_KEY");;
                 String endpoint = System.getenv("AZURE_OPENAI_ENDPOINT");;
-                String deploymentOrModelId = "gpt-35-turbo";
+                String deploymentOrModelId = "gpt-4";
 
                 client = new OpenAIClientBuilder()
                         .endpoint(endpoint)
@@ -232,7 +232,6 @@ Usage: number of prompt token is 119, number of completion token is 47, and numb
 • Flink 1.17.0 on HDInsight on AKS <br>
 • Azure OpenAI service <br>
 
-## Reference
 
 
 
