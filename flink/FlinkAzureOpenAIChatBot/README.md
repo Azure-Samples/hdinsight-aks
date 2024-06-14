@@ -1,4 +1,4 @@
-**Below blog integrates Apache Flink 1.17.0 on HDInsight on AKS with OpenAI to create an intelligent chatbot that can answer questions about U.S. Presidents. The chatbot’s responses are processed in real-time using Flink, allowing it to provide immediate feedback.**
+**This blog code integrates Apache Flink 1.17.0 on HDInsight on AKS with OpenAI to create an intelligent chatbot that can answer questions about U.S. Presidents. The chatbot’s responses are processed in real-time using Flink, allowing it to provide immediate feedback.**
 
 OpenAI’s GPT-4 model is capable of understanding and generating human-like text, making it a powerful tool for building intelligent chatbots. <br>
 
@@ -179,11 +179,15 @@ public class test2 {
 • The **asyncInvoke** method is where the actual processing happens. It takes an input string and a ResultFuture object. The input string is a name of a U.S. president, and the ResultFuture is used to output the result of the processing.<br>
 
 • Inside the asyncInvoke method, an OpenAIClient is created using the provided Azure OpenAI key, endpoint, and model ID. This client is used to interact with the OpenAI API.<br>
+
 • A list of ChatMessage objects is created. These messages simulate a conversation with the OpenAI API. The conversation starts with a system message, followed by a user message asking for help, an assistant message offering help, and finally a user message asking for the birthday and term of presidency of the input president.<br>
+
 • The getChatCompletions method of the OpenAIClient is called with the model ID and the list of chat messages. This sends the conversation to the OpenAI API and gets a response.<br>
+
 • The response from the OpenAI API is printed out. This includes the model ID, the creation time of the model, the content of the messages, and the usage statistics.<br>
+
 • If an exception occurs during the processing, it’s caught and its stack trace is printed.<br>
-This code demonstrates how to integrate Apache Flink with Azure OpenAI to process a stream of data in real-time. It’s a powerful combination for big data processing and AI.<br>
+
 
 ## Input Stream
 
