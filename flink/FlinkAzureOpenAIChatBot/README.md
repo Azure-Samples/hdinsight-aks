@@ -171,10 +171,13 @@ public class test2 {
     }
 
 ```
-## breakdown of the Code <br>
+## Code Breakdown <br>
 • The **main** method sets up the Flink execution environment, creates an input data stream, sets up the processing stream, prints the output data, and then executes the job.<br>
+
 • The **AsyncHttpRequestFunctio**n class implements the AsyncFunction interface, which allows for asynchronous I/O operations in Flink. This is useful for operations that are I/O-bound, such as making HTTP requests.<br>
+
 • The **asyncInvoke** method is where the actual processing happens. It takes an input string and a ResultFuture object. The input string is a name of a U.S. president, and the ResultFuture is used to output the result of the processing.<br>
+
 • Inside the asyncInvoke method, an OpenAIClient is created using the provided Azure OpenAI key, endpoint, and model ID. This client is used to interact with the OpenAI API.<br>
 • A list of ChatMessage objects is created. These messages simulate a conversation with the OpenAI API. The conversation starts with a system message, followed by a user message asking for help, an assistant message offering help, and finally a user message asking for the birthday and term of presidency of the input president.<br>
 • The getChatCompletions method of the OpenAIClient is called with the model ID and the list of chat messages. This sends the conversation to the OpenAI API and gets a response.<br>
@@ -182,7 +185,18 @@ public class test2 {
 • If an exception occurs during the processing, it’s caught and its stack trace is printed.<br>
 This code demonstrates how to integrate Apache Flink with Azure OpenAI to process a stream of data in real-time. It’s a powerful combination for big data processing and AI.<br>
 
+## Input Stream
+
+```
+    DataStream<String> testStream = env.fromElements("Bill Smith","Joe Biden","Donald John Trump","William Jefferson Clinton","Franklin Delano Roosevelt","Abraham Lincoln","George Washington");
+```
+
 ## Output
+
+As Bill Smith was not a President of the United States, so the response is **I'm sorry, but there has never been a President of the United States named Bill Smith.**.
+
+Other responses show the right answer for each President.
+
 ```
 Model ID=chatcmpl-9ZrsbpNazsfcgPO6Fcs2LaqvHnvKD is created at 2024-06-14T03:27:01Z.
 Index: 0, Chat Role: assistant.
